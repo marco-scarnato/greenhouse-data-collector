@@ -4,6 +4,7 @@ from influxdb_client import Bucket
 
 from influx_controller import InfluxController
 from src.Measurements.measurement_type import MeasurementType
+from test.resources.dummy_measurements import DummyMeasurements
 
 
 class TestInfluxController(TestCase):
@@ -18,7 +19,7 @@ class TestInfluxController(TestCase):
         assert influx_controller.get_bucket(self.TEST_BUCKET_NAME) is not None
         influx_controller.delete_bucket(self.TEST_BUCKET_NAME)
 
-    def test_write_measurement(self):
+    def test_write_measurements(self):
         """
         Test the writing of a measurement in InfluxDB.
         Writes one measurement of each measurement type in influxdb, reads them back and checks if they are the same
@@ -30,12 +31,14 @@ class TestInfluxController(TestCase):
         try:
             # iterate over all measurement types
             for measurement_type in MeasurementType:
-                    # write a measurement of that type taking it from a file containing dummy measurements as constants
-
-            #   read the measurement back from influxdb
-            #   assert the written and read measurement are the same
-
-
+                # get a dummy measurement of the current measurement type
+                dummy_measurements = DummyMeasurements.get_dummy_measurements(measurement_type)
+                # write the dummy measurement to influxdb
+                influx_controller.write_measurements(dummy_measurements, test_bucket)
+                # read the measurement back from influxdb
+                read_measurements = influx_controller.read_measurements(measurement_type, test_bucket)
+                # assert the written and read measurement are the same
+                assert dummy_measurements == read_measurements
         finally:
             influx_controller.delete_bucket(self.TEST_BUCKET_NAME)
 

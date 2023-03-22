@@ -5,7 +5,7 @@ from influxdb_client import Point
 from src.Measurements.measurement_type import MeasurementType
 
 
-class ShelfMeasurement:
+class PotMeasurement:
     """
     Class representing a measurement for the shelf.
     ...

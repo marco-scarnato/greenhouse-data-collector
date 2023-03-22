@@ -1,7 +1,9 @@
-from typing import Optional
+from typing import Optional, List
 
 from influxdb_client import InfluxDBClient, Bucket, Point
 from decouple import config
+
+from src.Measurements.measurement_type import MeasurementType
 
 
 def check_env_variables():
@@ -57,6 +59,18 @@ class InfluxController:
         :return: bucket if found, None otherwise
         """
         return self._client.buckets_api().find_bucket_by_name(bucket_name)
+
+    def write_measurements(self, measurement_list: List[Point], test_bucket: Bucket):
+        """
+        Write a list of measurements to InfluxDB
+        :param measurement_list: list of measurements to write
+        :param test_bucket: bucket to write to
+        """
+        # TODO check if records can be written in bulk with a list or a for loop is needed
+        self._client.write_api().write(bucket=test_bucket.name, record=measurement_list)
+
+    def read_measurements(self, measurement_type: MeasurementType, test_bucket: Bucket):
+        pass
 
 
 

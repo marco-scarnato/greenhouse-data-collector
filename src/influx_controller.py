@@ -1,6 +1,6 @@
 from typing import Optional
 
-from influxdb_client import InfluxDBClient, Bucket
+from influxdb_client import InfluxDBClient, Bucket, Point
 from decouple import config
 
 
@@ -57,3 +57,6 @@ class InfluxController:
         :return: bucket if found, None otherwise
         """
         return self._client.buckets_api().find_bucket_by_name(bucket_name)
+
+
+

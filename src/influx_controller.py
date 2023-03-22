@@ -45,7 +45,8 @@ class InfluxController:
         Delete a bucket from InfluxDB
         :return: True if deleted, False otherwise
         """
-        if self._client.buckets_api().delete_bucket(bucket_name) is None:
+
+        if self._client.buckets_api().delete_bucket(self.get_bucket(bucket_name)) is None:
             return False
         else:
             return True

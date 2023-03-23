@@ -60,17 +60,14 @@ class InfluxController:
         """
         return self._client.buckets_api().find_bucket_by_name(bucket_name)
 
-    def write_measurements(self, measurement_list: List[Point], test_bucket: Bucket):
+    def write_measurements(self, measurement_list: List[Point], bucket: Bucket) -> None:
         """
         Write a list of measurements to InfluxDB
         :param measurement_list: list of measurements to write
-        :param test_bucket: bucket to write to
+        :param bucket: bucket to write to
         """
         # TODO check if records can be written in bulk with a list or a for loop is needed
-        self._client.write_api().write(bucket=test_bucket.name, record=measurement_list)
+        self._client.write_api().write(bucket=bucket.name, record=measurement_list)
 
-    def read_measurements(self, measurement_type: MeasurementType, test_bucket: Bucket):
+    def read_measurements(self, measurement_type: MeasurementType, bucket: Bucket) -> List[Point]:
         pass
-
-
-

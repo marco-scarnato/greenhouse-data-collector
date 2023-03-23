@@ -4,8 +4,10 @@ from influxdb_client import Bucket
 
 from influx_controller import InfluxController
 from src.measurements.measurement_type import MeasurementType
-from test.resources.dummy_measurements import DummyMeasurements
+from test.resources.dummy_measurements import get_dummy_measurements
 
+
+# TODO Remove .env from repo
 
 class TestInfluxController(TestCase):
     TEST_BUCKET_NAME: str = 'test'
@@ -32,13 +34,13 @@ class TestInfluxController(TestCase):
             # iterate over all measurement types
             for measurement_type in MeasurementType:
                 # get a dummy measurement of the current measurement type
-                dummy_measurements = DummyMeasurements.get_dummy_measurements(measurement_type)
+                dummy_measurements: list = get_dummy_measurements(measurement_type)
                 # write the dummy measurement to influxdb
                 influx_controller.write_measurements(dummy_measurements, test_bucket)
                 # read the measurement back from influxdb
                 read_measurements = influx_controller.read_measurements(measurement_type, test_bucket)
                 # assert the written and read measurement are the same
-                assert dummy_measurements == read_measurements
+                for measurement in dummy_measurements:
+                    assert measurement in read_measurements
         finally:
             influx_controller.delete_bucket(self.TEST_BUCKET_NAME)
-

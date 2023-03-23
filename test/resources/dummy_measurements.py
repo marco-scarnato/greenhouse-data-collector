@@ -2,12 +2,16 @@ from datetime import datetime
 from typing import List
 
 from src.measurements.greenhouse_measurement import GreenhouseMeasurement
+from src.measurements.measurement_type import MeasurementType
 from src.measurements.pot_measurement import PotMeasurement
 from src.measurements.pump_measurement import PumpMeasurement
 from src.measurements.shelf_measurement import ShelfMeasurement
 
 
 class DummyMeasurements:
+    """
+    Class containing dummy measurements for testing purposes
+    """
     GREENHOUSE_MEASUREMENTS: List[GreenhouseMeasurement] = [
         GreenhouseMeasurement(0.5, datetime(2021, 1, 1, 0, 0, 0)),
         GreenhouseMeasurement(0.6, datetime(2021, 1, 1, 0, 1, 0)),
@@ -32,14 +36,15 @@ class DummyMeasurements:
         PotMeasurement(1, 'right', 'left', 0.7, datetime(2021, 1, 1, 0, 2, 0))
     ]
 
-    def get_dummy_measurements(self, measurement_type: str) -> List:
-        if measurement_type == 'greenhouse':
-            return self.GREENHOUSE_MEASUREMENTS
-        elif measurement_type == 'shelf':
-            return self.SHELF_MEASUREMENTS
-        elif measurement_type == 'pump':
-            return self.PUMP_MEASUREMENTS
-        elif measurement_type == 'pot':
-            return self.POT_MEASUREMENTS
-        else:
-            raise ValueError('Invalid measurement type')
+
+def get_dummy_measurements(measurement_type: MeasurementType) -> List:
+    if measurement_type == MeasurementType.GREENHOUSE:
+        return DummyMeasurements.GREENHOUSE_MEASUREMENTS
+    elif measurement_type == MeasurementType.SHELF:
+        return DummyMeasurements.SHELF_MEASUREMENTS
+    elif measurement_type == MeasurementType.PUMP:
+        return DummyMeasurements.PUMP_MEASUREMENTS
+    elif measurement_type == MeasurementType.POT:
+        return DummyMeasurements.POT_MEASUREMENTS
+    else:
+        raise ValueError('Invalid measurement type')

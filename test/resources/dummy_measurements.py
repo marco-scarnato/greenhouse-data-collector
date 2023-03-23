@@ -1,10 +1,10 @@
 from datetime import datetime
 from typing import List
 
-from src.Measurements.greenhouse_measurement import GreenhouseMeasurement
-from src.Measurements.pot_measurement import PotMeasurement
-from src.Measurements.pump_measurement import PumpMeasurement
-from src.Measurements.shelf_measurement import ShelfMeasurement
+from src.measurements.greenhouse_measurement import GreenhouseMeasurement
+from src.measurements.pot_measurement import PotMeasurement
+from src.measurements.pump_measurement import PumpMeasurement
+from src.measurements.shelf_measurement import ShelfMeasurement
 
 
 class DummyMeasurements:

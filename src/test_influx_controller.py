@@ -3,7 +3,7 @@ from unittest import TestCase
 from influxdb_client import Bucket
 
 from influx_controller import InfluxController
-from src.Measurements.measurement_type import MeasurementType
+from src.measurements.measurement_type import MeasurementType
 from test.resources.dummy_measurements import DummyMeasurements
 
 

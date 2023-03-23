@@ -3,7 +3,7 @@ from typing import Optional, List
 from influxdb_client import InfluxDBClient, Bucket, Point
 from decouple import config
 
-from src.Measurements.measurement_type import MeasurementType
+from src.measurements.measurement_type import MeasurementType
 
 
 def check_env_variables():

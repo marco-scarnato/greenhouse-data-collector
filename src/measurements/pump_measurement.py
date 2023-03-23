@@ -2,7 +2,7 @@ from datetime import datetime
 
 from influxdb_client import Point
 
-from src.Measurements.measurement_type import MeasurementType
+from src.measurements.measurement_type import MeasurementType
 
 
 class PumpMeasurement:

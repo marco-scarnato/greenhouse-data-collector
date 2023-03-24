@@ -15,9 +15,28 @@ def check_env_variables():
     if not config('INFLUX_ORG_ID'):
         raise Exception('INFLUX_ORG_ID is not set')
 
-    print("INFLUX_URL: " + config('INFLUX_URL'),
-          "\nINFLUX_TOKEN: " + config('INFLUX_TOKEN'),
-          "\nINFLUX_ORG_ID: " + config('INFLUX_ORG_ID'))
+
+def query_result_to_points(result):
+    """
+    Convert a query result to a list of points
+    :param result: query result
+    :return: list of points
+    """
+    points: List[Point] = []
+    # convert result to list of points
+    for table in result:
+        for record in table.records:
+            point: Point = Point("measurement_name").time(record.get_time())
+            for key, value in record.values.items():
+                # skip private fields
+                if key.startswith('_'):
+                    continue
+                if key in table.columns:
+                    point.field(key, value)
+                else:
+                    point.tag(key, value)
+            points.append(point)
+    return points
 
 
 class InfluxController:
@@ -60,14 +79,40 @@ class InfluxController:
         """
         return self._client.buckets_api().find_bucket_by_name(bucket_name)
 
-    def write_measurements(self, measurement_list: List[Point], bucket: Bucket) -> None:
+    def write_point(self, point: Point, bucket: Bucket) -> None:
         """
-        Write a list of measurements to InfluxDB
-        :param measurement_list: list of measurements to write
+        Write a measurement to bucket
+        :param point: measurement to write
         :param bucket: bucket to write to
         """
-        # TODO check if records can be written in bulk with a list or a for loop is needed
-        self._client.write_api().write(bucket=bucket.name, record=measurement_list)
+        self._client.write_api().write(bucket=bucket.name, record=point)
 
-    def read_measurements(self, measurement_type: MeasurementType, bucket: Bucket) -> List[Point]:
-        pass
+    def write_points(self, points_list: List[Point], bucket: Bucket) -> bool:
+        """
+        Write a list of measurements to bucket
+        :param points_list: list of measurements to write
+        :param bucket: bucket to write to
+        :return: True if written, False otherwise
+        """
+        # TODO check if records can be written in bulk with a list or a for loop is needed
+        return self._client.write_api().write(bucket=bucket.name, record=points_list, org=config('INFLUX_ORG_ID'))
+
+    def read_all_measurements(self, measurement_type: Optional[MeasurementType], bucket: Bucket) -> List[Point]:
+        """
+        Read all measurements from bucket, if measurement_type is specified only measurements of that type are returned.
+        Otherwise, all measurements are returned
+        :param measurement_type: type of measurement to read
+        :param bucket: bucket to read from
+        :return: list of measurements read from bucket
+        """
+        if measurement_type is None:
+            query = f'from(bucket: "{bucket.name}") |> range(start: 0)'
+        else:
+            query = f'from(bucket: "{bucket.name}") |> range(start: 0) |> ' \
+                    f'filter(fn: (r) => r._measurement == "{measurement_type.value}") '
+
+        result = self._client.query_api().query(query)
+        points = query_result_to_points(result)
+
+        return points
+

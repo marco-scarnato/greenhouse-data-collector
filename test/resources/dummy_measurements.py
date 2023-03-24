@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import List
 
+from src.measurements.functions import TIMEZONE
 from src.measurements.greenhouse_measurement import GreenhouseMeasurement
 from src.measurements.measurement_type import MeasurementType
 from src.measurements.pot_measurement import PotMeasurement
@@ -13,9 +14,9 @@ class DummyMeasurements:
     Class containing dummy measurements for testing purposes
     """
     GREENHOUSE_MEASUREMENTS: List[GreenhouseMeasurement] = [
-        GreenhouseMeasurement(0.5, datetime(2021, 1, 1, 0, 0, 0)),
-        GreenhouseMeasurement(0.6, datetime(2021, 1, 1, 0, 1, 0)),
-        GreenhouseMeasurement(0.7, datetime(2021, 1, 1, 0, 2, 0)),
+        GreenhouseMeasurement(0.5, datetime.now(tz=TIMEZONE)),
+        GreenhouseMeasurement(0.6, datetime.now(tz=TIMEZONE)),
+        GreenhouseMeasurement(0.7, datetime.now(tz=TIMEZONE)),
     ]
 
     SHELF_MEASUREMENTS: List[ShelfMeasurement] = [

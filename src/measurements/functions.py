@@ -1,11 +1,14 @@
 from typing import List
 
+import pytz
 from influxdb_client import Point
 
 from src.measurements.greenhouse_measurement import GreenhouseMeasurement
 from src.measurements.pot_measurement import PotMeasurement
 from src.measurements.pump_measurement import PumpMeasurement
 from src.measurements.shelf_measurement import ShelfMeasurement
+
+TIMEZONE = pytz.timezone('Etc/GMT+1')
 
 
 def measurements_to_points(measurements: list) -> List[Point]:

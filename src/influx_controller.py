@@ -1,7 +1,10 @@
+import json
 from typing import Optional, List
 
 from influxdb_client import InfluxDBClient, Bucket, Point
 from decouple import config
+from influxdb_client.client.flux_table import TableList, FluxStructureEncoder
+from influxdb_client.client.write_api import SYNCHRONOUS
 
 from src.measurements.measurement_type import MeasurementType
 
@@ -16,25 +19,33 @@ def check_env_variables():
         raise Exception('INFLUX_ORG_ID is not set')
 
 
-def query_result_to_points(result):
+def query_result_to_points(result: TableList) -> List[Point]:
     """
     Convert a query result to a list of points
     :param result: query result
     :return: list of points
     """
     points: List[Point] = []
+
+    output = json.dumps(result, cls=FluxStructureEncoder, indent=2)
+    print(output)
     # convert result to list of points
     for table in result:
         for record in table.records:
-            point: Point = Point("measurement_name").time(record.get_time())
-            for key, value in record.values.items():
-                # skip private fields
-                if key.startswith('_'):
-                    continue
-                if key in table.columns:
-                    point.field(key, value)
-                else:
-                    point.tag(key, value)
+            # _measurement contains the measurement name and _time contains the timestamp of the measurement
+            measurement_name = record.get_measurement()
+            measurement_time = record.get_time()
+            fields = record.values
+            tags = record.values.get('tags')
+            point_dict = {
+                'measurement': measurement_name,
+                'time': measurement_time,
+                'fields': fields,
+                'tags': tags
+            }
+            point = Point.from_dict(point_dict)
+            print("point", point)
+
             points.append(point)
     return points
 
@@ -51,8 +62,6 @@ class InfluxController:
         self._client: InfluxDBClient = InfluxDBClient(url=config('INFLUX_URL'),
                                                       token=config('INFLUX_TOKEN'),
                                                       org=config('INFLUX_ORG_ID'))
-
-        self._client.buckets_api().find_buckets()
 
     def create_bucket(self, bucket_name: str) -> Optional[Bucket]:
         """
@@ -79,13 +88,14 @@ class InfluxController:
         """
         return self._client.buckets_api().find_bucket_by_name(bucket_name)
 
-    def write_point(self, point: Point, bucket: Bucket) -> None:
+    def write_point(self, point: Point, bucket: Bucket) -> bool:
         """
         Write a measurement to bucket
         :param point: measurement to write
         :param bucket: bucket to write to
         """
-        self._client.write_api().write(bucket=bucket.name, record=point)
+        return self._client.write_api(write_options=SYNCHRONOUS)\
+            .write(bucket=bucket.name, org=self._client.org, record=point)
 
     def write_points(self, points_list: List[Point], bucket: Bucket) -> bool:
         """
@@ -95,9 +105,13 @@ class InfluxController:
         :return: True if written, False otherwise
         """
         # TODO check if records can be written in bulk with a list or a for loop is needed
-        return self._client.write_api().write(bucket=bucket.name, record=points_list, org=config('INFLUX_ORG_ID'))
+        for point in points_list:
+            self.write_point(point, bucket)
 
-    def read_all_measurements(self, measurement_type: Optional[MeasurementType], bucket: Bucket) -> List[Point]:
+        # return self._client.write_api().write(bucket=bucket.name, record=points_list)
+
+    def read_all_measurements(self, bucket: Bucket,
+                              measurement_type: Optional[MeasurementType] = None) -> List[Point]:
         """
         Read all measurements from bucket, if measurement_type is specified only measurements of that type are returned.
         Otherwise, all measurements are returned
@@ -111,7 +125,8 @@ class InfluxController:
             query = f'from(bucket: "{bucket.name}") |> range(start: 0) |> ' \
                     f'filter(fn: (r) => r._measurement == "{measurement_type.value}") '
 
-        result = self._client.query_api().query(query)
+        result: TableList = self._client.query_api().query(query)
+
         points = query_result_to_points(result)
 
         return points

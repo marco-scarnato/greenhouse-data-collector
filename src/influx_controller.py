@@ -50,6 +50,15 @@ def query_result_to_points(result: TableList) -> List[Point]:
     return points
 
 
+def query_result_to_points_2(tables: TableList) -> List[Point]:
+    points = []
+    for table in tables:
+        for record in table.records:
+            point = Point.from_dict(record.values)
+            points.append(point)
+    return points
+
+
 class InfluxController:
     # https://influxdb-client.readthedocs.io/en/latest/
 
@@ -94,7 +103,7 @@ class InfluxController:
         :param point: measurement to write
         :param bucket: bucket to write to
         """
-        return self._client.write_api(write_options=SYNCHRONOUS)\
+        return self._client.write_api(write_options=SYNCHRONOUS) \
             .write(bucket=bucket.name, org=self._client.org, record=point)
 
     def write_points(self, points_list: List[Point], bucket: Bucket) -> bool:
@@ -127,7 +136,7 @@ class InfluxController:
 
         result: TableList = self._client.query_api().query(query)
 
-        points = query_result_to_points(result)
+        points = query_result_to_points_2(result)  # TODO testing
+        print("points: ", points)
 
         return points
-

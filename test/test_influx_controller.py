@@ -1,3 +1,4 @@
+import unittest
 from datetime import datetime, timedelta
 from typing import List
 from unittest import TestCase
@@ -5,7 +6,7 @@ from unittest import TestCase
 import pytz
 from influxdb_client import Bucket, Point
 
-from influx_controller import InfluxController
+from src.influx_controller import InfluxController
 from src.measurements.functions import measurements_to_points, TIMEZONE
 from src.measurements.greenhouse_measurement import GreenhouseMeasurement
 from src.measurements.measurement_type import MeasurementType
@@ -55,7 +56,7 @@ class TestInfluxController(TestCase):
             influx_controller.write_point(bucket=test_bucket, point=greenhouse_point)
         finally:
             pass
-            # influx_controller.delete_bucket(self.TEST_BUCKET_NAME)
+            influx_controller.delete_bucket(self.TEST_BUCKET_NAME)
 
     def test_write_measurements(self):
         """
@@ -80,4 +81,9 @@ class TestInfluxController(TestCase):
                 influx_controller.write_points(bucket=test_bucket, points_list=dummy_points)
         finally:
             pass
-            # influx_controller.delete_bucket(self.TEST_BUCKET_NAME)
+            influx_controller.delete_bucket(self.TEST_BUCKET_NAME)
+
+
+if __name__ == '__main__':
+    unittest.main()
+

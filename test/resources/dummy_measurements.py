@@ -32,9 +32,9 @@ class DummyMeasurements:
     ]
 
     POT_MEASUREMENTS: List[PotMeasurement] = [
-        PotMeasurement(1, 'left', 'left', 0.5, datetime(2021, 1, 1, 0, 0, 0)),
-        PotMeasurement(1, 'left', 'right', 0.6, datetime(2021, 1, 1, 0, 1, 0)),
-        PotMeasurement(1, 'right', 'left', 0.7, datetime(2021, 1, 1, 0, 2, 0))
+        PotMeasurement(1, 'right', 'left', 15, datetime(2023, 3, 26, 0, 0, 0)),
+        PotMeasurement(1, 'right', 'left', 10, datetime(2023, 3, 25, 0, 1, 0)),
+        PotMeasurement(1, 'right', 'left', 3, datetime(2023, 3, 24, 0, 2, 0))
     ]
 
 

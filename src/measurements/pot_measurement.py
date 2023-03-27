@@ -47,10 +47,10 @@ class PotMeasurement:
                and self.time == other.time
 
     def __str__(self):
-        return f'ShelfMeasurement(shelf_floor={self.shelf_floor}, group_position={self.group_position}, pot_position={self.pot_position}, moisture={self.moisture}, time={self.time})'
+        return f'PotMeasurement(shelf_floor={self.shelf_floor}, group_position={self.group_position}, pot_position={self.pot_position}, moisture={self.moisture}, time={self.time})'
 
     def to_point(self) -> Point:
-        return Point(MeasurementType.SHELF.get_measurement_name())\
+        return Point(MeasurementType.POT.get_measurement_name())\
             .tag("shelf_floor", self.shelf_floor)\
             .tag("group_position", self.group_position)\
             .tag("pot_position", self.pot_position)\

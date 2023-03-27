@@ -1,12 +1,12 @@
 from datetime import datetime
 from typing import List
 
-from src.measurements.functions import TIMEZONE
-from src.measurements.greenhouse_measurement import GreenhouseMeasurement
-from src.measurements.measurement_type import MeasurementType
-from src.measurements.pot_measurement import PotMeasurement
-from src.measurements.pump_measurement import PumpMeasurement
-from src.measurements.shelf_measurement import ShelfMeasurement
+from src.influx.measurements.functions import TIMEZONE
+from src.influx.measurements.greenhouse_measurement import GreenhouseMeasurement
+from src.influx.measurements.measurement_type import MeasurementType
+from src.influx.measurements.pot_measurement import PotMeasurement
+from src.influx.measurements.pump_measurement import PumpMeasurement
+from src.influx.measurements.shelf_measurement import ShelfMeasurement
 
 
 class DummyMeasurements:

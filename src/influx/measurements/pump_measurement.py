@@ -2,7 +2,7 @@ from datetime import datetime
 
 from influxdb_client import Point
 
-from src.measurements.measurement_type import MeasurementType
+from src.influx.measurements.measurement_type import MeasurementType
 
 
 class PumpMeasurement:
@@ -48,3 +48,5 @@ class PumpMeasurement:
             .tag("group_position", self.group_position)\
             .field("pumped_water", self.pumped_water)\
             .time(self.time)
+
+    

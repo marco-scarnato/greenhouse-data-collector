@@ -1,16 +1,14 @@
 import unittest
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import List
 from unittest import TestCase
 
-import pytz
 from influxdb_client import Bucket, Point
 
-from src.influx_controller import InfluxController
-from src.measurements.functions import measurements_to_points, TIMEZONE
-from src.measurements.greenhouse_measurement import GreenhouseMeasurement
-from src.measurements.measurement_type import MeasurementType
-from test.resources.dummy_measurements import get_dummy_measurements, DummyMeasurements
+from src.influx.influx_controller import InfluxController
+from src.influx.measurements.functions import measurements_to_points, TIMEZONE
+from src.influx.measurements.measurement_type import MeasurementType
+from test.resources.dummy_measurements import get_dummy_measurements
 
 
 # TODO Remove .env from repo

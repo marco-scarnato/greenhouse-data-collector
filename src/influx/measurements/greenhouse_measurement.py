@@ -1,8 +1,11 @@
+import time
 from datetime import datetime
 
-from influxdb_client import Point
+from influxdb_client import Point, Bucket
 
-from src.measurements.measurement_type import MeasurementType
+from src.influx.influx_controller import InfluxController
+from src.influx.measurements.measurement_type import MeasurementType
+from src.sensors.lightlevel import LightLevel
 
 
 class GreenhouseMeasurement:
@@ -17,9 +20,10 @@ class GreenhouseMeasurement:
         time of the measurement
     """
 
-    def __init__(self, light: float, time: datetime):
+    def __init__(self, light: float, time: datetime, light_sensor: LightLevel):
         self.light = light
         self.time = time
+        self.light_sensor = light_sensor
 
     def __eq__(self, other):
         return self.light == other.light and self.time == other.time
@@ -32,3 +36,11 @@ class GreenhouseMeasurement:
             .field("light", self.light)\
             .time(self.time)
 
+    def read_sensor_data(self, interval: int = 5):
+        influx_controller = InfluxController()
+        bucket: Bucket = influx_controller.get_bucket("greenhouse")
+        while True:
+            self.light = self.light_sensor.read()
+            self.time = datetime.now()
+            influx_controller.write_point(self.to_point(), bucket)
+            time.sleep(interval)

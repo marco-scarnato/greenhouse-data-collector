@@ -1,8 +1,11 @@
+import time
 from datetime import datetime
 
-from influxdb_client import Point
+from influxdb_client import Point, Bucket
 
-from src.measurements.measurement_type import MeasurementType
+from src.influx.influx_controller import InfluxController
+from src.influx.measurements.measurement_type import MeasurementType
+from src.sensors.moisture import Moisture
 
 
 class PotMeasurement:
@@ -23,7 +26,14 @@ class PotMeasurement:
         time of the measurement
     """
 
-    def __init__(self, shelf_floor: int, group_position: str, pot_position: str, moisture: float, time: datetime):
+    def __init__(self,
+                 shelf_floor: int,
+                 group_position: str,
+                 pot_position: str,
+                 moisture: float,
+                 time: datetime,
+                 moisture_sensor: Moisture):
+
         # check if shelf_floor is 1 or 2
         if shelf_floor != 1 and shelf_floor != 2:
             raise ValueError("shelf_floor must be 1 or 2")
@@ -37,6 +47,7 @@ class PotMeasurement:
         self.group_position = group_position
         self.pot_position = pot_position
         self.moisture = moisture
+        self.moisture_sensor = moisture_sensor
         self.time = time
 
     def __eq__(self, other):
@@ -56,4 +67,12 @@ class PotMeasurement:
             .tag("pot_position", self.pot_position)\
             .field("moisture", self.moisture)\
             .time(self.time)
+
+    def read_sensor_data(self, interval: int = 5):
+        influx_controller = InfluxController()
+        bucket: Bucket = influx_controller.get_bucket("greenhouse")
+        while True:
+            self.moisture = self.moisture_sensor.read()
+            influx_controller.write_point(self.to_point(), bucket)
+            time.sleep(interval)
 

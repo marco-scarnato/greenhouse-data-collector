@@ -1,16 +1,32 @@
-# This is a sample Python script.
+import threading
+from datetime import datetime
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from src.influx.measurements.functions import TIMEZONE
+from src.influx.measurements.greenhouse_measurement import GreenhouseMeasurement
+from src.influx.measurements.pot_measurement import PotMeasurement
+from src.influx.measurements.shelf_measurement import ShelfMeasurement
+from src.sensors.humidity import Humidity
+from src.sensors.lightlevel import LightLevel
+from src.sensors.mcp3008 import MCP3008
+from src.sensors.moisture import Moisture
+from src.sensors.temperature import Temperature
 
 
-def test(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+def main():
+    mcp3008 = MCP3008()
+
+    shelf_measurement = ShelfMeasurement(1, 20, 50, datetime.now(tz=TIMEZONE), Humidity(), Temperature())
+    thread_shelf = threading.Thread(target=shelf_measurement.read_sensor_data())
+    thread_shelf.start()
+
+    pot_measurement = PotMeasurement(1, 'right', 'left', 20, datetime.now(tz=TIMEZONE), Moisture(mcp3008, 1))
+    thread_pot = threading.Thread(target=pot_measurement.read_sensor_data())
+    thread_pot.start()
+
+    greenhouse_measurement = GreenhouseMeasurement(50, datetime.now(tz=TIMEZONE), LightLevel())
+    thread_greenhouse = threading.Thread(target=greenhouse_measurement.read_sensor_data())
+    thread_greenhouse.start()
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    test()
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    main()

@@ -3,10 +3,10 @@ from typing import List
 import pytz
 from influxdb_client import Point
 
-from src.measurements.greenhouse_measurement import GreenhouseMeasurement
-from src.measurements.pot_measurement import PotMeasurement
-from src.measurements.pump_measurement import PumpMeasurement
-from src.measurements.shelf_measurement import ShelfMeasurement
+from src.influx.measurements.greenhouse_measurement import GreenhouseMeasurement
+from src.influx.measurements.pot_measurement import PotMeasurement
+from src.influx.measurements.pump_measurement import PumpMeasurement
+from src.influx.measurements.shelf_measurement import ShelfMeasurement
 
 TIMEZONE = pytz.timezone('Etc/GMT+1')
 

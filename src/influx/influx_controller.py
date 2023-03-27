@@ -1,12 +1,12 @@
 import json
-from typing import Optional, List
+from typing import Optional, List, Iterable
 
 from influxdb_client import InfluxDBClient, Bucket, Point
 from decouple import config
 from influxdb_client.client.flux_table import TableList, FluxStructureEncoder
 from influxdb_client.client.write_api import SYNCHRONOUS
 
-from src.measurements.measurement_type import MeasurementType
+from src.influx.measurements.measurement_type import MeasurementType
 
 
 def check_env_variables():
@@ -97,7 +97,7 @@ class InfluxController:
         """
         return self._client.buckets_api().find_bucket_by_name(bucket_name)
 
-    def write_point(self, point: Point, bucket: Bucket) -> bool:
+    def write_point(self, point: Point | Iterable[Point], bucket: Bucket) -> bool:
         """
         Write a measurement to bucket
         :param point: measurement to write

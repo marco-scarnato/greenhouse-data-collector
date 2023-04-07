@@ -3,9 +3,9 @@ from typing import List
 
 from influxdb_client import Bucket, Point
 
-from src.influx.influx_controller import InfluxController
-from src.influx.measurements.functions import measurements_to_points
-from src.influx.measurements.measurement_type import MeasurementType
+from influx.influx_controller import InfluxController
+from influx.measurements.functions import measurements_to_points
+from influx.measurements.measurement_type import MeasurementType
 from test.resources.dummy_measurements import get_dummy_measurements
 
 

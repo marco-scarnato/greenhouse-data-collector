@@ -1,5 +1,5 @@
 import json
-from typing import Optional, List, Iterable
+from typing import Optional, List, Iterable, Union
 
 from influxdb_client import InfluxDBClient, Bucket, Point
 from decouple import config
@@ -97,7 +97,7 @@ class InfluxController:
         """
         return self._client.buckets_api().find_bucket_by_name(bucket_name)
 
-    def write_point(self, point: Point | Iterable[Point], bucket: Bucket) -> bool:
+    def write_point(self, point: Union[Point, Iterable[Point]], bucket: Bucket) -> bool:
         """
         Write a measurement to bucket
         :param point: measurement to write

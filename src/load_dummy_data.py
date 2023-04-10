@@ -4,8 +4,8 @@ from typing import List
 from influxdb_client import Bucket, Point
 
 from influx.influx_controller import InfluxController
-from influx.measurements.functions import measurements_to_points
-from influx.measurements.measurement_type import MeasurementType
+from influx.assets.functions import measurements_to_points
+from influx.assets.measurement_type import MeasurementType
 from test.resources.dummy_measurements import get_dummy_measurements
 
 
@@ -25,7 +25,7 @@ class MyTestCase(unittest.TestCase):
 
         dummy_measurements: list = get_dummy_measurements(MeasurementType.POT)
 
-        # convert the measurements to points
+        # convert the assets to points
         dummy_points: List[Point] = measurements_to_points(dummy_measurements)
 
         # write the dummy measurement to influxdb

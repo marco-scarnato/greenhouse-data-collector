@@ -6,12 +6,10 @@ from unittest import TestCase
 from influxdb_client import Bucket, Point
 
 from src.influx.influx_controller import InfluxController
-from src.influx.measurements.functions import measurements_to_points, TIMEZONE
-from src.influx.measurements.measurement_type import MeasurementType
+from src.influx.assets.functions import measurements_to_points, TIMEZONE
+from src.influx.assets.measurement_type import MeasurementType
 from test.resources.dummy_measurements import get_dummy_measurements
 
-
-# TODO Remove .env from repo
 
 class TestInfluxController(TestCase):
     TEST_BUCKET_NAME: str = 'test'
@@ -40,12 +38,11 @@ class TestInfluxController(TestCase):
             pass
             influx_controller.delete_bucket(self.TEST_BUCKET_NAME)
 
-    def test_write_measurement_greenhouse(self):
+    def test_write_measurement(self):
         """
         Test the writing of a single greenhouse measurement in InfluxDB
         """
         influx_controller = InfluxController()
-        #influx_controller.delete_bucket(self.TEST_BUCKET_NAME)  # TODO remove this line
         influx_controller.create_bucket(self.TEST_BUCKET_NAME)
         test_bucket: Bucket = influx_controller.get_bucket(self.TEST_BUCKET_NAME)
         greenhouse_measurement = get_dummy_measurements(MeasurementType.GREENHOUSE)[0]
@@ -58,11 +55,10 @@ class TestInfluxController(TestCase):
 
     def test_write_measurements(self):
         """
-        Test the writing of a measurement in InfluxDB.
+        Test writing multiple assets in InfluxDB.
         Writes one measurement of each measurement type in influxdb, reads them back and checks if they are the same
         """
         influx_controller = InfluxController()
-        influx_controller.delete_bucket(self.TEST_BUCKET_NAME)  # TODO remove this line
 
         influx_controller.create_bucket(self.TEST_BUCKET_NAME)
         test_bucket: Bucket = influx_controller.get_bucket(self.TEST_BUCKET_NAME)
@@ -72,7 +68,7 @@ class TestInfluxController(TestCase):
             for measurement_type in MeasurementType:
                 # get a dummy measurement of the current measurement type
                 dummy_measurements: list = get_dummy_measurements(measurement_type)
-                # convert the measurements to points
+                # convert the assets to points
                 dummy_points: List[Point] = measurements_to_points(dummy_measurements)
 
                 # write the dummy measurement to influxdb
@@ -84,4 +80,3 @@ class TestInfluxController(TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-

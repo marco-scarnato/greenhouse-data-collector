@@ -1,10 +1,10 @@
 import threading
 from datetime import datetime
 
-from src.influx.measurements.functions import TIMEZONE
-from src.influx.measurements.greenhouse_measurement import GreenhouseMeasurement
-from src.influx.measurements.pot_measurement import PotMeasurement
-from src.influx.measurements.shelf_measurement import ShelfMeasurement
+from src.influx.assets.functions import TIMEZONE
+from src.influx.assets.greenhouse_measurement import GreenhouseMeasurement
+from src.influx.assets.pot_measurement import PotMeasurement
+from src.influx.assets.shelf_measurement import ShelfMeasurement
 from src.sensors.humidity import Humidity
 from src.sensors.lightlevel import LightLevel
 from src.sensors.mcp3008 import MCP3008

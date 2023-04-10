@@ -1,17 +1,17 @@
 from datetime import datetime
 from typing import List
 
-from src.influx.measurements.functions import TIMEZONE
-from src.influx.measurements.greenhouse_measurement import GreenhouseMeasurement
-from src.influx.measurements.measurement_type import MeasurementType
-from src.influx.measurements.pot_measurement import PotMeasurement
-from src.influx.measurements.pump_measurement import PumpMeasurement
-from src.influx.measurements.shelf_measurement import ShelfMeasurement
+from src.influx.assets.functions import TIMEZONE
+from src.influx.assets.greenhouse_measurement import GreenhouseMeasurement
+from src.influx.assets.measurement_type import MeasurementType
+from src.influx.assets.pot_measurement import PotMeasurement
+from src.influx.assets.pump_measurement import PumpMeasurement
+from src.influx.assets.shelf_measurement import ShelfMeasurement
 
 
 class DummyMeasurements:
     """
-    Class containing dummy measurements for testing purposes
+    Class containing dummy assets for testing purposes
     """
     GREENHOUSE_MEASUREMENTS: List[GreenhouseMeasurement] = [
         GreenhouseMeasurement(0.5, datetime.now(tz=TIMEZONE)),

@@ -72,10 +72,10 @@ class InfluxController:
                                                       token=config('INFLUX_TOKEN'),
                                                       org=config('INFLUX_ORG_ID'))
 
-    def create_bucket(self, bucket_name: str) -> Optional[Bucket]:
+    def create_bucket(self, bucket_name: str) -> Bucket:
         """
         Create a new bucket in InfluxDB
-        :return: new bucket if created, None otherwise
+        :return: new bucket created
         """
         return self._client.buckets_api().create_bucket(bucket_name=bucket_name)
 

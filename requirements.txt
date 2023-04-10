@@ -2,3 +2,4 @@ python-decouple
 influxdb-client
 pytz
 board
+opencv-python

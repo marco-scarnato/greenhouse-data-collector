@@ -70,7 +70,8 @@ class PotMeasurement:
 
     def read_sensor_data(self, interval: int = 5):
         influx_controller = InfluxController()
-        bucket: Bucket = influx_controller.get_bucket("greenhouse")
+        bucket = influx_controller.get_bucket("greenhouse") or influx_controller.create_bucket("greenhouse")
+        
         while True:
             self.moisture = self.moisture_sensor.read()
             influx_controller.write_point(self.to_point(), bucket)

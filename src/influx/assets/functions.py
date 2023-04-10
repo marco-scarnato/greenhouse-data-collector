@@ -3,7 +3,7 @@ from typing import List
 import pytz
 from influxdb_client import Point
 
-from src.influx.assets.greenhouse_measurement import GreenhouseMeasurement
+from src.influx.assets.greenhouse_measurement import Greenhouse
 from src.influx.assets.pot_measurement import PotMeasurement
 from src.influx.assets.pump_measurement import PumpMeasurement
 from src.influx.assets.shelf_measurement import ShelfMeasurement
@@ -20,7 +20,7 @@ def measurements_to_points(measurements: list) -> List[Point]:
     points: List[Point] = []
     for measurement in measurements:
         # based on the measurement type, the measurement is converted to a point
-        if isinstance(measurement, GreenhouseMeasurement):
+        if isinstance(measurement, Greenhouse):
             points.append(measurement.to_point())
         elif isinstance(measurement, ShelfMeasurement):
             points.append(measurement.to_point())

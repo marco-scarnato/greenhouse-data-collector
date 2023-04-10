@@ -2,7 +2,7 @@ import threading
 from datetime import datetime
 
 from src.influx.assets.functions import TIMEZONE
-from src.influx.assets.greenhouse_measurement import GreenhouseMeasurement
+from src.influx.assets.greenhouse_measurement import Greenhouse
 from src.influx.assets.pot_measurement import PotMeasurement
 from src.influx.assets.shelf_measurement import ShelfMeasurement
 from src.sensors.humidity import Humidity
@@ -23,7 +23,7 @@ def main():
     thread_pot = threading.Thread(target=pot_measurement.read_sensor_data())
     thread_pot.start()
 
-    greenhouse_measurement = GreenhouseMeasurement(50, datetime.now(tz=TIMEZONE), LightLevel())
+    greenhouse_measurement = Greenhouse(50, datetime.now(tz=TIMEZONE), LightLevel())
     thread_greenhouse = threading.Thread(target=greenhouse_measurement.read_sensor_data())
     thread_greenhouse.start()
 

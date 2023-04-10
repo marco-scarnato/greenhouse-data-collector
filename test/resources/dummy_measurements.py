@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import List
 
 from src.influx.assets.functions import TIMEZONE
-from src.influx.assets.greenhouse_measurement import GreenhouseMeasurement
+from src.influx.assets.greenhouse_measurement import Greenhouse
 from src.influx.assets.measurement_type import MeasurementType
 from src.influx.assets.pot_measurement import PotMeasurement
 from src.influx.assets.pump_measurement import PumpMeasurement
@@ -13,10 +13,10 @@ class DummyMeasurements:
     """
     Class containing dummy assets for testing purposes
     """
-    GREENHOUSE_MEASUREMENTS: List[GreenhouseMeasurement] = [
-        GreenhouseMeasurement(0.5, datetime.now(tz=TIMEZONE)),
-        GreenhouseMeasurement(0.6, datetime.now(tz=TIMEZONE)),
-        GreenhouseMeasurement(0.7, datetime.now(tz=TIMEZONE)),
+    GREENHOUSE_MEASUREMENTS: List[Greenhouse] = [
+        Greenhouse(0.5, datetime.now(tz=TIMEZONE)),
+        Greenhouse(0.6, datetime.now(tz=TIMEZONE)),
+        Greenhouse(0.7, datetime.now(tz=TIMEZONE)),
     ]
 
     SHELF_MEASUREMENTS: List[ShelfMeasurement] = [

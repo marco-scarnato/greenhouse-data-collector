@@ -5,7 +5,7 @@ from datetime import datetime
 from influxdb_client import Point, Bucket
 
 from src.influx.influx_controller import InfluxController
-from src.influx.measurements.measurement_type import MeasurementType
+from src.influx.assets.measurement_type import MeasurementType
 from src.sensors.humidity import Humidity
 from src.sensors.temperature import Temperature
 

@@ -6,7 +6,7 @@ from decouple import config
 from influxdb_client.client.flux_table import TableList, FluxStructureEncoder
 from influxdb_client.client.write_api import SYNCHRONOUS
 
-from src.influx.measurements.measurement_type import MeasurementType
+from src.influx.assets.measurement_type import MeasurementType
 
 
 def check_env_variables():
@@ -17,46 +17,6 @@ def check_env_variables():
         raise Exception('INFLUX_TOKEN is not set')
     if not config('INFLUX_ORG_ID'):
         raise Exception('INFLUX_ORG_ID is not set')
-
-
-def query_result_to_points(result: TableList) -> List[Point]:
-    """
-    Convert a query result to a list of points
-    :param result: query result
-    :return: list of points
-    """
-    points: List[Point] = []
-
-    output = json.dumps(result, cls=FluxStructureEncoder, indent=2)
-    print(output)
-    # convert result to list of points
-    for table in result:
-        for record in table.records:
-            # _measurement contains the measurement name and _time contains the timestamp of the measurement
-            measurement_name = record.get_measurement()
-            measurement_time = record.get_time()
-            fields = record.values
-            tags = record.values.get('tags')
-            point_dict = {
-                'measurement': measurement_name,
-                'time': measurement_time,
-                'fields': fields,
-                'tags': tags
-            }
-            point = Point.from_dict(point_dict)
-            print("point", point)
-
-            points.append(point)
-    return points
-
-
-def query_result_to_points_2(tables: TableList) -> List[Point]:
-    points = []
-    for table in tables:
-        for record in table.records:
-            point = Point.from_dict(record.values)
-            points.append(point)
-    return points
 
 
 class InfluxController:
@@ -108,8 +68,8 @@ class InfluxController:
 
     def write_points(self, points_list: List[Point], bucket: Bucket) -> bool:
         """
-        Write a list of measurements to bucket
-        :param points_list: list of measurements to write
+        Write a list of assets to bucket
+        :param points_list: list of assets to write
         :param bucket: bucket to write to
         :return: True if written, False otherwise
         """
@@ -118,25 +78,3 @@ class InfluxController:
             self.write_point(point, bucket)
 
         # return self._client.write_api().write(bucket=bucket.name, record=points_list)
-
-    def read_all_measurements(self, bucket: Bucket,
-                              measurement_type: Optional[MeasurementType] = None) -> List[Point]:
-        """
-        Read all measurements from bucket, if measurement_type is specified only measurements of that type are returned.
-        Otherwise, all measurements are returned
-        :param measurement_type: type of measurement to read
-        :param bucket: bucket to read from
-        :return: list of measurements read from bucket
-        """
-        if measurement_type is None:
-            query = f'from(bucket: "{bucket.name}") |> range(start: 0)'
-        else:
-            query = f'from(bucket: "{bucket.name}") |> range(start: 0) |> ' \
-                    f'filter(fn: (r) => r._measurement == "{measurement_type.value}") '
-
-        result: TableList = self._client.query_api().query(query)
-
-        points = query_result_to_points_2(result)  # TODO testing
-        print("points: ", points)
-
-        return points

@@ -1,36 +1,24 @@
 import unittest
-from typing import List
 
-from influxdb_client import Bucket, Point
 
 from influx.influx_controller import InfluxController
-from influx.assets.functions import measurements_to_points
-from influx.assets.measurement_type import MeasurementType
-from test.resources.dummy_measurements import get_dummy_measurements
+
+from test.dummy_measurements import POT_MEASUREMENTS
 
 
 class MyTestCase(unittest.TestCase):
-    GREENHOUSE_BUCKET_NAME: str = 'greenhouse_test'
+    GREENHOUSE_BUCKET_NAME: str = "greenhouse_test"
 
     def test_smol_write_pot(self):
         influx_controller = InfluxController()
 
-        greenhouse_bucket: Bucket = influx_controller.get_bucket(self.GREENHOUSE_BUCKET_NAME)
+        influx_controller.delete_bucket(self.GREENHOUSE_BUCKET_NAME)
+        greenhouse_bucket = influx_controller.create_bucket(self.GREENHOUSE_BUCKET_NAME)
 
-        if greenhouse_bucket is None:
-            greenhouse_bucket = influx_controller.create_bucket(self.GREENHOUSE_BUCKET_NAME)
-        else:
-            influx_controller.delete_bucket(self.GREENHOUSE_BUCKET_NAME)
-            greenhouse_bucket = influx_controller.create_bucket(self.GREENHOUSE_BUCKET_NAME)
+        points: list = POT_MEASUREMENTS[:5]
 
-        dummy_measurements: list = get_dummy_measurements(MeasurementType.POT)
-
-        # convert the assets to points
-        dummy_points: List[Point] = measurements_to_points(dummy_measurements)
-
-        # write the dummy measurement to influxdb
-        influx_controller.write_points(bucket=greenhouse_bucket, points_list=dummy_points)
+        influx_controller.write_point(bucket=greenhouse_bucket, point=points)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

@@ -2,9 +2,9 @@ import threading
 from datetime import datetime
 
 from src.influx.assets.functions import TIMEZONE
-from src.influx.assets.greenhouse_measurement import Greenhouse
-from src.influx.assets.pot_measurement import PotMeasurement
-from src.influx.assets.shelf_measurement import ShelfMeasurement
+from src.influx.assets.greenhouse_asset import GreenhouseAsset
+from src.influx.assets.pot_asset import PotAsset
+from src.influx.assets.shelf_asset import ShelfAsset
 from src.sensors.humidity import Humidity
 from src.sensors.lightlevel import LightLevel
 from src.sensors.mcp3008 import MCP3008
@@ -15,15 +15,15 @@ from src.sensors.temperature import Temperature
 def main():
     mcp3008 = MCP3008()
 
-    shelf_measurement = ShelfMeasurement(1, 20, 50, datetime.now(tz=TIMEZONE), Humidity(), Temperature())
+    shelf_measurement = ShelfAsset(1, 20, 50, datetime.now(tz=TIMEZONE), Humidity(), Temperature())
     thread_shelf = threading.Thread(target=shelf_measurement.read_sensor_data())
     thread_shelf.start()
 
-    pot_measurement = PotMeasurement(1, 'right', 'left', 20, datetime.now(tz=TIMEZONE), Moisture(mcp3008, 1))
+    pot_measurement = PotAsset(1, 'right', 'left', 20, datetime.now(tz=TIMEZONE), Moisture(mcp3008, 1))
     thread_pot = threading.Thread(target=pot_measurement.read_sensor_data())
     thread_pot.start()
 
-    greenhouse_measurement = Greenhouse(50, datetime.now(tz=TIMEZONE), LightLevel())
+    greenhouse_measurement = GreenhouseAsset(50, datetime.now(tz=TIMEZONE), LightLevel())
     thread_greenhouse = threading.Thread(target=greenhouse_measurement.read_sensor_data())
     thread_greenhouse.start()
 

@@ -11,12 +11,12 @@ from src.influx.assets.measurement_type import MeasurementType
 
 def check_env_variables():
     # check if environment variables are set
-    if not config('INFLUX_URL'):
-        raise Exception('INFLUX_URL is not set')
-    if not config('INFLUX_TOKEN'):
-        raise Exception('INFLUX_TOKEN is not set')
-    if not config('INFLUX_ORG_ID'):
-        raise Exception('INFLUX_ORG_ID is not set')
+    if not config("INFLUX_URL"):
+        raise Exception("INFLUX_URL is not set")
+    if not config("INFLUX_TOKEN"):
+        raise Exception("INFLUX_TOKEN is not set")
+    if not config("INFLUX_ORG_ID"):
+        raise Exception("INFLUX_ORG_ID is not set")
 
 
 class InfluxController:
@@ -28,9 +28,12 @@ class InfluxController:
         from the environment variables in .env file
         """
         check_env_variables()
-        self._client: InfluxDBClient = InfluxDBClient(url=config('INFLUX_URL'),
-                                                      token=config('INFLUX_TOKEN'),
-                                                      org=config('INFLUX_ORG_ID'))
+        url, token, org = (
+            str(config("INFLUX_URL")),
+            str(config("INFLUX_TOKEN")),
+            str(config("INFLUX_ORG_ID")),
+        )
+        self._client: InfluxDBClient = InfluxDBClient(url=url, token=token, org=org)
 
     def create_bucket(self, bucket_name: str) -> Bucket:
         """
@@ -45,7 +48,10 @@ class InfluxController:
         :return: True if deleted, False otherwise
         """
 
-        if self._client.buckets_api().delete_bucket(self.get_bucket(bucket_name)) is None:
+        if (
+            self._client.buckets_api().delete_bucket(self.get_bucket(bucket_name))
+            is None
+        ):
             return False
         else:
             return True
@@ -63,18 +69,6 @@ class InfluxController:
         :param point: measurement to write
         :param bucket: bucket to write to
         """
-        return self._client.write_api(write_options=SYNCHRONOUS) \
-            .write(bucket=bucket.name, org=self._client.org, record=point)
-
-    def write_points(self, points_list: List[Point], bucket: Bucket) -> bool:
-        """
-        Write a list of assets to bucket
-        :param points_list: list of assets to write
-        :param bucket: bucket to write to
-        :return: True if written, False otherwise
-        """
-        # TODO check if records can be written in bulk with a list or a for loop is needed
-        for point in points_list:
-            self.write_point(point, bucket)
-
-        # return self._client.write_api().write(bucket=bucket.name, record=points_list)
+        return self._client.write_api(write_options=SYNCHRONOUS).write(
+            bucket=bucket.name, org=self._client.org, record=point
+        )

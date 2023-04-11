@@ -3,3 +3,6 @@ influxdb-client
 pytz
 board
 opencv-python
+spidev
+adafruit-circuitpython-dht
+numpy

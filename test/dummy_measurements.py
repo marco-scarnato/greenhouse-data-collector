@@ -17,6 +17,7 @@ humidity_data = np.linspace(0, 100, 100)
 pumpd_water_data = np.linspace(0, 100, 100)
 moist_data = np.linspace(0, 100, 100)
 
+np.random.seed(42)
 ones_and_twos = np.random.choice([1, 2], size=100, replace=True)
 left_and_right = np.random.choice(["left", "right"], size=100, replace=True)
 

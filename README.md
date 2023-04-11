@@ -17,6 +17,6 @@ The sensors retrieve data related to:
 To load dummy data on your local influxdb database, run the following command from the root of the project:
 
 ```bash
-python src/load_dummy_data.py
+python src/load_dummy_data_smol.py
 ```
 

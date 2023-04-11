@@ -15,15 +15,15 @@ from src.sensors.temperature import Temperature
 def main():
     mcp3008 = MCP3008()
 
-    shelf_measurement = ShelfAsset(1, 20, 50, datetime.now(tz=TIMEZONE), Humidity(), Temperature())
+    shelf_measurement = ShelfAsset(1, Humidity(), Temperature())
     thread_shelf = threading.Thread(target=shelf_measurement.read_sensor_data())
     thread_shelf.start()
 
-    pot_measurement = PotAsset(1, 'right', 'left', 20, datetime.now(tz=TIMEZONE), Moisture(mcp3008, 1))
+    pot_measurement = PotAsset(1, 'right', 'left', Moisture(mcp3008, 1))
     thread_pot = threading.Thread(target=pot_measurement.read_sensor_data())
     thread_pot.start()
 
-    greenhouse_measurement = GreenhouseAsset(50, datetime.now(tz=TIMEZONE), LightLevel())
+    greenhouse_measurement = GreenhouseAsset(LightLevel())
     thread_greenhouse = threading.Thread(target=greenhouse_measurement.read_sensor_data())
     thread_greenhouse.start()
 

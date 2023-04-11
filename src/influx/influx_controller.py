@@ -40,20 +40,23 @@ class InfluxController:
         Create a new bucket in InfluxDB
         :return: new bucket created
         """
-        return self._client.buckets_api().create_bucket(bucket_name=bucket_name)
+        bucket: Bucket = self.get_bucket(bucket_name)
+        if bucket is None:
+            return self._client.buckets_api().create_bucket(bucket_name=bucket_name)
+        else:
+            return bucket
 
     def delete_bucket(self, bucket_name: str) -> bool:
         """
         Delete a bucket from InfluxDB
         :return: True if deleted, False otherwise
         """
+        bucket: Bucket = self.get_bucket(bucket_name)
 
-        if (
-            self._client.buckets_api().delete_bucket(self.get_bucket(bucket_name))
-            is None
-        ):
+        if bucket is None:
             return False
         else:
+            self._client.buckets_api().delete_bucket(bucket)
             return True
 
     def get_bucket(self, bucket_name: str) -> Optional[Bucket]:

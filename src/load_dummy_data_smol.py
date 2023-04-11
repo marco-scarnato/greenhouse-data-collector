@@ -7,7 +7,7 @@ from test.dummy_measurements import POT_MEASUREMENTS
 
 
 class MyTestCase(unittest.TestCase):
-    GREENHOUSE_BUCKET_NAME: str = "greenhouse_test"
+    GREENHOUSE_BUCKET_NAME: str = "armando"
 
     def test_smol_write_pot(self):
         influx_controller = InfluxController()

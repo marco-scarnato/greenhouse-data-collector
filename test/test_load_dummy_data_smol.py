@@ -1,7 +1,7 @@
 import unittest
 
 
-from influx.influx_controller import InfluxController
+from src.influx.influx_controller import InfluxController
 
 from test.dummy_measurements import POT_MEASUREMENTS
 

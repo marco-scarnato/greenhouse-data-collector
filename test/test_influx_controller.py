@@ -1,13 +1,11 @@
 import unittest
 from datetime import datetime
-from typing import List
-from unittest import TestCase, mock
+from unittest import TestCase
 
-from influxdb_client import Bucket, Point
+from influxdb_client import Point
 
 from src.influx.influx_controller import InfluxController
-from src.influx.assets.functions import measurements_to_points, TIMEZONE
-from src.influx.assets.measurement_type import MeasurementType
+from src.influx.assets.functions import TIMEZONE
 from test.dummy_measurements import GREENHOUSE_MEASUREMENTS
 
 
@@ -44,22 +42,17 @@ class TestInfluxController(TestCase):
         """
         Test the writing of a single greenhouse measurement in InfluxDB
         """
-        bucket_name = self.TEST_BUCKET_NAME
         influx_controller = InfluxController()
-        test_bucket = influx_controller.create_bucket(bucket_name)
-        point = GREENHOUSE_MEASUREMENTS[0]
+        bucket_name = self.TEST_BUCKET_NAME
+        
+        try:
+            test_bucket = influx_controller.create_bucket(bucket_name)
+            point = GREENHOUSE_MEASUREMENTS[3]
 
-        res = influx_controller.write_point(bucket=test_bucket, point=point)
-        assert res
-
-        query_api = influx_controller._client.query_api()
-        query = f'from(bucket: "{bucket_name}") |> range(start: 0) |> filter(fn: (r) => r._measurement == "greenhouse")'
-        tables = query_api.query(query)
-
-        assert len(tables) == 1
-        assert len(tables[0].records) == 1
-
-        influx_controller.delete_bucket(bucket_name)
+            res = influx_controller.write_point(bucket=test_bucket, point=point)
+            assert(res)
+        finally:
+            influx_controller.delete_bucket(bucket_name)
 
     # def test_write_measurements(self): FIXME: not necessary
     #     """

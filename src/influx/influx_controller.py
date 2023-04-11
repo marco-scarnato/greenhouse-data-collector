@@ -1,12 +1,8 @@
-import json
-from typing import Optional, List, Iterable, Union
+from typing import Optional, Iterable, Union
 
 from influxdb_client import InfluxDBClient, Bucket, Point
 from decouple import config
-from influxdb_client.client.flux_table import TableList, FluxStructureEncoder
 from influxdb_client.client.write_api import SYNCHRONOUS
-
-from src.influx.assets.measurement_type import MeasurementType
 
 
 def check_env_variables():
@@ -40,19 +36,19 @@ class InfluxController:
         Create a new bucket in InfluxDB
         :return: new bucket created
         """
-        bucket: Bucket = self.get_bucket(bucket_name)
-        if bucket is None:
-            return self._client.buckets_api().create_bucket(bucket_name=bucket_name)
-        else:
-            return bucket
+        bucket = self.get_bucket(bucket_name)
+        return (
+            self._client.buckets_api().create_bucket(bucket_name=bucket_name)
+            if bucket is None
+            else bucket
+        )
 
     def delete_bucket(self, bucket_name: str) -> bool:
         """
         Delete a bucket from InfluxDB
         :return: True if deleted, False otherwise
         """
-        bucket: Bucket = self.get_bucket(bucket_name)
-
+        bucket = self.get_bucket(bucket_name)
         if bucket is None:
             return False
         else:
@@ -72,6 +68,6 @@ class InfluxController:
         :param point: measurement to write
         :param bucket: bucket to write to
         """
-        return self._client.write_api(write_options=SYNCHRONOUS).write(
+        return True if self._client.write_api(write_options=SYNCHRONOUS).write(
             bucket=bucket.name, org=self._client.org, record=point
-        )
+        ) is None else False

@@ -5,16 +5,6 @@ from decouple import config
 from influxdb_client.client.write_api import SYNCHRONOUS
 
 
-def check_env_variables():
-    # check if environment variables are set
-    if not config("INFLUX_URL"):
-        raise Exception("INFLUX_URL is not set")
-    if not config("INFLUX_TOKEN"):
-        raise Exception("INFLUX_TOKEN is not set")
-    if not config("INFLUX_ORG_ID"):
-        raise Exception("INFLUX_ORG_ID is not set")
-
-
 class InfluxController:
     # https://influxdb-client.readthedocs.io/en/latest/
 
@@ -23,13 +13,23 @@ class InfluxController:
         Instantiate a new InfluxController object getting the connection parameters
         from the environment variables in .env file
         """
-        check_env_variables()
-        url, token, org = (
-            str(config("INFLUX_URL")),
-            str(config("INFLUX_TOKEN")),
-            str(config("INFLUX_ORG_ID")),
+
+        url, token, org, username, password = (
+            config("INFLUX_URL", cast=str, default="http://localhost:8086"),
+            config("INFLUX_TOKEN", cast=str),
+            config("INFLUX_ORG_ID", cast=str),
+            config("INFLUX_USERNAME", default=None),
+            config("INFLUX_PASSWORD", default=None),
         )
-        self._client: InfluxDBClient = InfluxDBClient(url=url, token=token, org=org)
+
+        self._client: InfluxDBClient = InfluxDBClient(
+            url=url,  # type: ignore
+            token=token,  # type: ignore
+            org=org,  # type: ignore
+            username=username,
+            password=password,
+            verify_ssl=True,
+        )
 
     def create_bucket(self, bucket_name: str) -> Bucket:
         """
@@ -68,6 +68,11 @@ class InfluxController:
         :param point: measurement to write
         :param bucket: bucket to write to
         """
-        return True if self._client.write_api(write_options=SYNCHRONOUS).write(
-            bucket=bucket.name, org=self._client.org, record=point
-        ) is None else False
+        return (
+            True
+            if self._client.write_api(write_options=SYNCHRONOUS).write(
+                bucket=bucket.name, org=self._client.org, record=point
+            )
+            is None
+            else False
+        )

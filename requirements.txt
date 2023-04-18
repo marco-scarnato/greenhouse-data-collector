@@ -1,7 +1,7 @@
 python-decouple
 influxdb-client
 pytz
-board
+adafruit-blinka
 opencv-python
 spidev
 adafruit-circuitpython-dht

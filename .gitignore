@@ -9,6 +9,7 @@ target/
 /dataSources.local.xml
 /.idea/
 /.env
+*.ini
 
 # Virtual environment
 .venv/

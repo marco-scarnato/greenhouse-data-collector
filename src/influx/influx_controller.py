@@ -1,7 +1,6 @@
 from typing import Optional, Iterable, Union
 
 from influxdb_client import InfluxDBClient, Bucket, Point
-from decouple import config
 from influxdb_client.client.write_api import SYNCHRONOUS
 
 
@@ -9,27 +8,7 @@ class InfluxController:
     # https://influxdb-client.readthedocs.io/en/latest/
 
     def __init__(self):
-        """
-        Instantiate a new InfluxController object getting the connection parameters
-        from the environment variables in .env file
-        """
-
-        url, token, org, username, password = (
-            config("INFLUX_URL", cast=str, default="http://localhost:8086"),
-            config("INFLUX_TOKEN", cast=str),
-            config("INFLUX_ORG_ID", cast=str),
-            config("INFLUX_USERNAME", default=None),
-            config("INFLUX_PASSWORD", default=None),
-        )
-
-        self._client: InfluxDBClient = InfluxDBClient(
-            url=url,  # type: ignore
-            token=token,  # type: ignore
-            org=org,  # type: ignore
-            username=username,
-            password=password,
-            verify_ssl=True,
-        )
+        self._client: InfluxDBClient = InfluxDBClient.from_config_file("config.ini")
 
     def create_bucket(self, bucket_name: str) -> Bucket:
         """

@@ -1,0 +1,50 @@
+from datetime import datetime
+from sys import argv
+from typing import Optional
+
+from influxdb_client import Bucket, Point
+
+from src.influx.assets.functions import TIMEZONE
+from src.influx.influx_controller import InfluxController
+from test.dummy_measurements import POT_MEASUREMENTS, GREENHOUSE_MEASUREMENTS, SHELF_MEASUREMENTS, PUMP_MEASUREMENTS, \
+    PLANT_MEASUREMENTS
+
+
+def main(bucket_name: str, num_measurements: Optional[int] = 5):
+    influx_controller = InfluxController()
+    # if bucket does not exist create it
+    bucket: Bucket = influx_controller.get_bucket(bucket_name)
+    if bucket is None:
+        bucket = influx_controller.create_bucket(bucket_name)
+    # get dummy measurement for each asset
+    greenhouse_measurements = GREENHOUSE_MEASUREMENTS[:num_measurements]
+    shelf_measurements = SHELF_MEASUREMENTS[:num_measurements]
+    pump_measurements = PUMP_MEASUREMENTS[:num_measurements]
+    pot_measurements = POT_MEASUREMENTS[:num_measurements]
+    plant_measurements = PLANT_MEASUREMENTS[:num_measurements]
+
+    # write measurements to influx
+    influx_controller.write_point(greenhouse_measurements, bucket)
+    influx_controller.write_point(shelf_measurements, bucket)
+    influx_controller.write_point(pump_measurements, bucket)
+    influx_controller.write_point(pot_measurements, bucket)
+    influx_controller.write_point(plant_measurements, bucket)
+
+
+if __name__ == "__main__":
+    """
+    Usage: python load_dummy_data.py <bucket_name> 
+        or python load_dummy_data.py <bucket_name> <num_measurements> 
+    """
+    if len(argv) == 2:
+        print("Loading 5 measurements per asset...")
+        main(argv[1])
+    elif len(argv) == 3:
+        print(f"Loading {argv[2]} measurements per asset...")
+        main(argv[1], int(argv[2]))
+    else:
+        print("Usage: python load_dummy_data.py <bucket_name> or python load_dummy_data.py <bucket_name> "
+              "<num_measurements>")
+        exit(1)
+
+    exit()

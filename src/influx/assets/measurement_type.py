@@ -5,6 +5,7 @@ class MeasurementType(Enum):
     """
     Enum containing measurement types: greenhouse, shelf, pump, pot
     """
+    PLANT = 'plant'
     GREENHOUSE = 'greenhouse'
     SHELF = 'shelf'
     PUMP = 'pump'

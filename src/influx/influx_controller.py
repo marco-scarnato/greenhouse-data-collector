@@ -1,3 +1,4 @@
+import os
 from typing import Optional, Iterable, Union
 
 from influxdb_client import InfluxDBClient, Bucket, Point
@@ -8,7 +9,13 @@ class InfluxController:
     # https://influxdb-client.readthedocs.io/en/latest/
 
     def __init__(self):
-        self._client: InfluxDBClient = InfluxDBClient.from_config_file("config.ini")
+        # check if config file exists
+        if not os.path.isfile("../config.ini"):
+            raise FileNotFoundError("Could not find config.ini file. More info in README.md - Configuration section")
+        client = InfluxDBClient.from_config_file("../config.ini")
+        if client is None:
+            raise ValueError("Could not connect to InfluxDB")
+        self._client: InfluxDBClient = client
 
     def create_bucket(self, bucket_name: str) -> Bucket:
         """

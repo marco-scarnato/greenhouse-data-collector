@@ -14,7 +14,7 @@ from src.sensors.moisture import Moisture
 class PotAsset(Asset):
     """
     Class representing a measurement for the shelf.
-    ...
+
     Attributes
     ----------
     shelf_floor: int

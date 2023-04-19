@@ -54,28 +54,6 @@ class TestInfluxController(TestCase):
         finally:
             influx_controller.delete_bucket(bucket_name)
 
-    # def test_write_measurements(self): FIXME: not necessary
-    #     """
-    #     Test writing multiple assets in InfluxDB.
-    #     Writes one measurement of each measurement type in influxdb, reads them back and checks if they are the same
-    #     """
-    #     influx_controller = InfluxController()
-
-    #     test_bucket = influx_controller.create_bucket(self.TEST_BUCKET_NAME)
-
-    #     try:
-    #         # iterate over all measurement types
-    #         for measurement_type in MeasurementType:
-    #             # get a dummy measurement of the current measurement type
-    #             dummy_measurements: list = get_dummy_measurements(measurement_type)
-    #             # convert the assets to points
-    #             dummy_points: List[Point] = measurements_to_points(dummy_measurements)
-
-    #             # write the dummy measurement to influxdb
-    #             influx_controller.write_point(bucket=test_bucket, point=dummy_points)
-    #     finally:
-    #         influx_controller.delete_bucket(self.TEST_BUCKET_NAME)
-
 
 if __name__ == "__main__":
     unittest.main()

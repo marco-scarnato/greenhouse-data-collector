@@ -16,6 +16,8 @@ temp_data = np.linspace(20, 30, 100)
 humidity_data = np.linspace(0, 100, 100)
 pumpd_water_data = np.linspace(0, 100, 100)
 moist_data = np.linspace(0, 100, 100)
+health_data = np.linspace(0, 100, 100)
+growth_data = np.linspace(0, 100, 100)
 
 np.random.seed(42)
 ones_and_twos = np.random.choice([1, 2], size=100, replace=True)
@@ -55,9 +57,21 @@ POT_MEASUREMENTS: List[Point] = [
     .tag("shelf_floor", shelf)
     .tag("group_position", group)
     .tag("pot_position", pot)
+    .tag("plant_id", plant)
     .field("moisture", moist)
     .time(datetime.fromtimestamp(ts))
-    for shelf, group, pot, moist, ts in zip(
-        ones_and_twos, left_and_right, left_and_right, moist_data, time_data
+    for shelf, group, pot, plant, moist, ts in zip(
+        ones_and_twos, left_and_right, left_and_right, ones_and_twos, moist_data, time_data
+    )
+]
+
+PLANT_MEASUREMENTS: List[Point] = [
+    Point(MeasurementType.PLANT.get_measurement_name())
+    .tag("plant_id", plant)
+    .field("health", health)
+    .field("growth", growth)
+    .time(datetime.fromtimestamp(ts))
+    for plant, health, growth, ts in zip(
+        ones_and_twos, health_data, growth_data, time_data
     )
 ]

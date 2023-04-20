@@ -6,7 +6,7 @@ from src.influx.assets.greenhouse_asset import GreenhouseAsset
 from src.influx.assets.pot_asset import PotAsset
 from src.influx.assets.shelf_asset import ShelfAsset
 from src.sensors.humidity import Humidity
-from src.sensors.lightlevel import LightLevel
+from sensors.light_level import LightLevel
 from src.sensors.mcp3008 import MCP3008
 from src.sensors.moisture import Moisture
 from src.sensors.temperature import Temperature

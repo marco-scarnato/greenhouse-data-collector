@@ -6,3 +6,5 @@ opencv-python
 spidev
 adafruit-circuitpython-dht
 numpy
+json
+configparser

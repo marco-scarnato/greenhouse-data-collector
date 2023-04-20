@@ -7,7 +7,7 @@ from influxdb_client import Point
 from src.influx.assets.asset import Asset
 from src.influx.influx_controller import InfluxController
 from src.influx.assets.measurement_type import MeasurementType
-from src.sensors.lightlevel import LightLevel
+from sensors.light_level import LightLevel
 
 
 @dataclass

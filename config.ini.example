@@ -2,3 +2,12 @@
 url=http://localhost:8086
 org=my-org
 token=my-token
+
+[moisture_values]
+XP=[2.4, 1.0]
+
+[water_level_values]
+XP=[1.1, 2.0]
+
+[light_level_values]
+XP=[80, 180]

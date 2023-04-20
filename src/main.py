@@ -29,4 +29,7 @@ def main():
 
 
 if __name__ == '__main__':
+    """
+    Script to be run on the Raspberry Pi Data Collectors.
+    """
     main()

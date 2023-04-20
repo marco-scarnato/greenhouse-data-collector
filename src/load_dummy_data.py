@@ -33,6 +33,7 @@ def main(bucket_name: str, num_measurements: Optional[int] = 5):
 
 if __name__ == "__main__":
     """
+    Loads dummy data into the specified bucket.
     Usage: python load_dummy_data.py <bucket_name> 
         or python load_dummy_data.py <bucket_name> <num_measurements> 
     """

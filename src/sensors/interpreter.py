@@ -1,6 +1,6 @@
 from configparser import ConfigParser
 import json
-
+from typing import List
 import numpy as np
 
 
@@ -12,5 +12,5 @@ class Interpreter:
         self.XP = json.loads(conf[sensor + "_values"]["XP"])
         self.FP = np.linspace(range[0], range[1], len(self.XP))
 
-    def interpret(self, value):
+    def interpret(self, value: float) -> float:
         return np.interp(value, self.XP, self.FP)

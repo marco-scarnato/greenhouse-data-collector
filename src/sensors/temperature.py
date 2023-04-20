@@ -5,10 +5,10 @@ import adafruit_dht
 
 
 class Temperature:
-    def __init__(self, pin=board.D4):
+    def __init__(self, pin=board.D4) -> None:
         self.dhtDevice = adafruit_dht.DHT22(pin)
 
-    def read(self):
+    def read(self) -> Optional[float]:
         temperature_c: Optional[float] = None
 
         try:

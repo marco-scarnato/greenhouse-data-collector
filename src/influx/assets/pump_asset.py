@@ -13,8 +13,8 @@ from src.sensors.water_level import WaterLevel
 @dataclass
 class PumpAsset(Asset):
     """
-    Class representing a measurement for the pump.
-    ...
+    Class representing the Pump asset.
+
     Attributes
     ----------
     shelf_floor: int

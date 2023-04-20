@@ -13,8 +13,8 @@ from src.sensors.lightlevel import LightLevel
 @dataclass
 class GreenhouseAsset(Asset):
     """
-    Class representing the greenhouse asset.
-    ...
+    Class representing the Greenhouse asset.
+
     Attributes
     ----------
     light_sensor: LightLevel
@@ -24,11 +24,6 @@ class GreenhouseAsset(Asset):
     light_sensor: LightLevel
 
     def to_point(self) -> Point:
-        """
-        Get a point measurement for the greenhouse.
-        It contains the light level and timestamp of the last sensor detection.
-        :return: Point(light, time)
-        """
         return (
             Point(MeasurementType.GREENHOUSE.get_measurement_name())
             .field("light", self.light_sensor.read())
@@ -36,10 +31,6 @@ class GreenhouseAsset(Asset):
         )
 
     def read_sensor_data(self, interval: int = 5):
-        """
-        Read the sensor data and write it to the database.
-        :param interval: interval in seconds between each light sensor reading
-        """
         influx_controller = InfluxController()
         bucket = influx_controller.get_bucket(
             "greenhouse"

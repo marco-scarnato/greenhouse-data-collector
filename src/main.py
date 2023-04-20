@@ -1,7 +1,7 @@
 import threading
 from datetime import datetime
 
-from src.influx.assets.functions import TIMEZONE
+from src.influx.assets.assets_utils import TIMEZONE
 from src.influx.assets.greenhouse_asset import GreenhouseAsset
 from src.influx.assets.pot_asset import PotAsset
 from src.influx.assets.shelf_asset import ShelfAsset

@@ -5,7 +5,7 @@ from unittest import TestCase
 from influxdb_client import Point
 
 from src.influx.influx_controller import InfluxController
-from src.influx.assets.functions import TIMEZONE
+from src.influx.assets.assets_utils import TIMEZONE
 from test.dummy_measurements import GREENHOUSE_MEASUREMENTS
 
 

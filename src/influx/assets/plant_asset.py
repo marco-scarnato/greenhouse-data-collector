@@ -12,7 +12,7 @@ from src.influx.influx_controller import InfluxController
 @dataclass
 class PlantAsset(Asset):
     """
-    Class representing a physical plant.
+    Class representing the Plant asset.
 
     Attributes
     ----------

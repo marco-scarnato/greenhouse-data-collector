@@ -13,7 +13,7 @@ from src.sensors.moisture import Moisture
 @dataclass
 class PotAsset(Asset):
     """
-    Class representing a measurement for the shelf.
+    Class representing the Pot asset.
 
     Attributes
     ----------

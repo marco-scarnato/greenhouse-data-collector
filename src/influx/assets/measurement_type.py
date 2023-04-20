@@ -1,18 +1,21 @@
 from enum import Enum
 
+ASSET_MODEL_PREFIX = 'ast:' # Prefix for asset model measurements
+
 
 class MeasurementType(Enum):
     """
-    Enum containing measurement types: greenhouse, shelf, pump, pot
+    Enum containing measurement types: greenhouse, shelf, pump, pot, plant
     """
-    PLANT = 'plant'
     GREENHOUSE = 'greenhouse'
     SHELF = 'shelf'
     PUMP = 'pump'
     POT = 'pot'
+    PLANT = 'plant'
 
     """
-    Returns the measurement name for a given measurement type. It adds the prefix "ast:" to the measurement type
+    Returns the measurement name for a given measurement type. It adds the asset model prefix to the measurement type
     """
     def get_measurement_name(self):
-        return 'ast:' + self.value
+        # Adding the asset model prefix to the measurement type allows for easier querying
+        return ASSET_MODEL_PREFIX + self.value

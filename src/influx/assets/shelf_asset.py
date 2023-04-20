@@ -13,10 +13,9 @@ from src.sensors.temperature import Temperature
 
 @dataclass
 class ShelfAsset(Asset):
-    # FIXME: do we want to maintain the docstring? most are very obvious atm
     """
-    Class representing a measurement for the shelf.
-    ...
+    Class representing The Shelf Asset
+
     Attributes
     ----------
     shelf_floor: int

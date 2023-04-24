@@ -4,8 +4,8 @@ from typing import Optional
 
 from influxdb_client import Bucket, Point
 
-from src.influx.assets.assets_utils import TIMEZONE
-from src.influx.influx_controller import InfluxController
+from influx.assets.assets_utils import TIMEZONE
+from influx.influx_controller import InfluxController
 from test.dummy_measurements import POT_MEASUREMENTS, GREENHOUSE_MEASUREMENTS, SHELF_MEASUREMENTS, PUMP_MEASUREMENTS, \
     PLANT_MEASUREMENTS
 
@@ -13,9 +13,8 @@ from test.dummy_measurements import POT_MEASUREMENTS, GREENHOUSE_MEASUREMENTS, S
 def main(bucket_name: str, num_measurements: Optional[int] = 5):
     influx_controller = InfluxController()
     # if bucket does not exist create it
-    bucket: Bucket = influx_controller.get_bucket(bucket_name)
-    if bucket is None:
-        bucket = influx_controller.create_bucket(bucket_name)
+    bucket: Bucket = influx_controller.get_bucket(bucket_name) or influx_controller.create_bucket(bucket_name)
+    
     # get dummy measurement for each asset
     greenhouse_measurements = GREENHOUSE_MEASUREMENTS[:num_measurements]
     shelf_measurements = SHELF_MEASUREMENTS[:num_measurements]

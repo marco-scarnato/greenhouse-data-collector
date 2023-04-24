@@ -1,15 +1,15 @@
 import threading
 from datetime import datetime
 
-from src.influx.assets.assets_utils import TIMEZONE
-from src.influx.assets.greenhouse_asset import GreenhouseAsset
-from src.influx.assets.pot_asset import PotAsset
-from src.influx.assets.shelf_asset import ShelfAsset
-from src.sensors.humidity import Humidity
+from influx.assets.assets_utils import TIMEZONE
+from influx.assets.greenhouse_asset import GreenhouseAsset
+from influx.assets.pot_asset import PotAsset
+from influx.assets.shelf_asset import ShelfAsset
+from sensors.humidity import Humidity
 from sensors.light_level import LightLevel
-from src.sensors.mcp3008 import MCP3008
-from src.sensors.moisture import Moisture
-from src.sensors.temperature import Temperature
+from sensors.mcp3008 import MCP3008
+from sensors.moisture import Moisture
+from sensors.temperature import Temperature
 
 
 def main():

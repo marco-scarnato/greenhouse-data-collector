@@ -2,7 +2,7 @@ from typing import List
 
 import pytz
 from influxdb_client import Point
-from src.influx.assets.asset import Asset
+from influx.assets.asset import Asset
 
 
 TIMEZONE = pytz.timezone("Etc/GMT+1")

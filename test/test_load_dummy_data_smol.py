@@ -7,7 +7,7 @@ from test.dummy_measurements import POT_MEASUREMENTS
 
 
 class MyTestCase(unittest.TestCase):
-    GREENHOUSE_BUCKET_NAME: str = "armando"
+    GREENHOUSE_BUCKET_NAME: str = "test"
 
     def test_smol_write_pot(self):
         influx_controller = InfluxController()
@@ -17,7 +17,7 @@ class MyTestCase(unittest.TestCase):
 
         points: list = POT_MEASUREMENTS[:5]
 
-        influx_controller.write_point(bucket=greenhouse_bucket, point=points)
+        assert influx_controller.write_point(bucket=greenhouse_bucket, point=points)
 
 
 if __name__ == "__main__":

@@ -49,8 +49,7 @@ class TestInfluxController(TestCase):
             test_bucket = influx_controller.create_bucket(bucket_name)
             point = GREENHOUSE_MEASUREMENTS[3]
 
-            res = influx_controller.write_point(bucket=test_bucket, point=point)
-            assert(res)
+            assert influx_controller.write_point(bucket=test_bucket, point=point)
         finally:
             influx_controller.delete_bucket(bucket_name)
 

@@ -1,10 +1,8 @@
-from datetime import datetime
 from sys import argv
 from typing import Optional
 
-from influxdb_client import Bucket, Point
+from influxdb_client import Bucket
 
-from src.influx.assets.assets_utils import TIMEZONE
 from src.influx.influx_controller import InfluxController
 from test.dummy_measurements import POT_MEASUREMENTS, GREENHOUSE_MEASUREMENTS, SHELF_MEASUREMENTS, PUMP_MEASUREMENTS, \
     PLANT_MEASUREMENTS

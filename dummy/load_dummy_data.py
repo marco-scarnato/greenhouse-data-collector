@@ -3,12 +3,9 @@ from typing import Optional
 
 from influxdb_client import Bucket
 
-from influx.assets.assets_utils import TIMEZONE
-from influx.influx_controller import InfluxController
-
-from test.dummy_measurements import POT_MEASUREMENTS, GREENHOUSE_MEASUREMENTS, SHELF_MEASUREMENTS, PUMP_MEASUREMENTS, \
 from dummy.dummy_measurements import POT_MEASUREMENTS, GREENHOUSE_MEASUREMENTS, SHELF_MEASUREMENTS, PUMP_MEASUREMENTS, \
     PLANT_MEASUREMENTS
+from src.influx.influx_controller import InfluxController
 
 
 def main(bucket_name: str, num_measurements: Optional[int] = 5):

@@ -3,8 +3,8 @@ from typing import Optional
 
 from influxdb_client import Bucket
 
-from src.influx.influx_controller import InfluxController
-from test.dummy_measurements import POT_MEASUREMENTS, GREENHOUSE_MEASUREMENTS, SHELF_MEASUREMENTS, PUMP_MEASUREMENTS, \
+from src.influx_controller.influx_controller import InfluxController
+from dummy.dummy_measurements import POT_MEASUREMENTS, GREENHOUSE_MEASUREMENTS, SHELF_MEASUREMENTS, PUMP_MEASUREMENTS, \
     PLANT_MEASUREMENTS
 
 
@@ -21,7 +21,7 @@ def main(bucket_name: str, num_measurements: Optional[int] = 5):
     pot_measurements = POT_MEASUREMENTS[:num_measurements]
     plant_measurements = PLANT_MEASUREMENTS[:num_measurements]
 
-    # write measurements to influx
+    # write measurements to influx_controller
     influx_controller.write_point(greenhouse_measurements, bucket)
     influx_controller.write_point(shelf_measurements, bucket)
     influx_controller.write_point(pump_measurements, bucket)

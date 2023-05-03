@@ -4,7 +4,7 @@ from typing import List
 from influxdb_client import Point
 import numpy as np
 
-from src.influx.assets.measurement_type import MeasurementType
+from src.influx_controller.assets.measurement_type import MeasurementType
 
 
 start_time = datetime(2023, 4, 11, 12, 0, 0)

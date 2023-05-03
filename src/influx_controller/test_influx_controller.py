@@ -4,13 +4,13 @@ from unittest import TestCase
 
 from influxdb_client import Point
 
-from src.influx.influx_controller import InfluxController
-from src.influx.assets.assets_utils import TIMEZONE
-from test.dummy_measurements import GREENHOUSE_MEASUREMENTS
+from src.influx_controller.influx_controller import InfluxController
+from src.influx_controller.assets.assets_utils import TIMEZONE
+from dummy.dummy_measurements import GREENHOUSE_MEASUREMENTS
 
 
 class TestInfluxController(TestCase):
-    TEST_BUCKET_NAME: str = "test"
+    TEST_BUCKET_NAME: str = "dummy"
 
     def test_create_drop_bucket(self):
         """
@@ -21,7 +21,7 @@ class TestInfluxController(TestCase):
         assert influx_controller.get_bucket(self.TEST_BUCKET_NAME) is not None
         influx_controller.delete_bucket(self.TEST_BUCKET_NAME)
 
-    def test_write_single_point(self):
+    def test_write_1_point(self):
         """
         Test the writing of a single point in InfluxDB
         """
@@ -38,9 +38,9 @@ class TestInfluxController(TestCase):
         finally:
             influx_controller.delete_bucket(self.TEST_BUCKET_NAME)
 
-    def test_write_measurement(self):  # TODO: test on the db
+    def test_write_multiple_points(self):
         """
-        Test the writing of a single greenhouse measurement in InfluxDB
+        Test the writing of multiple points in InfluxDB
         """
         influx_controller = InfluxController()
         bucket_name = self.TEST_BUCKET_NAME

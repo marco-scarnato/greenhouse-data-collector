@@ -3,11 +3,11 @@ from datetime import datetime
 import time
 
 from influxdb_client import Point
-from src.influx.assets.asset import Asset
+from influx.assets.asset import Asset
 
-from src.influx.influx_controller import InfluxController
-from src.influx.assets.measurement_type import MeasurementType
-from src.sensors.water_level import WaterLevel
+from influx.influx_controller import InfluxController
+from influx.assets.measurement_type import MeasurementType
+from sensors.water_level import WaterLevel
 
 
 @dataclass

@@ -3,8 +3,8 @@ from typing import Optional
 
 from influxdb_client import Bucket
 
-from src.influx_controller.influx_controller import InfluxController
-from dummy.dummy_measurements import POT_MEASUREMENTS, GREENHOUSE_MEASUREMENTS, SHELF_MEASUREMENTS, PUMP_MEASUREMENTS, \
+from influx_controller.influx_controller import InfluxController
+from dummy_measurements import POT_MEASUREMENTS, GREENHOUSE_MEASUREMENTS, SHELF_MEASUREMENTS, PUMP_MEASUREMENTS, \
     PLANT_MEASUREMENTS
 
 

@@ -10,9 +10,9 @@ class InfluxController:
 
     def __init__(self):
         # check if config file exists
-        if not os.path.isfile("../config.ini"):
+        if not os.path.isfile("../../config.ini"):
             raise FileNotFoundError("Could not find config.ini file. More info in README.md - Configuration section")
-        client = InfluxDBClient.from_config_file("../config.ini")
+        client = InfluxDBClient.from_config_file("../../config.ini")
         if client is None:
             raise ValueError("Could not connect to InfluxDB")
         self._client: InfluxDBClient = client

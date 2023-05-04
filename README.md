@@ -16,7 +16,7 @@ The sensors retrieve data related to:
 
 ## Configuration
 
-Modify the [config.ini.example](src/config.ini.example) file to set the URL of the InfluxDB server, the personal access token and the organization ID. Save the file as `config.ini`.
+Modify the [config.ini.example](config.ini.example) file to set the URL of the InfluxDB server, the personal access token and the organization ID. Save the file as `config.ini`.
 For other optional parameters, see the [documentation](https://github.com/influxdata/influxdb-client-python).
 
 You can set the raw voltages reading of the sensors, so they can be converted to meaningful values. The array can be of arbitrary length and will be mapped to a range of 0 to 100 <!-- FIXME: update if changes happen in the range -->

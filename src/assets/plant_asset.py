@@ -6,7 +6,7 @@ from influxdb_client import Point
 
 from assets.asset import Asset
 from assets.measurement_type import MeasurementType
-from src.influx_controller.influx_controller import InfluxController
+from src.influx.influx_controller import InfluxController
 
 
 @dataclass

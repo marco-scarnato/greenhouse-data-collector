@@ -14,6 +14,20 @@ The sensors retrieve data related to:
 - **Growth** of the **plants** in the greenhouse (in %)
 - Quantity of **water pumped** from the **water tanks** (in liters)
 
+## Dependencies
+
+To run the code needs the following packages to be installed (used for the NoIR camera):
+
+```bash
+sudo apt install -y python3-pyqt5 python3-opengl build-essential libcap-dev libcamera-dev
+```
+
+To install the python dependencies, run the following command from the root of the project:
+
+```bash
+pip install -r requirements.txt
+```
+
 ## Configuration
 
 Modify the [config.ini.example](config.ini.example) file to set the URL of the InfluxDB server, the personal access token and the organization ID. Save the file as `config.ini`.

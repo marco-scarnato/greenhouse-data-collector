@@ -3,11 +3,11 @@ import time
 from datetime import datetime
 
 from influxdb_client import Point
-from influx.assets.asset import Asset
+from assets.asset import Asset
 
-from influx.influx_controller import InfluxController
-from influx.assets.measurement_type import MeasurementType
-from sensors.moisture import Moisture
+from src.influx.influx_controller import InfluxController
+from assets.measurement_type import MeasurementType
+from src.sensors.moisture import Moisture
 
 
 @dataclass
@@ -23,6 +23,8 @@ class PotAsset(Asset):
         (tag) position of the pot group in which the pot is placed, can be 'left' or 'right'
     pot_position: str
         (tag) position of the pot into the pot group, can be 'left' or 'right'
+    plant_id: str
+        (tag) id of the plant in the pot
     moisture_sensor: Moisture
         moisture sensor of the pot
     """
@@ -30,6 +32,7 @@ class PotAsset(Asset):
     shelf_floor: int
     group_position: str
     pot_position: str
+    plant_id: str
     moisture_sensor: Moisture
 
     def __post_init__(self):
@@ -48,6 +51,7 @@ class PotAsset(Asset):
             .tag("shelf_floor", self.shelf_floor)
             .tag("group_position", self.group_position)
             .tag("pot_position", self.pot_position)
+            .tag("plant_id", self.plant_id)
             .field("moisture", self.moisture_sensor.read())
             .time(datetime.now())
         )

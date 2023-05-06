@@ -3,10 +3,10 @@ import time
 from datetime import datetime
 
 from influxdb_client import Point
-from influx.assets.asset import Asset
+from assets.asset import Asset
+from assets.measurement_type import MeasurementType
 
 from influx.influx_controller import InfluxController
-from influx.assets.measurement_type import MeasurementType
 from sensors.humidity import Humidity
 from sensors.temperature import Temperature
 

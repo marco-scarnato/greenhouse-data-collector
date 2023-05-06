@@ -1,11 +1,17 @@
 from typing import Optional
 
-import board
 import adafruit_dht
 
 
 class Humidity:
-    def __init__(self, pin=board.D4) -> None:
+    def __init__(self, pin) -> None:
+        """Initializes the Humidity sensor. Uses the DHT22 sensor.
+
+        Args:
+            pin (Pin): pin connected to the signal line.
+            For example for pin GPIO4, board.D4 should be passed as argument.
+        """
+        
         self.dhtDevice = adafruit_dht.DHT22(pin)
 
     def read(self) -> Optional[float]:

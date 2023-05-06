@@ -6,7 +6,7 @@ from influxdb_client import Point
 
 from assets.asset import Asset
 from assets.measurement_type import MeasurementType
-from src.influx.influx_controller import InfluxController
+from influx.influx_controller import InfluxController
 
 
 @dataclass
@@ -23,7 +23,7 @@ class PlantAsset(Asset):
         implement the methods get_plant_health and get_plant_growth
     """
     plant_id: str
-    # this is a placeholder for the camera that will be used to take pictures of the plant and use them to check
+    # FIXME: this is a placeholder for the camera that will be used to take pictures of the plant and use them to check
     # the plant health and growth
     camera_sensor: any
 

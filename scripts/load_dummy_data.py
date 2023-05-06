@@ -3,16 +3,22 @@ from typing import Optional
 
 from influxdb_client import Bucket
 
-from src.influx.influx_controller import InfluxController
-from dummy.dummy_measurements import POT_MEASUREMENTS, GREENHOUSE_MEASUREMENTS, SHELF_MEASUREMENTS, PUMP_MEASUREMENTS, \
-    PLANT_MEASUREMENTS
-from src.influx.influx_controller import InfluxController
+from collector.influx.influx_controller import InfluxController
+from collector.tests.dummy_measurements import (
+    GREENHOUSE_MEASUREMENTS,
+    PLANT_MEASUREMENTS,
+    POT_MEASUREMENTS,
+    PUMP_MEASUREMENTS,
+    SHELF_MEASUREMENTS,
+)
 
 
 def main(bucket_name: str, num_measurements: Optional[int] = 5):
     influx_controller = InfluxController()
     # if bucket does not exist create it
-    bucket: Bucket = influx_controller.get_bucket(bucket_name) or influx_controller.create_bucket(bucket_name)
+    bucket: Bucket = influx_controller.get_bucket(
+        bucket_name
+    ) or influx_controller.create_bucket(bucket_name)
 
     # get dummy measurement for each asset
     greenhouse_measurements = GREENHOUSE_MEASUREMENTS[:num_measurements]
@@ -32,8 +38,8 @@ def main(bucket_name: str, num_measurements: Optional[int] = 5):
 if __name__ == "__main__":
     """
     Loads dummy data into the specified bucket.
-    Usage: python load_dummy_data.py <bucket_name> 
-        or python load_dummy_data.py <bucket_name> <num_measurements> 
+    Usage: python load_dummy_data.py <bucket_name>
+        or python load_dummy_data.py <bucket_name> <num_measurements>
     """
     if len(argv) == 2:
         print("Loading 5 measurements per asset...")
@@ -42,8 +48,10 @@ if __name__ == "__main__":
         print(f"Loading {argv[2]} measurements per asset...")
         main(argv[1], int(argv[2]))
     else:
-        print("Usage: python load_dummy_data.py <bucket_name> or python load_dummy_data.py <bucket_name> "
-              "<num_measurements>")
+        print(
+            "Usage: python load_dummy_data.py <bucket_name> or python load_dummy_data.py <bucket_name> "
+            "<num_measurements>"
+        )
         exit(1)
 
     exit()

@@ -5,9 +5,9 @@ import time
 from influxdb_client import Point
 from assets.asset import Asset
 
-from src.influx.influx_controller import InfluxController
+from influx.influx_controller import InfluxController
 from assets.measurement_type import MeasurementType
-from src.sensors.water_level import WaterLevel
+from sensors.water_level import WaterLevel
 
 
 @dataclass

@@ -6,14 +6,14 @@ from influxdb_client import Bucket
 from src.influx.influx_controller import InfluxController
 from dummy.dummy_measurements import POT_MEASUREMENTS, GREENHOUSE_MEASUREMENTS, SHELF_MEASUREMENTS, PUMP_MEASUREMENTS, \
     PLANT_MEASUREMENTS
+from src.influx.influx_controller import InfluxController
 
 
 def main(bucket_name: str, num_measurements: Optional[int] = 5):
     influx_controller = InfluxController()
     # if bucket does not exist create it
-    bucket: Bucket = influx_controller.get_bucket(bucket_name)
-    if bucket is None:
-        bucket = influx_controller.create_bucket(bucket_name)
+    bucket: Bucket = influx_controller.get_bucket(bucket_name) or influx_controller.create_bucket(bucket_name)
+
     # get dummy measurement for each asset
     greenhouse_measurements = GREENHOUSE_MEASUREMENTS[:num_measurements]
     shelf_measurements = SHELF_MEASUREMENTS[:num_measurements]
@@ -21,7 +21,7 @@ def main(bucket_name: str, num_measurements: Optional[int] = 5):
     pot_measurements = POT_MEASUREMENTS[:num_measurements]
     plant_measurements = PLANT_MEASUREMENTS[:num_measurements]
 
-    # write measurements to influx_controller
+    # write measurements to influx
     influx_controller.write_point(greenhouse_measurements, bucket)
     influx_controller.write_point(shelf_measurements, bucket)
     influx_controller.write_point(pump_measurements, bucket)

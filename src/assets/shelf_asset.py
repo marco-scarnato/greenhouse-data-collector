@@ -4,11 +4,11 @@ from datetime import datetime
 
 from influxdb_client import Point
 from assets.asset import Asset
-
-from src.influx.influx_controller import InfluxController
 from assets.measurement_type import MeasurementType
-from src.sensors.humidity import Humidity
-from src.sensors.temperature import Temperature
+
+from influx.influx_controller import InfluxController
+from sensors.humidity import Humidity
+from sensors.temperature import Temperature
 
 
 @dataclass

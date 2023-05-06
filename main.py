@@ -1,13 +1,13 @@
 import threading
 
 from src.assets.greenhouse_asset import GreenhouseAsset
-from src.assets import PotAsset
-from src.assets import ShelfAsset
-from sensors.humidity import Humidity
-from sensors.light_level import LightLevel
-from sensors.mcp3008 import MCP3008
-from sensors.moisture import Moisture
-from sensors.temperature import Temperature
+from src.assets.pot_asset import PotAsset
+from src.assets.shelf_asset import ShelfAsset
+from src.sensors.humidity import Humidity
+from src.sensors.light_level import LightLevel
+from src.sensors.mcp3008 import MCP3008
+from src.sensors.moisture import Moisture
+from src.sensors.temperature import Temperature
 
 
 def main():
@@ -17,7 +17,7 @@ def main():
     thread_shelf = threading.Thread(target=shelf_measurement.read_sensor_data())
     thread_shelf.start()
 
-    pot_measurement = PotAsset(1, 'right', 'left', Moisture(mcp3008, 1))
+    pot_measurement = PotAsset(1, 'right', 'left', "1", Moisture(mcp3008, 1))
     thread_pot = threading.Thread(target=pot_measurement.read_sensor_data())
     thread_pot.start()
 

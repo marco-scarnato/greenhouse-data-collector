@@ -6,7 +6,6 @@ import numpy as np
 
 from src.assets.measurement_type import MeasurementType
 
-
 start_time = datetime(2023, 4, 11, 12, 0, 0)
 end_time = datetime(2023, 4, 11, 13, 0, 0)
 

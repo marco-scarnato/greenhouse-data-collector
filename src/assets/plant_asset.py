@@ -4,9 +4,9 @@ from datetime import datetime
 
 from influxdb_client import Point
 
-from influx.assets.asset import Asset
-from influx.assets.measurement_type import MeasurementType
-from influx.influx_controller import InfluxController
+from assets.asset import Asset
+from assets.measurement_type import MeasurementType
+from src.influx.influx_controller import InfluxController
 
 
 @dataclass

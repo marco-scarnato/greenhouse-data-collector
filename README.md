@@ -14,9 +14,23 @@ The sensors retrieve data related to:
 - **Growth** of the **plants** in the greenhouse (in %)
 - Quantity of **water pumped** from the **water tanks** (in liters)
 
+## Dependencies
+
+To run the code needs the following packages to be installed (used for the NoIR camera):
+
+```bash
+sudo apt install -y python3-pyqt5 python3-opengl build-essential libcap-dev libcamera-dev
+```
+
+To install the python dependencies, run the following command from the root of the project:
+
+```bash
+pip install -r requirements.txt
+```
+
 ## Configuration
 
-Modify the [config.ini.example](src/config.ini.example) file to set the URL of the InfluxDB server, the personal access token and the organization ID. Save the file as `config.ini`.
+Modify the [config.ini.example](config.ini.example) file to set the URL of the InfluxDB server, the personal access token and the organization ID. Save the file as `config.ini`.
 For other optional parameters, see the [documentation](https://github.com/influxdata/influxdb-client-python).
 
 You can set the raw voltages reading of the sensors, so they can be converted to meaningful values. The array can be of arbitrary length and will be mapped to a range of 0 to 100 <!-- FIXME: update if changes happen in the range -->

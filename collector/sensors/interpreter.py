@@ -5,6 +5,12 @@ import numpy as np
 
 
 class Interpreter:
+    """
+    Class that interprets raw values from sensors to meaningful values.
+    Uses a linear interpolation, a variable number of points can be used
+    to define the interpolation function.
+    """
+
     def __init__(self, sensor: str, range: tuple = (0, 100)):
         conf = ConfigParser()
         conf.read("config.ini")

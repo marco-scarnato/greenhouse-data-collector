@@ -1,4 +1,3 @@
-import os
 from typing import Optional, Iterable, Union
 
 from influxdb_client import InfluxDBClient, Bucket, Point

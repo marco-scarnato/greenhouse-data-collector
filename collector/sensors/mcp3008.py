@@ -2,6 +2,11 @@ from spidev import SpiDev
 
 
 class MCP3008:
+    """
+    Analog to digital converter for the Raspberry Pi.
+    Uses the SPI protocol to communicate with the Raspberry Pi.
+    """
+
     def __init__(self, bus=0, device=0) -> None:
         self.bus, self.device = bus, device
         self.spi = SpiDev()

@@ -4,9 +4,9 @@ from unittest import TestCase
 
 from influxdb_client import Point
 
-from src.influx.influx_controller import InfluxController
+from influx.influx_controller import InfluxController
 from assets.assets_utils import TIMEZONE
-from dummy.dummy_measurements import GREENHOUSE_MEASUREMENTS
+from dummy_measurements import GREENHOUSE_MEASUREMENTS
 
 
 class TestInfluxController(TestCase):

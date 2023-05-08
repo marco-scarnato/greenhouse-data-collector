@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 
+
 class WaterPump:
     def __init__(self, pin):
         self.pin = pin

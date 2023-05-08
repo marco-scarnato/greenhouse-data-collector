@@ -25,6 +25,7 @@ class ShelfAsset(Asset):
     temperature_sensor: Temperature
         temperature sensor
     """
+
     shelf_floor: int
     humidity_sensor: Humidity
     temperature_sensor: Temperature

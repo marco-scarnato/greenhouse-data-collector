@@ -11,7 +11,7 @@ class Humidity:
             pin (Pin): pin connected to the signal line.
             For example for pin GPIO4, board.D4 should be passed as argument.
         """
-        
+
         self.dhtDevice = adafruit_dht.DHT22(pin)
 
     def read(self) -> Optional[float]:

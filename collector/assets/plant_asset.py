@@ -23,13 +23,14 @@ class PlantAsset(Asset):
         camera sensor used to take pictures of the plant and use them to check the plant health and growth. It must
         implement the methods get_plant_health and get_plant_growth
     """
+
     plant_id: str
     # FIXME: this is a placeholder for the camera that will be used to take pictures of the plant and use them to check
     # the plant health and growth
     camera_sensor: Any
-    
+
     def to_point(self) -> Point:
-        return(
+        return (
             Point(MeasurementType.PLANT.get_measurement_name())
             .tag("plant_id", self.plant_id)
             .field("health", self.camera_sensor.get_plant_health())
@@ -47,4 +48,3 @@ class PlantAsset(Asset):
             point = self.to_point()
             influx_controller.write_point(point, bucket)
             time.sleep(interval)
-

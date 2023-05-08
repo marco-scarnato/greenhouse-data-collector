@@ -24,4 +24,3 @@ class Asset(ABC):
         :param interval: interval in seconds between each sensor reading
         """
         pass
-

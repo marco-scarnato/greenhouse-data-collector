@@ -28,7 +28,7 @@ def main():
     mcp3008 = MCP3008()
 
     pin = pinlist[ConfigParser().getint("DHT22", "gpio_pin")]
-    
+
     # TODO: get channel from config, should we have "moisture_channel1, moisture_channel2, ..."?
     # Should it be a list instead?
     # channel = ConfigParser().getint("MCP3008", "channel")

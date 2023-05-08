@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import time
 from datetime import datetime
+from typing import Any
 
 from influxdb_client import Point
 
@@ -18,15 +19,15 @@ class PlantAsset(Asset):
     ----------
     plant_id: str
         (tag) id of the plant
-    camera_sensor: any
+    camera_sensor: Any
         camera sensor used to take pictures of the plant and use them to check the plant health and growth. It must
         implement the methods get_plant_health and get_plant_growth
     """
     plant_id: str
     # FIXME: this is a placeholder for the camera that will be used to take pictures of the plant and use them to check
     # the plant health and growth
-    camera_sensor: any
-
+    camera_sensor: Any
+    
     def to_point(self) -> Point:
         return(
             Point(MeasurementType.PLANT.get_measurement_name())

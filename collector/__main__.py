@@ -6,9 +6,19 @@ and send it to the InfluxDB database.
 Should be run from the root of the project as: python3 -m collector
 """
 
-from configparser import ConfigParser
 import threading
 import board
+
+import os
+
+try:
+    # >3.2
+    from configparser import ConfigParser
+except ImportError:
+    # python27
+    # Refer to the older SafeConfigParser as ConfigParser
+    from configparser import SafeConfigParser as ConfigParser
+
 
 from collector.assets.greenhouse_asset import GreenhouseAsset
 from collector.assets.pot_asset import PotAsset
@@ -27,14 +37,27 @@ pinlist = [getattr(board, f"D{i}") for i in range(26)]
 
 
 def main():
+    conf = ConfigParser()
+
+    config_path = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "config.ini"
+    )
+
+    # check if the path is to a valid file
+    if not os.path.isfile(config_path):
+        raise FileNotFoundError("Config file not found")
+
+    conf.read(config_path)
+    
+    
     mcp3008 = MCP3008()
 
     # get DHT22 pin from config.ini
-    temp_humidity_sensor_pin = pinlist[ConfigParser().getint("DHT22", "gpio_pin")]
+    temp_humidity_sensor_pin = pinlist[conf.getint("DHT22", "gpio_pin")]
 
     # TODO: get channel from config, should we have "moisture_channel1, moisture_channel2, ..."?
     # Should it be a list instead?
-    # channel = ConfigParser().getint("MCP3008", "channel")
+    # channel = conf.getint("MCP3008", "channel")
 
     shelf = ShelfAsset(
         1,

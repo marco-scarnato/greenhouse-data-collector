@@ -13,6 +13,8 @@ import board
 from assets.greenhouse_asset import GreenhouseAsset
 from assets.pot_asset import PotAsset
 from assets.shelf_asset import ShelfAsset
+from collector.assets.plant_asset import PlantAsset
+from collector.sensors.ndvi import NDVI
 from sensors.humidity import Humidity
 from sensors.light_level import LightLevel
 from sensors.mcp3008 import MCP3008
@@ -27,25 +29,30 @@ pinlist = [getattr(board, f"D{i}") for i in range(26)]
 def main():
     mcp3008 = MCP3008()
 
-    pin = pinlist[ConfigParser().getint("DHT22", "gpio_pin")]
+    # get DHT22 pin from config.ini
+    temp_humidity_sensor_pin = pinlist[ConfigParser().getint("DHT22", "gpio_pin")]
     
     # TODO: get channel from config, should we have "moisture_channel1, moisture_channel2, ..."?
     # Should it be a list instead?
     # channel = ConfigParser().getint("MCP3008", "channel")
 
-    shelf_measurement = ShelfAsset(1, Humidity(pin=pin), Temperature(pin=pin))
-    thread_shelf = threading.Thread(target=shelf_measurement.read_sensor_data())
+    shelf = ShelfAsset(1, Humidity(pin=temp_humidity_sensor_pin), Temperature(pin=temp_humidity_sensor_pin))
+    thread_shelf = threading.Thread(target=shelf.read_sensor_data())
     thread_shelf.start()
 
-    pot_measurement = PotAsset(1, "right", "left", "1", Moisture(mcp3008, 1))
-    thread_pot = threading.Thread(target=pot_measurement.read_sensor_data())
+    pot = PotAsset(1, "right", "left", "1", Moisture(mcp3008, 1))
+    thread_pot = threading.Thread(target=pot.read_sensor_data())
     thread_pot.start()
 
-    greenhouse_measurement = GreenhouseAsset(LightLevel())
+    greenhouse = GreenhouseAsset(LightLevel())
     thread_greenhouse = threading.Thread(
-        target=greenhouse_measurement.read_sensor_data()
+        target=greenhouse.read_sensor_data()
     )
     thread_greenhouse.start()
+
+    plant = PlantAsset("1", NDVI())
+    thread_plant = threading.Thread(target=plant.read_sensor_data())
+    thread_plant.start()
 
 
 if __name__ == "__main__":

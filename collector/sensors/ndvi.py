@@ -7,11 +7,12 @@ from libcamera import Transform
 
 class NDVI:
     def __init__(
-        self, format: str = "RGB888", transform: Transform = Transform(vflip=True)
+        self, format: str = "RGB888", transform: Transform = Transform(vflip=False)
     ) -> None:
         """Initializes the camera, a config can be passed as a dictionary
 
         Args:
+            # TODO what is the config parameter? Is this a typo?
             config (str, optional): refer to https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf
             for all possible values, the default is RGB888 which is mapped to an array of pixels [B,G,R].
             Defaults to "RGB888".

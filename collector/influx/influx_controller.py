@@ -5,6 +5,8 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 
 import os
 
+from collector.__main__ import CONFIG_PATH
+
 try:
     # >3.2
     from configparser import ConfigParser
@@ -18,15 +20,7 @@ class InfluxController:
     # https://influxdb-client.readthedocs.io/en/latest/
 
     def __init__(self) -> None:
-        config_path = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), "config.ini"
-        )
-
-        # check if the path is to a valid file
-        if not os.path.isfile(config_path):
-            raise FileNotFoundError("Config file not found")
-
-        self._client: InfluxDBClient = InfluxDBClient.from_config_file(config_path)
+        self._client: InfluxDBClient = InfluxDBClient.from_config_file(CONFIG_PATH)
 
     def create_bucket(self, bucket_name: str) -> Bucket:
         """

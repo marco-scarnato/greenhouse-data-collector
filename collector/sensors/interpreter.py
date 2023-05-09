@@ -3,6 +3,8 @@ import numpy as np
 
 import os
 
+from collector.__main__ import CONFIG_PATH
+
 try:
     # >3.2
     from configparser import ConfigParser
@@ -21,16 +23,7 @@ class Interpreter:
 
     def __init__(self, sensor: str, range: tuple = (0, 100)):
         conf = ConfigParser()
-
-        config_path = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), "config.ini"
-        )
-
-        # check if the path is to a valid file
-        if not os.path.isfile(config_path):
-            raise FileNotFoundError("Config file not found")
-
-        conf.read(config_path)
+        conf.read(CONFIG_PATH)
 
         self.XP = json.loads(conf[sensor + "_values"]["XP"])
         self.FP = np.linspace(range[0], range[1], len(self.XP))

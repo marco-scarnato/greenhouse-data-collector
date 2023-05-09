@@ -2,12 +2,11 @@ from typing import Dict
 import cv2
 import numpy as np
 from picamera2 import Picamera2
-from libcamera import Transform
 
 
 class NDVI:
     def __init__(
-        self, format: str = "RGB888", transform: Transform = Transform(vflip=False)
+        self, format: str = "RGB888"
     ) -> None:
         """Initializes the camera, a config can be passed as a dictionary
 
@@ -23,8 +22,8 @@ class NDVI:
 
         self.camera = Picamera2()
         self.camera.still_configuration.main.format = format
-        self.camera.still_configuration.main.transform = transform
         self.camera.configure("still")
+        self.camera.start()
 
     def contrast_stretch(self, image):
         """Increases contrast of image to facilitate NDVI calculation"""
@@ -52,8 +51,6 @@ class NDVI:
         return ndvi
 
     def read(self):
-        self.camera.start()
-
         # TODO: check if there are more accurate ways to compute the number representing the plant health
         return np.mean(
             self.calculate_ndvi(self.contrast_stretch(self.camera.capture_array()))

@@ -8,7 +8,7 @@ from collector.assets.asset import Asset
 from collector.assets.measurement_type import MeasurementType
 from collector.influx.influx_controller import InfluxController
 
-from sensors.ndvi import NDVI
+from collector.sensors.ndvi import NDVI
 
 # TODO ask Eduard, do imports make sense?
 
@@ -33,7 +33,6 @@ class PlantAsset(Asset):
             Point(MeasurementType.PLANT.get_measurement_name())
             .tag("plant_id", self.plant_id)
             .field("ndvi", self.infrared_camera.read())
-            .time(datetime.now())
         )
 
     def read_sensor_data(self, interval: int = 5):
@@ -44,6 +43,7 @@ class PlantAsset(Asset):
 
         while True:
             point = self.to_point()
+            print(point)
             influx_controller.write_point(point, bucket)
             time.sleep(interval)
 

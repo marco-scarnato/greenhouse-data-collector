@@ -39,7 +39,6 @@ class ShelfAsset(Asset):
             .tag("shelf_floor", self.shelf_floor)
             .field("temperature", self.temperature_sensor.read())
             .field("humidity", self.humidity_sensor.read())
-            .time(datetime.now())
         )
 
     def read_sensor_data(self, interval: int = 5):

@@ -27,7 +27,6 @@ class GreenhouseAsset(Asset):
         return (
             Point(MeasurementType.GREENHOUSE.get_measurement_name())
             .field("light", self.light_sensor.read())
-            .time(datetime.now())
         )
 
     def read_sensor_data(self, interval: int = 5):
@@ -37,5 +36,7 @@ class GreenhouseAsset(Asset):
         ) or influx_controller.create_bucket("greenhouse")
 
         while True:
-            influx_controller.write_point(self.to_point(), bucket)
+            point = self.to_point()
+            print(point)
+            influx_controller.write_point(point, bucket)
             time.sleep(interval)

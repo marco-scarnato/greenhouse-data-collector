@@ -3,12 +3,30 @@ from typing import Optional, Iterable, Union
 from influxdb_client import InfluxDBClient, Bucket, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 
+import os
+
+try:
+    # >3.2
+    from configparser import ConfigParser
+except ImportError:
+    # python27
+    # Refer to the older SafeConfigParser as ConfigParser
+    from configparser import SafeConfigParser as ConfigParser
+
 
 class InfluxController:
     # https://influxdb-client.readthedocs.io/en/latest/
 
     def __init__(self) -> None:
-        self._client: InfluxDBClient = InfluxDBClient.from_config_file("config.ini")
+        config_path = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "config.ini"
+        )
+
+        # check if the path is to a valid file
+        if not os.path.isfile(config_path):
+            raise FileNotFoundError("Config file not found")
+
+        self._client: InfluxDBClient = InfluxDBClient.from_config_file(config_path)
 
     def create_bucket(self, bucket_name: str) -> Bucket:
         """

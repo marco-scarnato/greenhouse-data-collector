@@ -1,9 +1,7 @@
 import json
 import numpy as np
 
-import os
-
-from collector.__main__ import CONFIG_PATH
+from collector.config import CONFIG_PATH
 
 try:
     # >3.2

@@ -11,6 +11,8 @@ import board
 
 import os
 
+from collector.config import CONFIG_PATH
+
 try:
     # >3.2
     from configparser import ConfigParser
@@ -31,9 +33,6 @@ from collector.sensors.mcp3008 import MCP3008
 from collector.sensors.moisture import Moisture
 from collector.sensors.temperature import Temperature
 
-# FIXME:
-
-CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.ini")
 
 # We need to use board instead of initializing the pins manually like 'Pin(12)'
 # because in this way we have a wrapper that works on every Raspberry Pi model
@@ -42,11 +41,6 @@ pinlist = [getattr(board, f"D{i}") for i in range(26)]
 
 def main():
     conf = ConfigParser()
-
-    # check if the path is to a valid file
-    if not os.path.isfile(CONFIG_PATH):
-        raise FileNotFoundError("Config file not found")
-
     conf.read(CONFIG_PATH)
 
     mcp3008 = MCP3008()

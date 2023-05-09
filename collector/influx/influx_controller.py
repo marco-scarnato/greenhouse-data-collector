@@ -3,9 +3,7 @@ from typing import Optional, Iterable, Union
 from influxdb_client import InfluxDBClient, Bucket, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 
-import os
-
-from collector.__main__ import CONFIG_PATH
+from collector.config import CONFIG_PATH
 
 try:
     # >3.2

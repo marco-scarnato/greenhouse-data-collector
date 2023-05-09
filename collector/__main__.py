@@ -10,16 +10,16 @@ from configparser import ConfigParser
 import threading
 import board
 
-from assets.greenhouse_asset import GreenhouseAsset
-from assets.pot_asset import PotAsset
-from assets.shelf_asset import ShelfAsset
+from collector.assets.greenhouse_asset import GreenhouseAsset
+from collector.assets.pot_asset import PotAsset
+from collector.assets.shelf_asset import ShelfAsset
 from collector.assets.plant_asset import PlantAsset
 from collector.sensors.ndvi import NDVI
-from sensors.humidity import Humidity
-from sensors.light_level import LightLevel
-from sensors.mcp3008 import MCP3008
-from sensors.moisture import Moisture
-from sensors.temperature import Temperature
+from collector.sensors.humidity import Humidity
+from collector.sensors.light_level import LightLevel
+from collector.sensors.mcp3008 import MCP3008
+from collector.sensors.moisture import Moisture
+from collector.sensors.temperature import Temperature
 
 # We need to use board instead of initializing the pins manually like 'Pin(12)'
 # because in this way we have a wrapper that works on every Raspberry Pi model
@@ -31,12 +31,16 @@ def main():
 
     # get DHT22 pin from config.ini
     temp_humidity_sensor_pin = pinlist[ConfigParser().getint("DHT22", "gpio_pin")]
-    
+
     # TODO: get channel from config, should we have "moisture_channel1, moisture_channel2, ..."?
     # Should it be a list instead?
     # channel = ConfigParser().getint("MCP3008", "channel")
 
-    shelf = ShelfAsset(1, Humidity(pin=temp_humidity_sensor_pin), Temperature(pin=temp_humidity_sensor_pin))
+    shelf = ShelfAsset(
+        1,
+        Humidity(pin=temp_humidity_sensor_pin),
+        Temperature(pin=temp_humidity_sensor_pin),
+    )
     thread_shelf = threading.Thread(target=shelf.read_sensor_data())
     thread_shelf.start()
 
@@ -45,9 +49,7 @@ def main():
     thread_pot.start()
 
     greenhouse = GreenhouseAsset(LightLevel())
-    thread_greenhouse = threading.Thread(
-        target=greenhouse.read_sensor_data()
-    )
+    thread_greenhouse = threading.Thread(target=greenhouse.read_sensor_data())
     thread_greenhouse.start()
 
     plant = PlantAsset("1", NDVI())

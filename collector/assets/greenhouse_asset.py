@@ -4,10 +4,10 @@ from datetime import datetime
 
 from influxdb_client import Point
 
-from assets.asset import Asset
-from influx.influx_controller import InfluxController
-from assets.measurement_type import MeasurementType
-from sensors.light_level import LightLevel
+from collector.assets.asset import Asset
+from collector.influx.influx_controller import InfluxController
+from collector.assets.measurement_type import MeasurementType
+from collector.sensors.light_level import LightLevel
 
 
 @dataclass

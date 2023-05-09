@@ -4,9 +4,9 @@ from datetime import datetime
 
 from influxdb_client import Point
 
-from assets.asset import Asset
-from assets.measurement_type import MeasurementType
-from influx.influx_controller import InfluxController
+from collector.assets.asset import Asset
+from collector.assets.measurement_type import MeasurementType
+from collector.influx.influx_controller import InfluxController
 
 from sensors.ndvi import NDVI
 

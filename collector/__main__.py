@@ -52,17 +52,20 @@ def main():
     # Should it be a list instead?
     # channel = conf.getint("MCP3008", "channel")
 
-    shelf = ShelfAsset(
-       1,
-       Humidity(pin=temp_humidity_sensor_pin),
-       Temperature(pin=temp_humidity_sensor_pin),
-    )
-    thread_shelf = threading.Thread(target=shelf.read_sensor_data())
-    thread_shelf.start()
+    # shelf = ShelfAsset(
+    #    1,
+    #    Humidity(pin=temp_humidity_sensor_pin),
+    #    Temperature(pin=temp_humidity_sensor_pin),
+    # )
+    # thread_shelf = threading.Thread(target=shelf.read_sensor_data())
+    # thread_shelf.start()
 
-    pot = PotAsset(1, "right", "left", "1", Moisture(mcp3008, 1))
-    thread_pot = threading.Thread(target=pot.read_sensor_data)
-    thread_pot.start()
+    for conf_pot in conf["ASSETS"]["pots"]:
+        pot_dict = eval(conf_pot)
+        pot = PotAsset(pot_dict, mcp3008)
+        print(pot.to_point().to_line_protocol())
+        # thread_pot = threading.Thread(target=pot.read_sensor_data)
+        # thread_pot.start()
 
     greenhouse = GreenhouseAsset(LightLevel())
     thread_greenhouse = threading.Thread(target=greenhouse.read_sensor_data)

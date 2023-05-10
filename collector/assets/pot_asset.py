@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import time
 from datetime import datetime
+from typing import Dict
 
 from influxdb_client import Point
 from collector.assets.asset import Asset
@@ -44,6 +45,13 @@ class PotAsset(Asset):
 
         if self.pot_position != "left" and self.pot_position != "right":
             raise ValueError("pot_position must be 'left' or 'right'")
+
+    def __init__(self, pot_dict: Dict, mcp3008):
+        self.shelf_floor = pot_dict['shelf_floor']
+        self.group_position = pot_dict['group_position']
+        self.pot_position = pot_dict['pot_position']
+        self.moisture_sensor = Moisture(mcp3008, pot_dict['moisture_adc_channel'])
+        self.plant_id = pot_dict['plant_id']
 
     def to_point(self) -> Point:
         return (

@@ -26,11 +26,10 @@ class InfluxController:
         :return: the new bucket if created, the existing bucket if it already exists
         """
         bucket = self.get_bucket(bucket_name)
-        return (
-            self._client.buckets_api().create_bucket(bucket_name=bucket_name)
-            if bucket is None
-            else bucket
-        )
+        if bucket is None:
+            return self._client.buckets_api().create_bucket(bucket_name=bucket_name)
+        else:
+            return bucket
 
     def delete_bucket(self, bucket_name: str) -> bool:
         """
@@ -49,6 +48,9 @@ class InfluxController:
         Get a bucket from InfluxDB by name
         :return: bucket if found, None otherwise
         """
+        if self._client.buckets_api().find_bucket_by_name(bucket_name) is None:
+            self.create_bucket(bucket_name)
+
         return self._client.buckets_api().find_bucket_by_name(bucket_name)
 
     def write_point(self, point: Union[Point, Iterable[Point]], bucket: Bucket) -> bool:
@@ -58,11 +60,9 @@ class InfluxController:
         :param bucket: bucket to write to
         :return: True if write was successful, False otherwise
         """
-        return (
-            True
-            if self._client.write_api(write_options=SYNCHRONOUS).write(
+        if self._client.write_api(write_options=SYNCHRONOUS).write(
                 bucket=bucket.name, org=self._client.org, record=point
-            )
-            is None
-            else False
-        )
+        ) is None:
+            return True
+        else:
+            return False

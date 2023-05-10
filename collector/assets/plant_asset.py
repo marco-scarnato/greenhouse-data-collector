@@ -37,9 +37,7 @@ class PlantAsset(Asset):
 
     def read_sensor_data(self, interval: int = 5):
         influx_controller = InfluxController()
-        bucket = influx_controller.get_bucket(
-            "greenhouse"
-        ) or influx_controller.create_bucket("greenhouse")
+        bucket = influx_controller.get_bucket("greenhouse")
 
         while True:
             point = self.to_point()

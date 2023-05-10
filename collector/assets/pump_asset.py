@@ -60,9 +60,7 @@ class PumpAsset(Asset):
 
     def read_sensor_data(self, interval: int = 1000):
         influx_controller = InfluxController()
-        bucket = influx_controller.get_bucket(
-            "greenhouse"
-        ) or influx_controller.create_bucket("greenhouse")
+        bucket = influx_controller.get_bucket("greenhouse")
 
         while True:
             influx_controller.write_point(self.to_point(), bucket)

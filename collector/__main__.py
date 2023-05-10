@@ -66,8 +66,8 @@ def main():
     for pot_dict in pots:
         pot = PotAsset(pot_dict, mcp3008)
         print(pot.to_point().to_line_protocol())
-        # thread_pot = threading.Thread(target=pot.read_sensor_data)
-        # thread_pot.start()
+        thread_pot = threading.Thread(target=pot.read_sensor_data)
+        thread_pot.start()
 
     greenhouse = GreenhouseAsset(LightLevel())
     thread_greenhouse = threading.Thread(target=greenhouse.read_sensor_data)

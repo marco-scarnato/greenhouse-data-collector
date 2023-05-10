@@ -5,8 +5,10 @@ and send it to the InfluxDB database.
 
 Should be run from the root of the project as: python3 -m collector
 """
-
+import json
 import threading
+from typing import List
+
 import board
 
 import os
@@ -60,8 +62,8 @@ def main():
     # thread_shelf = threading.Thread(target=shelf.read_sensor_data())
     # thread_shelf.start()
 
-    for conf_pot in conf["ASSETS"]["pots"]:
-        pot_dict = eval(conf_pot)
+    pots: List = json.loads(conf["ASSETS"]["pots"])
+    for pot_dict in pots:
         pot = PotAsset(pot_dict, mcp3008)
         print(pot.to_point().to_line_protocol())
         # thread_pot = threading.Thread(target=pot.read_sensor_data)

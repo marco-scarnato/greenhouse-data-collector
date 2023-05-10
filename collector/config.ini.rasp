@@ -6,6 +6,17 @@ token=C2MP4iqlZ5j6VFCxx1ax9JzXd-8rB7LWCQJHH2Y9xkMRg9_K9hcRQd9VhDam03Wj1Q5hpvwYHt
 [DHT22]
 gpio_pin=4
 
+[ASSETS]
+# moisture_adc_channel refers to the channel in the Analog to Digital Converter
+pots=[
+    {shelf_floor=1, group_position=left, pot_position=left, moisture_adc_channel=1, plant_id=1},
+    {shelf_floor=1, group_position=left, pot_position=right, moisture_adc_channel=2, plant_id=2},
+    {shelf_floor=2, group_position=left, pot_position=left, moisture_adc_channel=3, plant_id=3},
+    {shelf_floor=2, group_position=left, pot_position=right, moisture_adc_channel=4, plant_id=4},
+]
+shelf={shelf_floor=1, humidity_gpio_pin=4, temperature_gpio_pin=4}
+
+
 [moisture_values]
 XP=[2.45, 1.2]
 

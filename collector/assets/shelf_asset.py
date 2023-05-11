@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import time
 from datetime import datetime
+from typing import Dict
 
 from influxdb_client import Point
 from collector.assets.asset import Asset
@@ -32,6 +33,12 @@ class ShelfAsset(Asset):
     def __post_init__(self):
         if self.shelf_floor != 1 and self.shelf_floor != 2:
             raise ValueError("shelf_floor must be 1 or 2")
+
+    def __init__(self, shelf_dict: Dict):
+        self.shelf_floor = shelf_dict['shelf_floor']
+        self.humidity_sensor = Humidity(pin=shelf_dict['humidity_gpio_pin'])
+        self.temperature_sensor = Temperature(pin=shelf_dict['temperature_gpio_pin'])
+        self.influx_controller = InfluxController()
 
     def to_point(self) -> Point:
         return (

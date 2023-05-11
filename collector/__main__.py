@@ -7,7 +7,7 @@ Should be run from the root of the project as: python3 -m collector
 """
 import json
 import threading
-from typing import List
+from typing import List, Dict
 
 import board
 
@@ -54,13 +54,10 @@ def main():
     # Should it be a list instead?
     # channel = conf.getint("MCP3008", "channel")
 
-    # shelf = ShelfAsset(
-    #    1,
-    #    Humidity(pin=temp_humidity_sensor_pin),
-    #    Temperature(pin=temp_humidity_sensor_pin),
-    # )
-    # thread_shelf = threading.Thread(target=shelf.read_sensor_data())
-    # thread_shelf.start()
+    shelf_dict: Dict = json.loads(conf["ASSETS"]["shelf"])
+    shelf = ShelfAsset(shelf_dict)
+    thread_shelf = threading.Thread(target=shelf.read_sensor_data())
+    thread_shelf.start()
 
     pots: List = json.loads(conf["ASSETS"]["pots"])
     for pot_dict in pots:

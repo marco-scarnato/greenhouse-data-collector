@@ -1,12 +1,7 @@
-import ast
 import json
-import threading
 import unittest
 from configparser import ConfigParser
-from typing import List
-
-# from assets.pot_asset import PotAsset
-# from sensors import mcp3008
+from typing import List, Dict
 
 
 class MyTestCase(unittest.TestCase):
@@ -19,9 +14,10 @@ class MyTestCase(unittest.TestCase):
         print(pots)
         for pot_dict in pots:
             print(pot_dict)
-            # thread_pot = threading.Thread(target=pot.read_sensor_data)
-            # thread_pot.start()
 
+        print("--------------- Shelf from config ----------------")
+        shelf_dict: Dict = json.loads(conf["ASSETS"]["shelf"])
+        print(shelf_dict)
 
 if __name__ == '__main__':
     unittest.main()

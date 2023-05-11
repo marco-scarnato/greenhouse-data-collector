@@ -52,6 +52,7 @@ class PotAsset(Asset):
         self.pot_position = pot_dict['pot_position']
         self.moisture_sensor = Moisture(mcp3008, pot_dict['moisture_adc_channel'])
         self.plant_id = pot_dict['plant_id']
+        self.influx_controller = InfluxController()
 
     def to_point(self) -> Point:
         return (
@@ -64,11 +65,10 @@ class PotAsset(Asset):
         )
 
     def read_sensor_data(self, interval: int = 5):
-        influx_controller = InfluxController()
-        bucket = influx_controller.get_bucket("greenhouse")
+        bucket = self.influx_controller.get_bucket("greenhouse")
 
         while True:
             point = self.to_point()
             print(point)
-            influx_controller.write_point(point, bucket)
+            self.influx_controller.write_point(point, bucket)
             time.sleep(interval)

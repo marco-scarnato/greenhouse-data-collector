@@ -47,17 +47,9 @@ def main():
 
     mcp3008 = MCP3008()
 
-    # get DHT22 pin from config.ini
-    temp_humidity_sensor_pin = pinlist[conf.getint("DHT22", "gpio_pin")]
-
-    # TODO: get channel from config, should we have "moisture_channel1, moisture_channel2, ..."?
-    # Should it be a list instead?
-    # channel = conf.getint("MCP3008", "channel")
-
     pots: List = json.loads(conf["ASSETS"]["pots"])
     for pot_dict in pots:
         pot = PotAsset(pot_dict, mcp3008)
-        print(pot.to_point().to_line_protocol())
         thread_pot = threading.Thread(target=pot.read_sensor_data)
         thread_pot.start()
 

@@ -53,6 +53,7 @@ class ShelfAsset(Asset):
         bucket = influx_controller.get_bucket("greenhouse")
 
         while True:
-            influx_controller.write_point(self.to_point(), bucket)
-            print(self.to_point())  # TODO remove
+            point = self.to_point()
+            print(point)
+            influx_controller.write_point(point, bucket)
             time.sleep(interval)

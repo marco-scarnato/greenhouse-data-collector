@@ -56,7 +56,7 @@ def main():
 
     shelf_dict: Dict = json.loads(conf["ASSETS"]["shelf"])
     shelf = ShelfAsset(shelf_dict)
-    thread_shelf = threading.Thread(target=shelf.read_sensor_data())
+    thread_shelf = threading.Thread(target=shelf.read_sensor_data)
     thread_shelf.start()
 
     pots: List = json.loads(conf["ASSETS"]["pots"])

@@ -47,24 +47,29 @@ def main():
 
     mcp3008 = MCP3008()
 
+    # TODO initialize all the sensors for pots and pass them in the construtor to lower the coupling
     pots: List = json.loads(conf["ASSETS"]["pots"])
     for pot_dict in pots:
         pot = PotAsset(pot_dict, mcp3008)
         thread_pot = threading.Thread(target=pot.read_sensor_data)
         thread_pot.start()
 
-    shelf_dict: Dict = json.loads(conf["ASSETS"]["shelf"])
-    shelf = ShelfAsset(shelf_dict)
-    thread_shelf = threading.Thread(target=shelf.read_sensor_data)
-    thread_shelf.start()
+    # TODO fix error Unable to set line 4 to input
+    # shelf_dict: Dict = json.loads(conf["ASSETS"]["shelf"])
+    # shelf = ShelfAsset(shelf_dict)
+    # thread_shelf = threading.Thread(target=shelf.read_sensor_data)
+    # thread_shelf.start()
 
     greenhouse = GreenhouseAsset(LightLevel())
     thread_greenhouse = threading.Thread(target=greenhouse.read_sensor_data)
     thread_greenhouse.start()
 
-    plant = PlantAsset("1", NDVI())
-    thread_plant = threading.Thread(target=plant.read_sensor_data)
-    thread_plant.start()
+    plants: List = json.loads(conf["ASSETS"]["plants"])
+    ndvi = NDVI()
+    for plant_dict in plants:
+        plant = PlantAsset(plant_dict, ndvi)
+        thread_plant = threading.Thread(target=plant.read_sensor_data)
+        thread_plant.start()
 
 
 if __name__ == "__main__":

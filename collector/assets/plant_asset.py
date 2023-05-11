@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import time
 from datetime import datetime
+from typing import Dict
 
 from influxdb_client import Point
 
@@ -27,6 +28,10 @@ class PlantAsset(Asset):
     """
     plant_id: str
     infrared_camera: NDVI
+
+    def __init__(self, plant_dict: Dict, infrared_camera):
+        self.plant_id = plant_dict['plant_id']
+        self.infrared_camera = infrared_camera
 
     def to_point(self) -> Point:
         return(

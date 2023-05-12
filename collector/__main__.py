@@ -13,6 +13,8 @@ import board
 
 from collector.config import CONFIG_PATH
 from collector.influx.influx_controller import InfluxController
+from collector.sensors.humidity import Humidity
+from collector.sensors.temperature import Temperature
 
 try:
     # >3.2
@@ -54,15 +56,11 @@ def main():
 
     init_pots_threads()
 
+    init_shelf_threads()
+
     init_greenhouse_thread()
 
     init_plants_threads()
-
-    # TODO fix error Unable to set line 4 to input
-    shelf_dict: Dict = json.loads(conf["ASSETS"]["shelf"])
-    shelf = ShelfAsset(shelf_dict)
-    thread_shelf = threading.Thread(target=shelf.read_sensor_data)
-    thread_shelf.start()
 
 
 def init_plants_threads():
@@ -70,7 +68,7 @@ def init_plants_threads():
     Initializes the threads that will read the data from the plants' sensors.
     """
     plants: List = json.loads(conf["ASSETS"]["plants"])
-    # A common NDVI sensor is used for all the plants in the shelf.
+    # A shared NDVI sensor is used for all the plants in the shelf.
     ndvi = NDVI()
     for plant_dict in plants:
         plant_id = plant_dict['plant_id']
@@ -79,8 +77,15 @@ def init_plants_threads():
         thread_plant.start()
 
 
-def init_shelf():
-    pass
+def init_shelf_threads():
+    shelf_dict: Dict = json.loads(conf["ASSETS"]["shelf"])
+    shelf_floor = shelf_dict['shelf_floor']
+    humidity_sensor = Humidity(pin=shelf_dict['humidity_gpio_pin'])
+    temperature_sensor = Temperature(pin=shelf_dict['temperature_gpio_pin'])
+    shelf = ShelfAsset(shelf_floor, humidity_sensor, temperature_sensor)
+
+    thread_shelf = threading.Thread(target=shelf.read_sensor_data)
+    thread_shelf.start()
 
 
 def init_pots_threads():

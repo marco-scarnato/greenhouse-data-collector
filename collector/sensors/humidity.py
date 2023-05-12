@@ -12,7 +12,7 @@ class Humidity:
             For example for pin GPIO4, board.D4 should be passed as argument.
         """
 
-        self.dhtDevice = adafruit_dht.DHT22(pin)
+        self.dhtDevice = adafruit_dht.DHT22(pin, use_pulseio=False)
 
     def read(self) -> Optional[float]:
         humidity: Optional[float] = None

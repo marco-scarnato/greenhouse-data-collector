@@ -1,7 +1,5 @@
 from dataclasses import dataclass
 import time
-from datetime import datetime
-from typing import Dict
 
 from influxdb_client import Point
 
@@ -11,30 +9,21 @@ from collector.influx.influx_controller import InfluxController
 
 from collector.sensors.ndvi import NDVI
 
-# TODO ask Eduard, do imports make sense?
-
 
 @dataclass
 class PlantAsset(Asset):
     """
     Class representing the Plant asset.
 
-    Attributes
-    ----------
-    plant_id: str
-        (tag) id of the plant
-    infrared_camera: NDVI
-        infrared camera used to take pictures of the plant and calculate its health (expressed as NDVI)
+    Attributes:
+        plant_id (str): id of the plant
+        infrared_camera (NDVI): infrared camera used to take pictures of the plant and calculate its health (expressed as NDVI)
     """
     plant_id: str
     infrared_camera: NDVI
 
-    def __init__(self, plant_dict: Dict, infrared_camera):
-        self.plant_id = plant_dict['plant_id']
-        self.infrared_camera = infrared_camera
-
     def to_point(self) -> Point:
-        return(
+        return (
             Point(MeasurementType.PLANT.get_measurement_name())
             .tag("plant_id", self.plant_id)
             .field("ndvi", self.infrared_camera.read())
@@ -49,4 +38,3 @@ class PlantAsset(Asset):
             print(point)
             influx_controller.write_point(point, bucket)
             time.sleep(interval)
-

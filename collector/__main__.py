@@ -14,6 +14,7 @@ import board
 import os
 
 from collector.config import CONFIG_PATH
+from influx.influx_controller import InfluxController
 
 try:
     # >3.2
@@ -22,7 +23,6 @@ except ImportError:
     # python27
     # Refer to the older SafeConfigParser as ConfigParser
     from configparser import SafeConfigParser as ConfigParser
-
 
 from collector.assets.greenhouse_asset import GreenhouseAsset
 from collector.assets.pot_asset import PotAsset
@@ -35,41 +35,85 @@ from collector.sensors.mcp3008 import MCP3008
 from collector.sensors.moisture import Moisture
 from collector.sensors.temperature import Temperature
 
-
 # We need to use board instead of initializing the pins manually like 'Pin(12)'
 # because in this way we have a wrapper that works on every Raspberry Pi model
 pinlist = [getattr(board, f"D{i}") for i in range(26)]
 
+# Used to read the .ini configuration file
+conf: ConfigParser = ConfigParser()
+conf.read(CONFIG_PATH)
+
+# Initialize Analog to Digital Converter (ADC) used to convert analog signal from moisture sensors
+mcp3008 = MCP3008()
+
 
 def main():
-    conf = ConfigParser()
-    conf.read(CONFIG_PATH)
+    """
+    Initialize and starts the threads that will read the data from the sensors and send it to the database.
+    The parameters of the sensors and assets are read from the configuration file as specified in the README.
+    """
 
-    mcp3008 = MCP3008()
+    # Initialize InfluxController singleton
+    InfluxController()
 
-    # TODO initialize all the sensors for pots and pass them in the construtor to lower the coupling
+    init_pots_threads()
+
+    init_greenhouse_thread()
+
+    init_plants_threads()
+
+    # TODO fix error Unable to set line 4 to input
+    shelf_dict: Dict = json.loads(conf["ASSETS"]["shelf"])
+    shelf = ShelfAsset(shelf_dict)
+    thread_shelf = threading.Thread(target=shelf.read_sensor_data)
+    thread_shelf.start()
+
+
+def init_plants_threads():
+    """
+    Initializes the threads that will read the data from the plants' sensors.
+    """
+    plants: List = json.loads(conf["ASSETS"]["plants"])
+    # A common NDVI sensor is used for all the plants in the shelf.
+    ndvi = NDVI()
+    for plant_dict in plants:
+        plant_id = plant_dict['plant_id']
+        plant = PlantAsset(plant_id, ndvi)
+        thread_plant = threading.Thread(target=plant.read_sensor_data)
+        thread_plant.start()
+
+
+def init_shelf():
+    pass
+
+
+def init_pots_threads():
+    """
+    Initializes the threads that will read the data from the pots' sensors.
+    The moisture sensors are read using the MCP3008 Analog to Digital Converter.
+    """
     pots: List = json.loads(conf["ASSETS"]["pots"])
     for pot_dict in pots:
-        pot = PotAsset(pot_dict, mcp3008)
+        shelf_floor = pot_dict['shelf_floor']
+        group_position = pot_dict['group_position']
+        pot_position = pot_dict['pot_position']
+        plant_id = pot_dict['plant_id']
+        # The moisture sensors data is converted using a shared MCP3008 Analog to Digital Converter.
+        moisture_sensor = Moisture(mcp3008, pot_dict['moisture_adc_channel'])
+        pot = PotAsset(shelf_floor, group_position, pot_position, plant_id, moisture_sensor)
         thread_pot = threading.Thread(target=pot.read_sensor_data)
         thread_pot.start()
 
-    # TODO fix error Unable to set line 4 to input
-    # shelf_dict: Dict = json.loads(conf["ASSETS"]["shelf"])
-    # shelf = ShelfAsset(shelf_dict)
-    # thread_shelf = threading.Thread(target=shelf.read_sensor_data)
-    # thread_shelf.start()
 
-    greenhouse = GreenhouseAsset(LightLevel())
+def init_greenhouse_thread():
+    """
+    Initializes the thread that will read the data from the greenhouse's sensors.
+    It will only read the light level.
+    """
+    light_level = LightLevel()
+    greenhouse = GreenhouseAsset(light_level)
     thread_greenhouse = threading.Thread(target=greenhouse.read_sensor_data)
     thread_greenhouse.start()
-
-    plants: List = json.loads(conf["ASSETS"]["plants"])
-    ndvi = NDVI()
-    for plant_dict in plants:
-        plant = PlantAsset(plant_dict, ndvi)
-        thread_plant = threading.Thread(target=plant.read_sensor_data)
-        thread_plant.start()
 
 
 if __name__ == "__main__":

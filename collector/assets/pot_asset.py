@@ -16,18 +16,12 @@ class PotAsset(Asset):
     """
     Class representing the Pot asset.
 
-    Attributes
-    ----------
-    shelf_floor: int
-        (tag) floor of the shelf in which the pot is, can be 1 or 2
-    group_position: str
-        (tag) position of the pot group in which the pot is placed, can be 'left' or 'right'
-    pot_position: str
-        (tag) position of the pot into the pot group, can be 'left' or 'right'
-    plant_id: str
-        (tag) id of the plant in the pot
-    moisture_sensor: Moisture
-        moisture sensor of the pot
+    Attributes:
+        shelf_floor (int): floor of the shelf in which the pot is, can be 1 or 2
+        group_position (str): position of the pot group in which the pot is placed, can be 'left' or 'right'
+        pot_position (str): position of the pot into the pot group, can be 'left' or 'right'
+        plant_id (str): id of the plant in the pot
+        moisture_sensor (Moisture): moisture sensor of the pot
     """
 
     shelf_floor: int
@@ -35,6 +29,7 @@ class PotAsset(Asset):
     pot_position: str
     plant_id: str
     moisture_sensor: Moisture
+    influx_controller: InfluxController = InfluxController()
 
     def __post_init__(self):
         if self.shelf_floor != 1 and self.shelf_floor != 2:
@@ -45,14 +40,6 @@ class PotAsset(Asset):
 
         if self.pot_position != "left" and self.pot_position != "right":
             raise ValueError("pot_position must be 'left' or 'right'")
-
-    def __init__(self, pot_dict: Dict, mcp3008):
-        self.shelf_floor = pot_dict['shelf_floor']
-        self.group_position = pot_dict['group_position']
-        self.pot_position = pot_dict['pot_position']
-        self.moisture_sensor = Moisture(mcp3008, pot_dict['moisture_adc_channel'])
-        self.plant_id = pot_dict['plant_id']
-        self.influx_controller = InfluxController()
 
     def to_point(self) -> Point:
         return (

@@ -15,10 +15,8 @@ class GreenhouseAsset(Asset):
     """
     Class representing the Greenhouse asset.
 
-    Attributes
-    ----------
-    light_sensor: LightLevel
-        sensor used to detect light in the greenhouse
+    Attributes:
+        light_sensor (LightLevel): sensor used to detect light in the greenhouse
     """
 
     light_sensor: LightLevel

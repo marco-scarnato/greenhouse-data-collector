@@ -15,7 +15,24 @@ except ImportError:
 
 
 class InfluxController:
+    """
+    Singleton class that handles the connection to InfluxDB.
+    Attributes:
+        _instance: the singleton instance
+        _client: the InfluxDB client used to interact with the database
+    """
     # https://influxdb-client.readthedocs.io/en/latest/
+
+    _instance = None
+    _client: InfluxDBClient = None
+
+    def __new__(cls):
+        """
+        Create a new instance of the class if it does not exist, otherwise return the existing one
+        """
+        if cls._instance is None:
+            cls._instance = super(InfluxController, cls).__new__(cls)
+        return cls._instance
 
     def __init__(self) -> None:
         self._client: InfluxDBClient = InfluxDBClient.from_config_file(CONFIG_PATH)

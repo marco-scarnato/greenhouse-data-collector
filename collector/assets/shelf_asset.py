@@ -16,21 +16,17 @@ class ShelfAsset(Asset):
     """
     Class representing The Shelf Asset
 
-    Attributes
-    ----------
-    shelf_floor: int
-        (tag) floor of the shelf, can be 1 or 2
-    humidity_sensor: Humidity
-        humidity sensor
-    temperature_sensor: Temperature
-        temperature sensor
+    Attributes:
+        shelf_floor(str): floor of the shelf, can be 1 or 2
+        humidity_sensor(Humidity)
+        temperature_sensor(Temperature)
     """
-    shelf_floor: int
+    shelf_floor: str
     humidity_sensor: Humidity
     temperature_sensor: Temperature
 
     def __post_init__(self):
-        if self.shelf_floor != 1 and self.shelf_floor != 2:
+        if self.shelf_floor != "1" and self.shelf_floor != "2":
             raise ValueError("shelf_floor must be 1 or 2")
 
     def __init__(self, shelf_dict: Dict):

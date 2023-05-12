@@ -10,6 +10,7 @@ import threading
 from typing import List, Dict
 
 import board
+from adafruit_dht import DHT22
 
 from collector.config import CONFIG_PATH
 from collector.influx.influx_controller import InfluxController
@@ -79,9 +80,14 @@ def init_plants_threads():
 
 def init_shelf_threads():
     shelf_dict: Dict = json.loads(conf["ASSETS"]["shelf"])
+    # In this case temperature and humidity sensors are on the same pin,
+    # we can use either of the temperature or humidity gpio_pin on the raspberry
+    dht22_gpio_pin = shelf_dict['temperature_gpio_pin']
+    humidity_temperature_sensor = DHT22(pinlist[int(dht22_gpio_pin)])
+    humidity_sensor = Humidity(humidity_temperature_sensor)
+    temperature_sensor = Temperature(humidity_temperature_sensor)
+
     shelf_floor = shelf_dict['shelf_floor']
-    humidity_sensor = Humidity(pin=shelf_dict['humidity_gpio_pin'])
-    temperature_sensor = Temperature(pin=shelf_dict['temperature_gpio_pin'])
     shelf = ShelfAsset(shelf_floor, humidity_sensor, temperature_sensor)
 
     thread_shelf = threading.Thread(target=shelf.read_sensor_data)

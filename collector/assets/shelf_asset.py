@@ -16,16 +16,12 @@ class ShelfAsset(Asset):
     """
     Class representing The Shelf Asset
 
-    Attributes
-    ----------
-    shelf_floor: int
-        (tag) floor of the shelf, can be 1 or 2
-    humidity_sensor: Humidity
-        humidity sensor
-    temperature_sensor: Temperature
-        temperature sensor
+    Attributes:
+        shelf_floor(str): floor of the shelf, can be 1 or 2
+        humidity_sensor(Humidity)
+        temperature_sensor(Temperature)
     """
-    shelf_floor: int
+    shelf_floor: str
     humidity_sensor: Humidity
     temperature_sensor: Temperature
     influx_controller: InfluxController = InfluxController()

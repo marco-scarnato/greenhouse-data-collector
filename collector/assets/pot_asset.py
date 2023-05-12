@@ -1,8 +1,5 @@
 from dataclasses import dataclass
 import time
-from datetime import datetime
-from typing import Dict
-
 from influxdb_client import Point
 from collector.assets.asset import Asset
 

@@ -11,10 +11,8 @@ from typing import List, Dict
 
 import board
 
-import os
-
 from collector.config import CONFIG_PATH
-from influx.influx_controller import InfluxController
+from collector.influx.influx_controller import InfluxController
 
 try:
     # >3.2
@@ -29,11 +27,9 @@ from collector.assets.pot_asset import PotAsset
 from collector.assets.shelf_asset import ShelfAsset
 from collector.assets.plant_asset import PlantAsset
 from collector.sensors.ndvi import NDVI
-from collector.sensors.humidity import Humidity
 from collector.sensors.light_level import LightLevel
 from collector.sensors.mcp3008 import MCP3008
 from collector.sensors.moisture import Moisture
-from collector.sensors.temperature import Temperature
 
 # We need to use board instead of initializing the pins manually like 'Pin(12)'
 # because in this way we have a wrapper that works on every Raspberry Pi model

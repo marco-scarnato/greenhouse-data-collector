@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 import time
-from datetime import datetime
 
 from influxdb_client import Point
 

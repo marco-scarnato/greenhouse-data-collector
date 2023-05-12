@@ -79,10 +79,16 @@ def init_plants_threads():
 
 
 def init_shelf_threads():
+    """
+    Initializes the threads that will read the data from the shelf's sensors.
+    """
     shelf_dict: Dict = json.loads(conf["ASSETS"]["shelf"])
     # In this case temperature and humidity sensors are on the same pin,
     # we can use either of the temperature or humidity gpio_pin on the raspberry
     dht22_gpio_pin = shelf_dict['temperature_gpio_pin']
+    # The DHT22 sensor is used for both temperature and humidity
+    # It is initialized with the pin number taken from the configuration file and
+    # the pinlist initialized above in order to have a wrapper that works on every Raspberry Pi model
     humidity_temperature_sensor = DHT22(pinlist[int(dht22_gpio_pin)])
     humidity_sensor = Humidity(humidity_temperature_sensor)
     temperature_sensor = Temperature(humidity_temperature_sensor)

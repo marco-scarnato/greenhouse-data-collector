@@ -4,12 +4,11 @@ from adafruit_dht import DHT22
 
 
 class Temperature:
-    def __init__(self, temperature_sensor: DHT22) -> None:
+    def __init__(self, temperature_sensor) -> None:
         """Initializes the Temperature sensor. Uses the DHT22 sensor.
 
         Args:
-            pin (Pin, optional): pin connected to the signal line.
-            For example for pin GPIO4, board.D4 should be passed as argument.
+            temperature_sensor: sensor used to read the temperature.
         """
         self.temperature_sensor = temperature_sensor
 

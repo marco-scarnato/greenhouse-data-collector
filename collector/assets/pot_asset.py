@@ -21,7 +21,7 @@ class PotAsset(Asset):
         moisture_sensor (Moisture): moisture sensor of the pot
     """
 
-    shelf_floor: int
+    shelf_floor: str
     group_position: str
     pot_position: str
     plant_id: str
@@ -29,8 +29,8 @@ class PotAsset(Asset):
     influx_controller: InfluxController = InfluxController()
 
     def __post_init__(self):
-        if self.shelf_floor != 1 and self.shelf_floor != 2:
-            raise ValueError("shelf_floor must be 1 or 2")
+        if self.shelf_floor != "1" and self.shelf_floor != "2":
+            raise ValueError("shelf_floor must be \"1\" or \"2\"")
 
         if self.group_position != "left" and self.group_position != "right":
             raise ValueError("group_position must be 'left' or 'right'")

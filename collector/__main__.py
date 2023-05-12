@@ -90,7 +90,7 @@ def init_shelf_threads():
     shelf_floor = shelf_dict['shelf_floor']
     shelf = ShelfAsset(shelf_floor, humidity_sensor, temperature_sensor)
 
-    thread_shelf = threading.Thread(target=shelf.read_sensor_data)
+    thread_shelf = threading.Thread(target=shelf.read_sensor_data, args=(10,))
     thread_shelf.start()
 
 

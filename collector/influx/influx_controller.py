@@ -37,16 +37,16 @@ class InfluxController:
     def __init__(self) -> None:
         self._client: InfluxDBClient = InfluxDBClient.from_config_file(CONFIG_PATH)
 
-    def create_bucket(self, bucket_name: str) -> Bucket:
+    def create_bucket(self, bucket_name: str) -> Optional[Bucket]:
         """
         Create a new bucket in InfluxDB with name bucket_name
-        :return: the new bucket if created, the existing bucket if it already exists
+        :return: the new bucket if created, None if it already exists
         """
         bucket = self.get_bucket(bucket_name)
         if bucket is None:
             return self._client.buckets_api().create_bucket(bucket_name=bucket_name)
         else:
-            return bucket
+            return None
 
     def delete_bucket(self, bucket_name: str) -> bool:
         """
@@ -65,10 +65,18 @@ class InfluxController:
         Get a bucket from InfluxDB by name
         :return: bucket if found, None otherwise
         """
-        if self._client.buckets_api().find_bucket_by_name(bucket_name) is None:
-            self.create_bucket(bucket_name)
-
         return self._client.buckets_api().find_bucket_by_name(bucket_name)
+
+    def create_bucket_if_not_exists(self, bucket_name: str) -> Bucket:
+        """
+        Create a new bucket in InfluxDB with name bucket_name if it does not exist, otherwise return the existing one
+        :return: the new bucket if created, the existing bucket otherwise
+        """
+        bucket = self.get_bucket(bucket_name)
+        if bucket is None:
+            return self._client.buckets_api().create_bucket(bucket_name=bucket_name)
+        else:
+            return bucket
 
     def write_point(self, point: Union[Point, Iterable[Point]], bucket: Bucket) -> bool:
         """

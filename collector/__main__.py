@@ -53,7 +53,8 @@ def main():
     """
 
     # Initialize InfluxController singleton
-    InfluxController()
+    influx_controller = InfluxController()
+    influx_controller.create_bucket_if_not_exists("greenhouse")
 
     init_pots_threads()
 

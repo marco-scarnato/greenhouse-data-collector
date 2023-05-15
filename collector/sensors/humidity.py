@@ -4,12 +4,11 @@ from adafruit_dht import DHT22
 
 
 class Humidity:
-    def __init__(self, humidity_sensor: DHT22) -> None:
+    def __init__(self, humidity_sensor) -> None:
         """Initializes the Humidity sensor. Uses the DHT22 sensor.
 
         Args:
-            pin (Pin): pin connected to the signal line.
-            For example for pin GPIO4, board.D4 should be passed as argument.
+            humidity_sensor: sensor used to read the humidity.
         """
         self.humidity_sensor = humidity_sensor
 

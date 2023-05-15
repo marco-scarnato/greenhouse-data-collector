@@ -1,12 +1,17 @@
+import time
 from abc import ABC, abstractmethod
 
 from influxdb_client import Point
+
+from collector.influx.influx_controller import InfluxController
 
 
 class Asset(ABC):
     """
     Abstract class for an asset.
     """
+    influx_controller: InfluxController = InfluxController()
+    sensor_read_interval: int = 5
 
     @abstractmethod
     def to_point(self) -> Point:
@@ -17,11 +22,15 @@ class Asset(ABC):
         """
         pass
 
-    @abstractmethod
-    def read_sensor_data(self, interval: int) -> None:
+    def read_sensor_data(self) -> None:
         """
         Read the sensor data and write a point to influxdb. The point is created by the to_point() method.
-        :param interval: interval in seconds between each sensor reading
+        Repeat every sensor_read_interval seconds.
         """
-        pass
+        bucket = self.influx_controller.get_bucket("greenhouse")
 
+        while True:
+            point = self.to_point()
+            print(point)
+            self.influx_controller.write_point(point, bucket)
+            time.sleep(self.sensor_read_interval)

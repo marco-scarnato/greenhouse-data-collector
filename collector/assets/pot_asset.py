@@ -1,9 +1,8 @@
 from dataclasses import dataclass
-import time
-from influxdb_client import Point
-from collector.assets.asset import Asset
 
-from collector.influx.influx_controller import InfluxController
+from influxdb_client import Point
+
+from collector.assets.asset import Asset
 from collector.assets.measurement_type import MeasurementType
 from collector.sensors.moisture import Moisture
 
@@ -18,7 +17,7 @@ class PotAsset(Asset):
         group_position (str): position of the pot group in which the pot is placed, can be 'left' or 'right'
         pot_position (str): position of the pot into the pot group, can be 'left' or 'right'
         plant_id (str): id of the plant in the pot
-        moisture_sensor (Moisture): moisture sensor of the pot
+        moisture_sensor (Moisture)
     """
 
     shelf_floor: str
@@ -26,7 +25,6 @@ class PotAsset(Asset):
     pot_position: str
     plant_id: str
     moisture_sensor: Moisture
-    influx_controller: InfluxController = InfluxController()
 
     def __post_init__(self):
         if self.shelf_floor != "1" and self.shelf_floor != "2":
@@ -47,12 +45,3 @@ class PotAsset(Asset):
             .tag("plant_id", self.plant_id)
             .field("moisture", self.moisture_sensor.read())
         )
-
-    def read_sensor_data(self, interval: int = 5):
-        bucket = self.influx_controller.get_bucket("greenhouse")
-
-        while True:
-            point = self.to_point()
-            print(point)
-            self.influx_controller.write_point(point, bucket)
-            time.sleep(interval)

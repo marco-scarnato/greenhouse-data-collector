@@ -58,7 +58,7 @@ def main():
 
     init_pots_threads()
 
-    init_shelf_threads()
+    init_shelf_thread()
 
     init_greenhouse_thread()
 
@@ -79,7 +79,7 @@ def init_plants_threads():
         thread_plant.start()
 
 
-def init_shelf_threads():
+def init_shelf_thread():
     """
     Initializes the threads that will read the data from the shelf's sensors.
     """
@@ -96,8 +96,9 @@ def init_shelf_threads():
 
     shelf_floor = shelf_dict['shelf_floor']
     shelf = ShelfAsset(shelf_floor, humidity_sensor, temperature_sensor)
+    shelf.set_sensor_read_interval(10)
 
-    thread_shelf = threading.Thread(target=shelf.read_sensor_data, args=(10,))
+    thread_shelf = threading.Thread(target=shelf.read_sensor_data)
     thread_shelf.start()
 
 

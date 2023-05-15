@@ -13,6 +13,13 @@ class Asset(ABC):
     influx_controller: InfluxController = InfluxController()
     sensor_read_interval: int = 5
 
+    def set_sensor_read_interval(self, sensor_read_interval: int) -> None:
+        """
+        Set the sensor read interval.
+        :param sensor_read_interval: sensor read interval in seconds
+        """
+        self.sensor_read_interval = sensor_read_interval
+
     @abstractmethod
     def to_point(self) -> Point:
         """

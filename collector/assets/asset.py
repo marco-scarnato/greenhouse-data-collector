@@ -39,5 +39,12 @@ class Asset(ABC):
         while True:
             point = self.to_point()
             print(point)
-            self.influx_controller.write_point(point, bucket)
+            if not self.influx_controller.write_point(point, bucket):
+                # if write fails, try again every 5 seconds
+                bucket = None
+                while bucket is None:
+                    print("Bucket not found, trying again in 5 seconds...")
+                    time.sleep(5)
+                    bucket = self.influx_controller.get_bucket("greenhouse")
+
             time.sleep(self.sensor_read_interval)

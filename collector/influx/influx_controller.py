@@ -1,6 +1,7 @@
 from typing import Optional, Iterable, Union
 
 from influxdb_client import InfluxDBClient, Bucket, Point
+from influxdb_client.client.exceptions import InfluxDBError
 from influxdb_client.client.write_api import SYNCHRONOUS
 
 from collector.config import CONFIG_PATH
@@ -85,9 +86,14 @@ class InfluxController:
         :param bucket: bucket to write to
         :return: True if write was successful, False otherwise
         """
-        if self._client.write_api(write_options=SYNCHRONOUS).write(
-                bucket=bucket.name, org=self._client.org, record=point
-        ) is None:
-            return True
-        else:
+
+        try:
+            if self._client.write_api(write_options=SYNCHRONOUS).write(
+                    bucket=bucket.name,
+                    org=self._client.org,
+                    record=point
+            ) is None:
+                return True
+        except InfluxDBError as e:
+            print("Error while writing point in influxController.write_point: ", e)
             return False

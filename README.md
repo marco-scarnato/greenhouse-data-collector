@@ -35,7 +35,7 @@ For other optional parameters, see the [documentation](https://github.com/influx
 
 You can set the raw voltages reading of the sensors, so they can be converted to meaningful values. The array can be of arbitrary length and will be mapped to a range of 0 to 100 <!-- FIXME: update if changes happen in the range -->
 
-## How to un
+## How to Run
 
 To run the script, run the following command from the root of the project:
 

@@ -1,5 +1,5 @@
-from sensors.interpreter import Interpreter
-from sensors.mcp3008 import MCP3008
+from collector.sensors.interpreter import Interpreter
+from collector.sensors.mcp3008 import MCP3008
 
 
 class WaterLevel:

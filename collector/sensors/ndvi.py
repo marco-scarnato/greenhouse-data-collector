@@ -1,17 +1,16 @@
-from typing import Dict
 import cv2
 import numpy as np
 from picamera2 import Picamera2
-from libcamera import Transform
 
 
 class NDVI:
     def __init__(
-        self, format: str = "RGB888", transform: Transform = Transform(vflip=True)
+        self, format: str = "RGB888"
     ) -> None:
         """Initializes the camera, a config can be passed as a dictionary
 
         Args:
+            # TODO what is the config parameter? Is this a typo?
             config (str, optional): refer to https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf
             for all possible values, the default is RGB888 which is mapped to an array of pixels [B,G,R].
             Defaults to "RGB888".
@@ -22,8 +21,8 @@ class NDVI:
 
         self.camera = Picamera2()
         self.camera.still_configuration.main.format = format
-        self.camera.still_configuration.main.transform = transform
         self.camera.configure("still")
+        self.camera.start()
 
     def contrast_stretch(self, image):
         """Increases contrast of image to facilitate NDVI calculation"""
@@ -51,8 +50,6 @@ class NDVI:
         return ndvi
 
     def read(self):
-        self.camera.start()
-
         # TODO: check if there are more accurate ways to compute the number representing the plant health
         return np.mean(
             self.calculate_ndvi(self.contrast_stretch(self.camera.capture_array()))

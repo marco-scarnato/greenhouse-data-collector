@@ -1,7 +1,15 @@
-from configparser import ConfigParser
 import json
-from typing import List
 import numpy as np
+
+from collector.config import CONFIG_PATH
+
+try:
+    # >3.2
+    from configparser import ConfigParser
+except ImportError:
+    # python27
+    # Refer to the older SafeConfigParser as ConfigParser
+    from configparser import SafeConfigParser as ConfigParser
 
 
 class Interpreter:
@@ -13,7 +21,7 @@ class Interpreter:
 
     def __init__(self, sensor: str, range: tuple = (0, 100)):
         conf = ConfigParser()
-        conf.read("config.ini")
+        conf.read(CONFIG_PATH)
 
         self.XP = json.loads(conf[sensor + "_values"]["XP"])
         self.FP = np.linspace(range[0], range[1], len(self.XP))

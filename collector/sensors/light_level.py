@@ -1,7 +1,7 @@
 import cv2
 from time import sleep
 
-from sensors.interpreter import Interpreter
+from collector.sensors.interpreter import Interpreter
 
 
 class LightLevel:

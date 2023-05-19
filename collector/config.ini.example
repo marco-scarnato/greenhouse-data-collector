@@ -19,6 +19,7 @@ plants=[
 
 [SENSOR_SWITCHES]
 use_infrared_sensor=false
+use_light_sensor=false
 
 [moisture_values]
 XP=[2.45, 1.2]

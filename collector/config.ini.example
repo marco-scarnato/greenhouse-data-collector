@@ -3,9 +3,6 @@ url=http://169.254.48.238:8086
 org=sirius_local
 token=C2MP4iqlZ5j6VFCxx1ax9JzXd-8rB7LWCQJHH2Y9xkMRg9_K9hcRQd9VhDam03Wj1Q5hpvwYHtbcnPaBpLuwfA==
 
-[DHT22]
-gpio_pin=4
-
 [ASSETS]
 # moisture_adc_channel refers to the channel in the Analog to Digital Converter
 pots=[
@@ -20,6 +17,8 @@ plants=[
     {"plant_id":"2"}
     ]
 
+[SENSOR_SWITCHES]
+use_infrared_sensor=false
 
 [moisture_values]
 XP=[2.45, 1.2]

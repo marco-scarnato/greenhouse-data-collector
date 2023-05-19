@@ -52,6 +52,9 @@ def main():
     The parameters of the sensors and assets are read from the configuration file as specified in the README.
     """
 
+    # Gets switch from config file to enable/disable infrared sensor
+    use_infrared_sensor = conf.getboolean("SENSOR_SWITCHES", "use_infrared_sensor")
+
     # Initialize InfluxController singleton
     influx_controller = InfluxController()
     influx_controller.create_bucket_if_not_exists("greenhouse")
@@ -62,7 +65,8 @@ def main():
 
     init_greenhouse_thread()
 
-    init_plants_threads()
+    if use_infrared_sensor:
+        init_plants_threads()
 
 
 def init_plants_threads():

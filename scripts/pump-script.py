@@ -4,8 +4,8 @@ import sys
 
 GPIO.setmode(GPIO.BCM)
 
-sec = sys.argv[1]
-gpio = sys.argv[2] or 18
+sec = int(sys.argv[1])
+gpio = int(sys.argv[2]) or 18
 
 GPIO.setup(gpio, GPIO.OUT)
 

@@ -32,5 +32,5 @@ class Interpreter:
             self.XP = self.XP[::-1]
             self.FP = self.FP[::-1]
 
-    def interpret(self, value: float | list[float]) -> float | list[float]:
+    def interpret(self, value: float) -> float:
         return np.interp(value, self.XP, self.FP)

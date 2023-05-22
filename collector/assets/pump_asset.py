@@ -1,13 +1,11 @@
 from dataclasses import dataclass
 from datetime import datetime
-import time
 
 from influxdb_client import Point
-from assets.asset import Asset
 
-from influx.influx_controller import InfluxController
-from assets.measurement_type import MeasurementType
-from sensors.water_level import WaterLevel
+from collector.assets.asset import Asset
+from collector.assets.measurement_type import MeasurementType
+from collector.sensors.water_level import WaterLevel
 
 
 @dataclass
@@ -15,20 +13,13 @@ class PumpAsset(Asset):
     """
     Class representing the Pump asset.
 
-    Attributes
-    ----------
-    shelf_floor: int
-        (tag) floor of the shelf in which the pump is, can be 1 or 2
-    group_position: str
-        (tag) position of the pot group watered by the pump, can be 'left' or 'right'
-    water_level_sensor: WaterLevel
-        water level of the pump at a specific time
-    surface_area: float
-        surface area of the container of the pump
-    water_level: float
-        water level of the pump at a specific time
+    Attributes:
+        shelf_floor (int): floor of the shelf in which the pump is, can be 1 or 2
+        group_position (str): position of the pot group watered by the pump, can be 'left' or 'right'
+        water_level_sensor (WaterLevel): water level of the pump at a specific time
+        surface_area (float): surface area of the container of the pump
+        water_level (float): water level of the pump at a specific time
     """
-
     shelf_floor: int
     group_position: str
     water_level_sensor: WaterLevel
@@ -57,13 +48,3 @@ class PumpAsset(Asset):
             .field("pumped_water", self.calculate_pumped_water())
             .time(datetime.now())
         )
-
-    def read_sensor_data(self, interval: int = 1000):
-        influx_controller = InfluxController()
-        bucket = influx_controller.get_bucket(
-            "greenhouse"
-        ) or influx_controller.create_bucket("greenhouse")
-
-        while True:
-            influx_controller.write_point(self.to_point(), bucket)
-            time.sleep(interval)

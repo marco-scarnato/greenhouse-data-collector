@@ -1,0 +1,31 @@
+[influx2]
+url=http://169.254.48.238:8086
+org=sirius_local
+token=C2MP4iqlZ5j6VFCxx1ax9JzXd-8rB7LWCQJHH2Y9xkMRg9_K9hcRQd9VhDam03Wj1Q5hpvwYHtbcnPaBpLuwfA==
+
+[ASSETS]
+# moisture_adc_channel refers to the channel in the Analog to Digital Converter
+pots=[
+    {"shelf_floor":"1", "group_position":"left", "pot_position":"left", "moisture_adc_channel":1, "plant_id":"1"},
+    {"shelf_floor":"1", "group_position":"left", "pot_position":"right", "moisture_adc_channel":2, "plant_id":"2"},
+    {"shelf_floor":"2", "group_position":"left", "pot_position":"left", "moisture_adc_channel":3, "plant_id":"3"},
+    {"shelf_floor":"2", "group_position":"left", "pot_position":"right", "moisture_adc_channel":4, "plant_id":"4"}
+    ]
+shelf={"shelf_floor":"1", "humidity_gpio_pin":4, "temperature_gpio_pin":4}
+plants=[
+    {"plant_id":"1"},
+    {"plant_id":"2"}
+    ]
+
+[SENSOR_SWITCHES]
+use_infrared_sensor=false
+use_light_sensor=false
+
+[moisture_values]
+XP=[2.45, 1.2]
+
+[water_level_values]
+XP=[1.1, 2.0]
+
+[light_level_values]
+XP=[80, 180]

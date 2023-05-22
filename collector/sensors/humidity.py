@@ -1,30 +1,28 @@
 from typing import Optional
 
-import adafruit_dht
+from adafruit_dht import DHT22
 
 
 class Humidity:
-    def __init__(self, pin) -> None:
+    def __init__(self, humidity_sensor) -> None:
         """Initializes the Humidity sensor. Uses the DHT22 sensor.
 
         Args:
-            pin (Pin): pin connected to the signal line.
-            For example for pin GPIO4, board.D4 should be passed as argument.
+            humidity_sensor: sensor used to read the humidity.
         """
-
-        self.dhtDevice = adafruit_dht.DHT22(pin)
+        self.humidity_sensor = humidity_sensor
 
     def read(self) -> Optional[float]:
         humidity: Optional[float] = None
 
         try:
-            humidity = self.dhtDevice.humidity
+            humidity = self.humidity_sensor.humidity
         except (
-            RuntimeError
+                RuntimeError
         ) as error:  # Errors happen fairly often, DHT's are hard to read, just keep going
             print(error.args[0])
         except Exception as error:
-            self.dhtDevice.exit()
+            self.humidity_sensor.exit()
             return None
 
         return humidity

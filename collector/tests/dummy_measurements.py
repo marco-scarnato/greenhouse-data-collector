@@ -77,9 +77,8 @@ PLANT_MEASUREMENTS: List[Point] = [
     Point(MeasurementType.PLANT.get_measurement_name())
     .tag("plant_id", plant)
     .field("health", health)
-    .field("growth", growth)
     .time(datetime.fromtimestamp(ts))
     for plant, health, growth, ts in zip(
-        ones_and_twos, health_data, growth_data, time_data
+        ones_and_twos, health_data, time_data
     )
 ]

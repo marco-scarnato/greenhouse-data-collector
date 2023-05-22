@@ -64,7 +64,12 @@ POT_MEASUREMENTS: List[Point] = [
     .field("moisture", moist)
     .time(datetime.fromtimestamp(ts))
     for shelf, group, pot, plant, moist, ts in zip(
-        ones_and_twos, left_and_right, left_and_right, ones_and_twos, moist_data, time_data
+        ones_and_twos,
+        left_and_right,
+        left_and_right,
+        ones_and_twos,
+        moist_data,
+        time_data,
     )
 ]
 

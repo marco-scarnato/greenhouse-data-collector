@@ -8,3 +8,5 @@ adafruit-circuitpython-dht
 numpy==1.23.5
 configparser
 picamera2==0.3.9
+RPi.GPIO
+pre-commit

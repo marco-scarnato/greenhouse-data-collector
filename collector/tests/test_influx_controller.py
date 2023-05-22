@@ -44,7 +44,7 @@ class TestInfluxController(TestCase):
         """
         influx_controller = InfluxController()
         bucket_name = self.TEST_BUCKET_NAME
-        
+
         try:
             test_bucket = influx_controller.create_bucket(bucket_name)
             point = GREENHOUSE_MEASUREMENTS[3]

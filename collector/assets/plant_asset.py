@@ -16,6 +16,7 @@ class PlantAsset(Asset):
         plant_id (str): id of the plant
         infrared_camera (NDVI): infrared camera used to take pictures of the plant and calculate its health (expressed as NDVI)
     """
+
     plant_id: str
     infrared_camera: NDVI
 

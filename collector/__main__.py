@@ -70,7 +70,6 @@ def main():
     if use_infrared_sensor:
         init_plants_threads()
 
-
 def init_plants_threads():
     """
     Initializes the threads that will read the data from the plants' sensors.

@@ -5,10 +5,9 @@ Used to initialize dummy measurements for testing purposes.
 from datetime import datetime
 from typing import List
 
-from influxdb_client import Point
 import numpy as np
-
 from assets.measurement_type import MeasurementType
+from influxdb_client import Point
 
 start_time = datetime(2023, 4, 11, 12, 0, 0)
 end_time = datetime(2023, 4, 11, 13, 0, 0)
@@ -19,7 +18,7 @@ temp_data = np.linspace(20, 30, 100)
 humidity_data = np.linspace(0, 100, 100)
 pumpd_water_data = np.linspace(0, 100, 100)
 moist_data = np.linspace(0, 100, 100)
-health_data = np.linspace(0, 100, 100)
+ndvi_data = np.linspace(-1, 1, 100)
 growth_data = np.linspace(0, 100, 100)
 
 np.random.seed(42)
@@ -76,9 +75,7 @@ POT_MEASUREMENTS: List[Point] = [
 PLANT_MEASUREMENTS: List[Point] = [
     Point(MeasurementType.PLANT.get_measurement_name())
     .tag("plant_id", plant)
-    .field("health", health)
+    .field("ndvi", ndvi)
     .time(datetime.fromtimestamp(ts))
-    for plant, health, growth, ts in zip(
-        ones_and_twos, health_data, time_data
-    )
+    for plant, ndvi, growth, ts in zip(ones_and_twos, ndvi_data, time_data)
 ]

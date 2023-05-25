@@ -43,10 +43,18 @@ To run the script, run the following command from the root of the project:
 python3 -m collector
 ```
 
-## Testing
+## Demo
 
-To load dummy data on your local influxdb database, run the following command from the root of the project:
+To execute a demo, run the following command from the root of the project:
 
 ```bash
-python src/load_dummy_data_smol.py
+python3 scripts/demo_influx.py
 ```
+
+The demo will create a database named `demo` and will populate it with pot measurements with decreasing moisture, simulating a real life scenario which triggers the actuator to water the pot.
+
+The measurements refer to a pot with
+- shelf_floor = 1
+- group_position = left
+- pot_position = right
+- plant_id = 1

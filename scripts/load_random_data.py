@@ -4,7 +4,7 @@ from typing import Optional
 from influxdb_client import Bucket
 
 from collector.influx.influx_controller import InfluxController
-from collector.tests.dummy_measurements import (
+from collector.tests.random_measurements import (
     GREENHOUSE_MEASUREMENTS,
     PLANT_MEASUREMENTS,
     POT_MEASUREMENTS,
@@ -37,9 +37,9 @@ def main(bucket_name: str, num_measurements: Optional[int] = 5):
 
 if __name__ == "__main__":
     """
-    Loads dummy data into the specified bucket.
-    Usage: python load_dummy_data.py <bucket_name>
-        or python load_dummy_data.py <bucket_name> <num_measurements>
+    Loads random data into the specified bucket.
+    Usage: python load_random_data.py <bucket_name>
+        or python load_random_data.py <bucket_name> <num_measurements>
     """
     if len(argv) == 2:
         print("Loading 5 measurements per asset...")
@@ -49,7 +49,7 @@ if __name__ == "__main__":
         main(argv[1], int(argv[2]))
     else:
         print(
-            "Usage: python load_dummy_data.py <bucket_name> or python load_dummy_data.py <bucket_name> "
+            "Usage: python load_random_data.py <bucket_name> or python load_random_data.py <bucket_name> "
             "<num_measurements>"
         )
         exit(1)

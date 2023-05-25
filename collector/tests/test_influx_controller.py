@@ -6,7 +6,7 @@ from influxdb_client import Point
 
 from influx.influx_controller import InfluxController
 from assets.assets_utils import TIMEZONE
-from dummy_measurements import GREENHOUSE_MEASUREMENTS
+from random_measurements import GREENHOUSE_MEASUREMENTS
 
 
 class TestInfluxController(TestCase):

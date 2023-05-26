@@ -13,6 +13,7 @@ import board
 from adafruit_dht import DHT22
 
 from collector.config import CONFIG_PATH
+from collector.demo.demo_influx import demo
 from collector.influx.influx_controller import InfluxController
 from collector.sensors.humidity import Humidity
 from collector.sensors.temperature import Temperature
@@ -69,6 +70,7 @@ def main():
 
     if use_infrared_sensor:
         init_plants_threads()
+
 
 def init_plants_threads():
     """
@@ -140,4 +142,5 @@ if __name__ == "__main__":
     """
     Script to be run on the Raspberry Pi Data Collectors.
     """
-    main()
+    # main()
+    demo()

@@ -7,6 +7,7 @@ Should be run from the root of the project as: python3 -m collector
 """
 import json
 import threading
+from sys import argv
 from typing import List, Dict
 
 import board
@@ -142,5 +143,7 @@ if __name__ == "__main__":
     """
     Script to be run on the Raspberry Pi Data Collectors.
     """
-    # main()
-    demo()
+    if argv[1] == "demo":
+        demo()
+    else:
+        main()

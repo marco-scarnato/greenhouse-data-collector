@@ -19,6 +19,8 @@ def demo():
             .field("moisture", float(moisture_value))
         pot_measurements.append(pot_measurement)
 
+    print("Sending demo measurements to InfluxDB...")
+
     for measurement in pot_measurements:
         influx_controller.write_point(measurement, demo_bucket)
         print(measurement.to_line_protocol())

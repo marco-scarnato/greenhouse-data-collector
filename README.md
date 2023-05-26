@@ -37,7 +37,7 @@ You can set the raw voltages reading of the sensors, so they can be converted to
 
 ## How to Run
 
-To run the script, run the following command from the root of the project:
+To run the main script, run the following command from the root of the project:
 
 ```bash
 python3 -m collector
@@ -48,7 +48,7 @@ python3 -m collector
 To execute a demo, run the following command from the root of the project:
 
 ```bash
-python3 collector/demo/demo_influx.py
+python3 -m collector --demo
 ```
 
 The demo will create a database named `demo` and will populate it with pot measurements with decreasing moisture, simulating a real life scenario which triggers the actuator to water the pot.

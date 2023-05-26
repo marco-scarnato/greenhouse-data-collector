@@ -142,8 +142,16 @@ def init_greenhouse_thread():
 if __name__ == "__main__":
     """
     Script to be run on the Raspberry Pi Data Collectors.
+    It starts the data collection process if no parameters are passed.
+    If the --demo parameter is passed it will run the demo.
     """
-    if argv[1] == "demo":
-        demo()
+    # if argv has a value check it
+    if len(argv) > 1:
+        # if the first parameter is --demo run the demo
+        if argv[1] == "--demo":
+            demo()
+        else:
+            print("Wrong parameter: " + argv[1])
+            print("Usage: python3 -m collector [--demo]")
     else:
         main()

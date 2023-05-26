@@ -48,7 +48,7 @@ python3 -m collector
 To execute a demo, run the following command from the root of the project:
 
 ```bash
-python3 scripts/demo_influx.py
+python3 collector/demo/demo_influx.py
 ```
 
 The demo will create a database named `demo` and will populate it with pot measurements with decreasing moisture, simulating a real life scenario which triggers the actuator to water the pot.
@@ -58,3 +58,4 @@ The measurements refer to a pot with
 - group_position = left
 - pot_position = right
 - plant_id = 1
+

@@ -3,8 +3,8 @@ from typing import List
 
 from influxdb_client import Point
 
-from assets.measurement_type import MeasurementType
-from influx.influx_controller import InfluxController
+from collector.assets.measurement_type import MeasurementType
+from collector.influx.influx_controller import InfluxController
 
 
 def main():

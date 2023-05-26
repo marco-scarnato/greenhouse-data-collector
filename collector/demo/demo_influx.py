@@ -7,7 +7,7 @@ from collector.assets.measurement_type import MeasurementType
 from collector.influx.influx_controller import InfluxController
 
 
-def main():
+def demo():
     influx_controller = InfluxController()
     demo_bucket = influx_controller.create_bucket_if_not_exists("demo")
 
@@ -30,4 +30,4 @@ if __name__ == "__main__":
     Send demo measurements to InfluxDB. Pot measurements are sent in a descending order, simulating a 
     plant's moisture decreasing over time.
     """
-    main()
+    demo()

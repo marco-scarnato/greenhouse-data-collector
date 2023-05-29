@@ -1,3 +1,4 @@
+# flake8: noqa
 import time
 from typing import List
 
@@ -56,8 +57,7 @@ def prepare_demo_bucket(influx_controller: InfluxController) -> Bucket:
 
 if __name__ == "__main__":
     """
-    Send demo measurements to InfluxDB.
-    Pot measurements are sent in a descending order,
+    Send demo measurements to InfluxDB. Pot measurements are sent in a descending order,
     simulating a plant's moisture decreasing over time.
     """
     demo()

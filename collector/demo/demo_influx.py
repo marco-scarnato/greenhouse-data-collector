@@ -17,12 +17,12 @@ def demo():
     plant_measurement1 = (
         Point(MeasurementType.PLANT.get_measurement_name())
         .tag("plant_id", "1")
-        .field("ndvi", "0.3")
+        .field("ndvi", 0.3)
     )
     plant_measurement2 = (
         Point(MeasurementType.PLANT.get_measurement_name())
         .tag("plant_id", "2")
-        .field("ndvi", "-0.7")
+        .field("ndvi", -0.7)
     )
 
     print("Sending demo plant measurements to InfluxDB...")

@@ -41,7 +41,7 @@ def demo():
     for measurement in pot_measurements:
         influx_controller.write_point(measurement, demo_bucket)
         print(measurement.to_line_protocol())
-        time.sleep(2)
+        time.sleep(1)
 
     influx_controller.write_point(plant_measurement1, demo_bucket)
     print(plant_measurement1.to_line_protocol())

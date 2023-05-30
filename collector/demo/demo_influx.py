@@ -25,6 +25,14 @@ def demo():
         .field("ndvi", "-0.7")
     )
 
+    print("Sending demo plant measurements to InfluxDB...")
+
+    influx_controller.write_point(plant_measurement1, demo_bucket)
+    print(plant_measurement1.to_line_protocol())
+    time.sleep(2)
+    influx_controller.write_point(plant_measurement2, demo_bucket)
+    print(plant_measurement2.to_line_protocol())
+
     for moisture_value in range(100, 0, -1):
         pot_measurement = (
             Point(MeasurementType.POT.get_measurement_name())
@@ -36,18 +44,12 @@ def demo():
         )
         pot_measurements.append(pot_measurement)
 
-    print("Sending demo measurements to InfluxDB...")
+    print("Sending demo pot measurements to InfluxDB...")
 
     for measurement in pot_measurements:
         influx_controller.write_point(measurement, demo_bucket)
         print(measurement.to_line_protocol())
         time.sleep(1)
-
-    influx_controller.write_point(plant_measurement1, demo_bucket)
-    print(plant_measurement1.to_line_protocol())
-    time.sleep(2)
-    influx_controller.write_point(plant_measurement2, demo_bucket)
-    print(plant_measurement2.to_line_protocol())
 
 
 def prepare_demo_bucket(influx_controller: InfluxController) -> Bucket:

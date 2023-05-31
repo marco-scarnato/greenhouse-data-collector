@@ -19,19 +19,12 @@ def demo():
         .tag("plant_id", "1")
         .field("ndvi", 0.3)
     )
-    plant_measurement2 = (
-        Point(MeasurementType.PLANT.get_measurement_name())
-        .tag("plant_id", "2")
-        .field("ndvi", -0.7)
-    )
 
     print("Sending demo plant measurements to InfluxDB...")
 
     influx_controller.write_point(plant_measurement1, demo_bucket)
     print(plant_measurement1.to_line_protocol())
     time.sleep(2)
-    influx_controller.write_point(plant_measurement2, demo_bucket)
-    print(plant_measurement2.to_line_protocol())
 
     for moisture_value in range(100, 0, -1):
         pot_measurement = (

@@ -5,10 +5,11 @@ and send it to the InfluxDB database.
 
 Should be run from the root of the project as: python3 -m collector
 """
+# flake8: noqa
 import json
 import threading
 from sys import argv
-from typing import List, Dict
+from typing import Dict, List
 
 import board
 from adafruit_dht import DHT22
@@ -28,13 +29,13 @@ except ImportError:
     from configparser import SafeConfigParser as ConfigParser
 
 from collector.assets.greenhouse_asset import GreenhouseAsset
+from collector.assets.plant_asset import PlantAsset
 from collector.assets.pot_asset import PotAsset
 from collector.assets.shelf_asset import ShelfAsset
-from collector.assets.plant_asset import PlantAsset
-from collector.sensors.ndvi import NDVI
 from collector.sensors.light_level import LightLevel
 from collector.sensors.mcp3008 import MCP3008
 from collector.sensors.moisture import Moisture
+from collector.sensors.ndvi import NDVI
 
 # We need to use board instead of initializing the pins manually like 'Pin(12)'
 # because in this way we have a wrapper that works on every Raspberry Pi model
@@ -72,6 +73,10 @@ def main():
     if use_infrared_sensor:
         init_plants_threads()
 
+    # TODO: method that start a thread which is triggered
+    #  if the config file is changed and then restarts all the
+    #  asset threads to get the new mapping between assets and sensors
+
 
 def init_plants_threads():
     """
@@ -81,7 +86,7 @@ def init_plants_threads():
     # A shared NDVI sensor is used for all the plants in the shelf.
     ndvi = NDVI()
     for plant_dict in plants:
-        plant_id = plant_dict['plant_id']
+        plant_id = plant_dict["plant_id"]
         plant = PlantAsset(plant_id, ndvi)
         thread_plant = threading.Thread(target=plant.read_sensor_data)
         thread_plant.start()
@@ -94,7 +99,7 @@ def init_shelf_thread():
     shelf_dict: Dict = json.loads(conf["ASSETS"]["shelf"])
     # In this case temperature and humidity sensors are on the same pin,
     # we can use either of the temperature or humidity gpio_pin on the raspberry
-    dht22_gpio_pin = shelf_dict['temperature_gpio_pin']
+    dht22_gpio_pin = shelf_dict["temperature_gpio_pin"]
     # The DHT22 sensor is used for both temperature and humidity
     # It is initialized with the pin number taken from the configuration file and
     # the pinlist initialized above in order to have a wrapper that works on every Raspberry Pi model
@@ -102,7 +107,7 @@ def init_shelf_thread():
     humidity_sensor = Humidity(humidity_temperature_sensor)
     temperature_sensor = Temperature(humidity_temperature_sensor)
 
-    shelf_floor = shelf_dict['shelf_floor']
+    shelf_floor = shelf_dict["shelf_floor"]
     shelf = ShelfAsset(shelf_floor, humidity_sensor, temperature_sensor)
     shelf.set_sensor_read_interval(10)
 
@@ -117,13 +122,15 @@ def init_pots_threads():
     """
     pots: List = json.loads(conf["ASSETS"]["pots"])
     for pot_dict in pots:
-        shelf_floor = pot_dict['shelf_floor']
-        group_position = pot_dict['group_position']
-        pot_position = pot_dict['pot_position']
-        plant_id = pot_dict['plant_id']
+        shelf_floor = pot_dict["shelf_floor"]
+        group_position = pot_dict["group_position"]
+        pot_position = pot_dict["pot_position"]
+        plant_id = pot_dict["plant_id"]
         # The moisture sensors data is converted using a shared MCP3008 Analog to Digital Converter.
-        moisture_sensor = Moisture(mcp3008, pot_dict['moisture_adc_channel'])
-        pot = PotAsset(shelf_floor, group_position, pot_position, plant_id, moisture_sensor)
+        moisture_sensor = Moisture(mcp3008, pot_dict["moisture_adc_channel"])
+        pot = PotAsset(
+            shelf_floor, group_position, pot_position, plant_id, moisture_sensor
+        )
         thread_pot = threading.Thread(target=pot.read_sensor_data)
         thread_pot.start()
 

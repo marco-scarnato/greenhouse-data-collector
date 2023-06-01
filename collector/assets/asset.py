@@ -10,6 +10,7 @@ class Asset(ABC):
     """
     Abstract class for an asset.
     """
+
     influx_controller: InfluxController = InfluxController()
     sensor_read_interval: int = 5
 
@@ -35,16 +36,14 @@ class Asset(ABC):
         Repeat every sensor_read_interval seconds.
         """
         bucket = self.influx_controller.get_bucket("greenhouse")
+        while bucket is None:
+            print("Bucket not found, trying again in 5 seconds...")
+            time.sleep(5)
+            bucket = self.influx_controller.get_bucket("greenhouse")
 
         while True:
             point = self.to_point()
             print(point)
             if not self.influx_controller.write_point(point, bucket):
-                # if write fails, try again every 5 seconds
-                bucket = None
-                while bucket is None:
-                    print("Bucket not found, trying again in 5 seconds...")
-                    time.sleep(5)
-                    bucket = self.influx_controller.get_bucket("greenhouse")
-
+                print("Error while writing point to influxdb")
             time.sleep(self.sensor_read_interval)

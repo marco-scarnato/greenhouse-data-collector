@@ -1,4 +1,3 @@
-# flake8: noqa
 import time
 from typing import List
 

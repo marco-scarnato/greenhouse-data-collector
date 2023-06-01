@@ -5,7 +5,6 @@ and send it to the InfluxDB database.
 
 Should be run from the root of the project as: python3 -m collector
 """
-# flake8: noqa
 import json
 import threading
 from sys import argv
@@ -61,7 +60,7 @@ def main():
 
     # Initialize InfluxController singleton
     influx_controller = InfluxController()
-    influx_controller.create_bucket_if_not_exists("greenhouse")
+    influx_controller.create_bucket("greenhouse")
 
     init_pots_threads()
 

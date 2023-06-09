@@ -20,7 +20,7 @@ class MCP3008:
     def read(self, channel=0) -> float:
         adc = self.spi.xfer2([1, (8 + channel) << 4, 0])
         data = ((adc[1] & 3) << 8) + adc[2]
-        return data
+        return data / 1023.0 * 3.3
 
     def close(self):
         self.spi.close()

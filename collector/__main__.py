@@ -8,7 +8,7 @@ Should be run from the root of the project as: python3 -m collector
 import json
 import threading
 from sys import argv
-from typing import Dict, List
+from typing import Dict
 
 import board
 from adafruit_dht import DHT22
@@ -55,8 +55,8 @@ def main():
     """
 
     # Gets switch from config file to enable/disable sensors
-    use_infrared_sensor = conf.getboolean("SENSOR_SWITCHES", "use_infrared_sensor")
-    use_light_sensor = conf.getboolean("SENSOR_SWITCHES", "use_light_sensor")
+    use_infrared_sensor = conf.getboolean("sensor_switches", "use_infrared_sensor")
+    use_light_sensor = conf.getboolean("sensor_switches", "use_light_sensor")
 
     # Initialize InfluxController singleton
     influx_controller = InfluxController()
@@ -81,10 +81,11 @@ def init_plants_threads():
     """
     Initializes the threads that will read the data from the plants' sensors.
     """
-    plants: List = json.loads(conf["ASSETS"]["plants"])
+    plants = conf.items("plants")
     # A shared NDVI sensor is used for all the plants in the shelf.
     ndvi = NDVI()
-    for plant_dict in plants:
+    for _, plant_parameters in plants:
+        plant_dict = json.loads(plant_parameters)
         plant_id = plant_dict["plant_id"]
         plant = PlantAsset(plant_id, ndvi)
         thread_plant = threading.Thread(target=plant.read_sensor_data)
@@ -95,7 +96,10 @@ def init_shelf_thread():
     """
     Initializes the threads that will read the data from the shelf's sensors.
     """
-    shelf_dict: Dict = json.loads(conf["ASSETS"]["shelf"])
+    shelves = conf.items("shelves")
+    # for now we only have one data-collector per shelf
+    shelf_dict: Dict = json.loads(shelves[0][1])
+
     # In this case temperature and humidity sensors are on the same pin,
     # we can use either of the temperature or humidity gpio_pin on the raspberry
     dht22_gpio_pin = shelf_dict["temperature_gpio_pin"]
@@ -119,8 +123,9 @@ def init_pots_threads():
     Initializes the threads that will read the data from the pots' sensors.
     The moisture sensors are read using the MCP3008 Analog to Digital Converter.
     """
-    pots: List = json.loads(conf["ASSETS"]["pots"])
-    for pot_dict in pots:
+    pots = conf.items("pots")
+    for _, pot_parameters in pots:
+        pot_dict = json.loads(pot_parameters)
         shelf_floor = pot_dict["shelf_floor"]
         group_position = pot_dict["group_position"]
         pot_position = pot_dict["pot_position"]

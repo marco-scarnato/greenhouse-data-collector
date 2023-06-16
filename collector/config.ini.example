@@ -5,15 +5,15 @@ token=C2MP4iqlZ5j6VFCxx1ax9JzXd-8rB7LWCQJHH2Y9xkMRg9_K9hcRQd9VhDam03Wj1Q5hpvwYHt
 
 [pots]
 # moisture_adc_channel refers to the channel in the Analog to Digital Converter
-pot.1={"shelf_floor":"1", "group_position":"left", "pot_position":"left", "moisture_adc_channel":1, "plant_id":"1"}
-pot.2={"shelf_floor":"1", "group_position":"left", "pot_position":"right", "moisture_adc_channel":2, "plant_id":"2"}
+pot_1={"shelf_floor":"1", "group_position":"left", "pot_position":"left", "moisture_adc_channel":1, "plant_id":"1"}
+pot_2={"shelf_floor":"1", "group_position":"left", "pot_position":"right", "moisture_adc_channel":2, "plant_id":"2"}
 
 [shelves]
-shelf.1={"shelf_floor":"1", "humidity_gpio_pin":4, "temperature_gpio_pin":4}
+shelf_1={"shelf_floor":"1", "humidity_gpio_pin":4, "temperature_gpio_pin":4}
 
 [plants]
-plant.1={"plant_id":"1"}
-plant.2={"plant_id":"2"}
+plant_1={"plant_id":"1"}
+plant_2={"plant_id":"2"}
 
 [sensor_switches]
 use_infrared_sensor=false

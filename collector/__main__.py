@@ -6,13 +6,16 @@ and send it to the InfluxDB database.
 Should be run from the root of the project as: python3 -m collector
 """
 import json
-import threading
+import os
 from sys import argv
-from typing import Dict
+from threading import Thread
+from time import sleep
+from typing import Dict, List
 
 import board
 from adafruit_dht import DHT22
 
+from collector.assets.asset import Asset
 from collector.config import CONFIG_PATH
 from collector.demo.demo_influx import demo
 from collector.influx.influx_controller import InfluxController
@@ -54,6 +57,44 @@ def main():
     The parameters of the sensors and assets are read from the configuration file as specified in the README.
     """
 
+    threads = init_threads()
+
+    for thread in threads:
+        thread.start()
+
+    sync_config_file(threads)
+
+
+def sync_config_file(thread_list: List[Asset, Thread]):
+    """
+    Checks if the configuration file has been modified and if so, it stops the threads and restarts them.
+    They will read the new parameters from the configuration file.
+    :param thread_list: list of tuples (asset, thread)
+    """
+    last_edited: float = os.path.getmtime(CONFIG_PATH)
+    while True:
+        newLastEdited = os.path.getmtime(CONFIG_PATH)
+        if newLastEdited > last_edited:
+            print("Config file changed, restarting threads...")
+            last_edited = newLastEdited
+            for asset, thread in thread_list:
+                asset.stop_thread()
+                thread.join()
+            thread_list = init_threads()
+            print("Threads restarted")
+        sleep(20)
+
+
+def init_threads() -> List[(Asset, Thread)]:
+    """
+    Initializes the threads that will read the data from the sensors and send it to the database.
+    For each asset, a thread is created and a related tuple (asset, thread) is added to a list and returned.
+    :return: list of tuples (asset, thread)
+    """
+
+    # List of tuple asset, thread that will be started
+    asset_list: List[(Asset, Thread)] = []
+
     # Gets switch from config file to enable/disable sensors
     use_infrared_sensor = conf.getboolean("sensor_switches", "use_infrared_sensor")
     use_light_sensor = conf.getboolean("sensor_switches", "use_light_sensor")
@@ -62,25 +103,35 @@ def main():
     influx_controller = InfluxController()
     influx_controller.create_bucket("greenhouse")
 
-    init_pots_threads()
+    # Initialize the threads that will read the data from the pots' sensors
+    pot_threads = init_pots_threads()
+    shelf_threads = init_shelf_thread()
 
-    init_shelf_thread()
-
+    greenhouse_threads = []
     if use_light_sensor:
-        init_greenhouse_thread()
+        greenhouse_threads = init_greenhouse_thread()
 
+    plant_threads = []
     if use_infrared_sensor:
-        init_plants_threads()
+        plant_threads = init_plants_threads()
 
-    # TODO: method that start a thread which is triggered
-    #  if the config file is changed and then restarts all the
-    #  asset threads to get the new mapping between assets and sensors
+    # Add all the threads to a common list in order to be controlled
+    asset_list.extend(pot_threads)
+    asset_list.extend(shelf_threads)
+    asset_list.extend(greenhouse_threads)
+    asset_list.extend(plant_threads)
+
+    return asset_list
 
 
-def init_plants_threads():
+def init_plants_threads() -> List[(PlantAsset, Thread)]:
     """
     Initializes the threads that will read the data from the plants' sensors.
+    :return: list of tuples (plant, thread)
     """
+    # List of tuples (plant, thread) that will be started
+    plant_list = []
+
     plants = conf.items("plants")
     # A shared NDVI sensor is used for all the plants in the shelf.
     ndvi = NDVI()
@@ -88,14 +139,20 @@ def init_plants_threads():
         plant_dict = json.loads(plant_parameters)
         plant_id = plant_dict["plant_id"]
         plant = PlantAsset(plant_id, ndvi)
-        thread_plant = threading.Thread(target=plant.read_sensor_data)
-        thread_plant.start()
+        thread_plant = Thread(target=plant.read_sensor_data)
+        plant_list.append((plant, thread_plant))
+
+    return plant_list
 
 
-def init_shelf_thread():
+def init_shelf_thread() -> List[(ShelfAsset, Thread)]:
     """
     Initializes the threads that will read the data from the shelf's sensors.
+    :return: list of tuples (shelf, thread)
     """
+    # List of tuples (shelf, thread) that will be started
+    shelf_list = []
+
     shelves = conf.items("shelves")
     # for now we only have one data-collector per shelf
     shelf_dict: Dict = json.loads(shelves[0][1])
@@ -114,15 +171,21 @@ def init_shelf_thread():
     shelf = ShelfAsset(shelf_floor, humidity_sensor, temperature_sensor)
     shelf.set_sensor_read_interval(10)
 
-    thread_shelf = threading.Thread(target=shelf.read_sensor_data)
-    thread_shelf.start()
+    thread_shelf = Thread(target=shelf.read_sensor_data)
+
+    shelf_list.append((shelf, thread_shelf))
+    return shelf_list
 
 
 def init_pots_threads():
     """
     Initializes the threads that will read the data from the pots' sensors.
     The moisture sensors are read using the MCP3008 Analog to Digital Converter.
+    :return: list of tuples (pot, thread)
     """
+    # List of tuples (pot, thread) that will be started
+    pot_list = []
+
     pots = conf.items("pots")
     for _, pot_parameters in pots:
         pot_dict = json.loads(pot_parameters)
@@ -135,19 +198,26 @@ def init_pots_threads():
         pot = PotAsset(
             shelf_floor, group_position, pot_position, plant_id, moisture_sensor
         )
-        thread_pot = threading.Thread(target=pot.read_sensor_data)
-        thread_pot.start()
+        thread_pot = Thread(target=pot.read_sensor_data)
+        pot_list.append((pot, thread_pot))
+
+    return pot_list
 
 
 def init_greenhouse_thread():
     """
     Initializes the thread that will read the data from the greenhouse's sensors.
     It will only read the light level.
+    :return: list of tuples (greenhouse, thread)
     """
+    # List of tuples (greenhouse, thread) that will be started
+    greenhouse_list = []
+
     light_level = LightLevel()
     greenhouse = GreenhouseAsset(light_level)
-    thread_greenhouse = threading.Thread(target=greenhouse.read_sensor_data)
-    thread_greenhouse.start()
+    thread_greenhouse = Thread(target=greenhouse.read_sensor_data)
+    greenhouse_list.append((greenhouse, thread_greenhouse))
+    return greenhouse_list
 
 
 if __name__ == "__main__":

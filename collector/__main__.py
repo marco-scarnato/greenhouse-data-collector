@@ -65,7 +65,7 @@ def main():
     sync_config_file(threads)
 
 
-def sync_config_file(thread_list: List[Asset, Thread]):
+def sync_config_file(thread_list: List[(Asset, Thread)]):
     """
     Checks if the configuration file has been modified and if so, it stops the threads and restarts them.
     They will read the new parameters from the configuration file.

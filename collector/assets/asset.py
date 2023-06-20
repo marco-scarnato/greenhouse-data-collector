@@ -1,3 +1,4 @@
+import threading
 import time
 from abc import ABC, abstractmethod
 
@@ -11,6 +12,7 @@ class Asset(ABC):
     Abstract class for an asset.
     """
 
+    stop_flag: threading.Event = threading.Event()
     influx_controller: InfluxController = InfluxController()
     sensor_read_interval: int = 5
 
@@ -36,7 +38,7 @@ class Asset(ABC):
         Repeat every sensor_read_interval seconds.
         """
         bucket = self.influx_controller.get_bucket("greenhouse")
-        while True:
+        while not self.stop_flag.is_set():
             point = self.to_point()
             print(point)
             if not self.influx_controller.write_point(point, bucket):
@@ -48,3 +50,9 @@ class Asset(ABC):
                     bucket = self.influx_controller.get_bucket("greenhouse")
 
             time.sleep(self.sensor_read_interval)
+
+    def stop_thread(self):
+        """
+        Stop the thread.
+        """
+        self.stop_flag.set()

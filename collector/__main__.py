@@ -10,7 +10,7 @@ import os
 from sys import argv
 from threading import Thread
 from time import sleep
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 import board
 from adafruit_dht import DHT22
@@ -59,13 +59,13 @@ def main():
 
     threads = init_threads()
 
-    for thread in threads:
+    for asset, thread in threads:
         thread.start()
 
     sync_config_file(threads)
 
 
-def sync_config_file(thread_list: List[(Asset, Thread)]):
+def sync_config_file(thread_list: List[Tuple[Asset, Thread]]):
     """
     Checks if the configuration file has been modified and if so, it stops the threads and restarts them.
     They will read the new parameters from the configuration file.
@@ -85,7 +85,7 @@ def sync_config_file(thread_list: List[(Asset, Thread)]):
         sleep(20)
 
 
-def init_threads() -> List[(Asset, Thread)]:
+def init_threads() -> List[Tuple[Asset, Thread]]:
     """
     Initializes the threads that will read the data from the sensors and send it to the database.
     For each asset, a thread is created and a related tuple (asset, thread) is added to a list and returned.
@@ -93,7 +93,7 @@ def init_threads() -> List[(Asset, Thread)]:
     """
 
     # List of tuple asset, thread that will be started
-    asset_list: List[(Asset, Thread)] = []
+    asset_list: List[Tuple[Asset, Thread]] = []
 
     # Gets switch from config file to enable/disable sensors
     use_infrared_sensor = conf.getboolean("sensor_switches", "use_infrared_sensor")
@@ -124,7 +124,7 @@ def init_threads() -> List[(Asset, Thread)]:
     return asset_list
 
 
-def init_plants_threads() -> List[(PlantAsset, Thread)]:
+def init_plants_threads() -> List[Tuple[Asset, Thread]]:
     """
     Initializes the threads that will read the data from the plants' sensors.
     :return: list of tuples (plant, thread)
@@ -145,7 +145,7 @@ def init_plants_threads() -> List[(PlantAsset, Thread)]:
     return plant_list
 
 
-def init_shelf_thread() -> List[(ShelfAsset, Thread)]:
+def init_shelf_thread() -> List[Tuple[ShelfAsset, Thread]]:
     """
     Initializes the threads that will read the data from the shelf's sensors.
     :return: list of tuples (shelf, thread)
@@ -204,7 +204,7 @@ def init_pots_threads():
     return pot_list
 
 
-def init_greenhouse_thread():
+def init_greenhouse_thread() -> List[Tuple[GreenhouseAsset, Thread]]:
     """
     Initializes the thread that will read the data from the greenhouse's sensors.
     It will only read the light level.

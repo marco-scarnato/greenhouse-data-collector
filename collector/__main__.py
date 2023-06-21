@@ -79,8 +79,10 @@ def main():
     logging.info(
         "\n\n************************************************************************************"
     )
-    logging.info("RUN - DATE: ", datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
-    logging.info("COLLECTOR PID: ", str(os.getpid()), "\n")
+    logging.info(
+        "RUN - DATE: " + str(datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
+    )
+    logging.info("COLLECTOR PID: " + str(os.getpid()) + "\n")
 
     signal.signal(signal.SIGINT, signal_handler)
 

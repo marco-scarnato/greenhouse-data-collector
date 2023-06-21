@@ -1,4 +1,5 @@
 import logging
+import sys
 import threading
 import time
 from abc import ABC, abstractmethod
@@ -33,6 +34,10 @@ class Asset(ABC):
         """
         pass
 
+    @abstractmethod
+    def stop_sensor(self):
+        pass
+
     def read_sensor_data(self) -> None:
         """
         Read the sensor data and write a point to influxdb. The point is created by the to_point() method.
@@ -58,6 +63,8 @@ class Asset(ABC):
         except Exception as e:
             print("Error while reading sensor data: " + str(e))
             logging.error("Error while reading sensor data: " + str(e))
+
+        sys.exit(0)
 
     def stop_thread(self):
         """

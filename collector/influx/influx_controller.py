@@ -79,3 +79,6 @@ class InfluxController:
         except InfluxDBError as e:
             print("Error while writing point in influxController.write_point: ", e)
             return False
+
+    def close(self):
+        self._client.close()

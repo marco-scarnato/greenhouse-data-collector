@@ -108,6 +108,7 @@ def sync_config_file(thread_list: List[Tuple[Asset, Thread]]):
             print("Config file changed, restarting threads...")
             logging.info("Config file changed, restarting threads...")
             last_edited = newLastEdited
+
             for asset, thread in thread_list:
                 asset.stop_thread()
                 thread.join()
@@ -133,7 +134,10 @@ def init_threads() -> List[Tuple[Asset, Thread]]:
 
     # Initialize InfluxController singleton
     try:
+        print("Creating InfluxController...")
         influx_controller = InfluxController()
+        print("influx controller: ", influx_controller)
+        print("InfluxController created")
     except Exception as e:
         print("Error creating InfluxController: " + str(e))
         print("Traceback:\n" + traceback.format_exc())
@@ -142,7 +146,9 @@ def init_threads() -> List[Tuple[Asset, Thread]]:
         raise e
 
     try:
+        print("Creating bucket...")
         influx_controller.create_bucket("greenhouse")
+        print("Bucket created")
     except Exception as e:
         print("Error creating bucket: " + str(e))
         print("Traceback:\n" + traceback.format_exc())
@@ -151,6 +157,7 @@ def init_threads() -> List[Tuple[Asset, Thread]]:
         raise e
 
     # Initialize the threads that will read the data from the pots' sensors
+    print("Initializing threads...")
     pot_threads = init_pots_threads()
     shelf_threads = init_shelf_thread()
 

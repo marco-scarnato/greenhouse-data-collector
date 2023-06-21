@@ -71,7 +71,7 @@ def main():
 
     # open log file in append mode to lines to existing file
     f = open(log_path, "a")
-    sys.stdout = f
+    # sys.stdout = f
 
     print(
         "\n\n************************************************************************************"

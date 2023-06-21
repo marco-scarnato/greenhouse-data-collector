@@ -83,3 +83,9 @@ class Asset(ABC):
         Stop the thread.
         """
         self.stop_flag.set()
+
+    def reset_stop_flag(self):
+        """
+        Reset the stop flag.
+        """
+        self.stop_flag.clear()

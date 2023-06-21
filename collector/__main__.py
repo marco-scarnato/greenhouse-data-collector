@@ -61,7 +61,7 @@ def main():
     Initialize and starts the threads that will read the data from the sensors and send it to the database.
     The parameters of the sensors and assets are read from the configuration file as specified in the README.
     """
-    log_path = "/home/lab/influx_greenhouse/greenhouse-data-collector/log_collector.txt"
+    log_path = "/home/lab/influx_greenhouse/greenhouse-data-collector/log_collector.log"
     logging.basicConfig(filename=log_path, filemode="a", level=logging.NOTSET)
 
     print("COLLECTOR PID: " + str(os.getpid()))

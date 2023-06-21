@@ -62,9 +62,9 @@ def main():
     print("COLLECTOR PID: " + str(os.getpid()))
 
     orig_stdout = sys.stdout
-    f = open("/influx_greenhouse/greenhouse-data-collector/log.txt", "x")
+    f = open("/home/lab/influx_greenhouse/greenhouse-data-collector/log.txt", "x")
     f.close()
-    f = open("/influx_greenhouse/greenhouse-data-collector/log.txt", "a")
+    f = open("/home/lab/influx_greenhouse/greenhouse-data-collector/log.txt", "a")
     sys.stdout = f
 
     print(

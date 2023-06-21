@@ -11,6 +11,7 @@ import logging
 import os
 import signal
 import sys
+import traceback
 from sys import argv
 from threading import Thread
 from time import sleep
@@ -145,13 +146,19 @@ def init_threads() -> List[Tuple[Asset, Thread]]:
         influx_controller = InfluxController()
     except Exception as e:
         print("Error creating InfluxController: " + str(e))
+        print("Traceback:\n" + traceback.format_exc())
         logging.error("Error creating InfluxController: " + str(e))
+        logging.error("Traceback:\n" + traceback.format_exc())
+        raise e
 
     try:
         influx_controller.create_bucket("greenhouse")
     except Exception as e:
         print("Error creating bucket: " + str(e))
+        print("Traceback:\n" + traceback.format_exc())
         logging.error("Error creating bucket: " + str(e))
+        logging.error("Traceback:\n" + traceback.format_exc())
+        raise e
 
     # Initialize the threads that will read the data from the pots' sensors
     pot_threads = init_pots_threads()

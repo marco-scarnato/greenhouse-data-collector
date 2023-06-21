@@ -7,6 +7,8 @@ Should be run from the root of the project as: python3 -m collector
 """
 import json
 import os
+import signal
+import sys
 from sys import argv
 from threading import Thread
 from time import sleep
@@ -56,13 +58,27 @@ def main():
     Initialize and starts the threads that will read the data from the sensors and send it to the database.
     The parameters of the sensors and assets are read from the configuration file as specified in the README.
     """
+    print("COLLECTOR PID: " + str(os.getpid()))
 
-    threads = init_threads()
+    orig_stdout = sys.stdout
+    f = open("/influx_greenhouse/greenhouse-data-collector/log.txt", "a")
+    sys.stdout = f
 
-    for asset, thread in threads:
-        thread.start()
+    print("COLLECTOR PID: " + str(os.getpid()))
 
-    sync_config_file(threads)
+    signal.signal(signal.SIGINT, signal_handler)
+
+    asset_list = init_threads()
+
+    sync_config_file(asset_list)
+
+    sys.stdout = orig_stdout
+    f.close()
+
+
+def signal_handler(signal, frame):
+    print("Terminating...")
+    sys.exit(0)
 
 
 def sync_config_file(thread_list: List[Tuple[Asset, Thread]]):
@@ -120,6 +136,10 @@ def init_threads() -> List[Tuple[Asset, Thread]]:
     asset_list.extend(shelf_threads)
     asset_list.extend(greenhouse_threads)
     asset_list.extend(plant_threads)
+
+    for asset, thread in asset_list:
+        thread.daemon = True
+        thread.start()
 
     return asset_list
 

@@ -141,8 +141,17 @@ def init_threads() -> List[Tuple[Asset, Thread]]:
     use_light_sensor = conf.getboolean("sensor_switches", "use_light_sensor")
 
     # Initialize InfluxController singleton
-    influx_controller = InfluxController()
-    influx_controller.create_bucket("greenhouse")
+    try:
+        influx_controller = InfluxController()
+    except Exception as e:
+        print("Error creating InfluxController: " + str(e))
+        logging.error("Error creating InfluxController: " + str(e))
+
+    try:
+        influx_controller.create_bucket("greenhouse")
+    except Exception as e:
+        print("Error creating bucket: " + str(e))
+        logging.error("Error creating bucket: " + str(e))
 
     # Initialize the threads that will read the data from the pots' sensors
     pot_threads = init_pots_threads()

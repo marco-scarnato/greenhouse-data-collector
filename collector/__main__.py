@@ -5,6 +5,7 @@ and send it to the InfluxDB database.
 
 Should be run from the root of the project as: python3 -m collector
 """
+import datetime
 import json
 import os
 import signal
@@ -61,10 +62,16 @@ def main():
     print("COLLECTOR PID: " + str(os.getpid()))
 
     orig_stdout = sys.stdout
+    f = open("/influx_greenhouse/greenhouse-data-collector/log.txt", "x")
+    f.close()
     f = open("/influx_greenhouse/greenhouse-data-collector/log.txt", "a")
     sys.stdout = f
 
-    print("COLLECTOR PID: " + str(os.getpid()))
+    print(
+        "\n\n************************************************************************************"
+    )
+    print("RUN - DATE: ", datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
+    print("COLLECTOR PID: ", str(os.getpid()), "\n")
 
     signal.signal(signal.SIGINT, signal_handler)
 

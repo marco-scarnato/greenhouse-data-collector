@@ -62,9 +62,15 @@ def main():
     print("COLLECTOR PID: " + str(os.getpid()))
 
     orig_stdout = sys.stdout
-    f = open("/home/lab/influx_greenhouse/greenhouse-data-collector/log.txt", "x")
-    f.close()
-    f = open("/home/lab/influx_greenhouse/greenhouse-data-collector/log.txt", "a")
+    log_path = "/home/lab/influx_greenhouse/greenhouse-data-collector/log.txt"
+
+    # create log file if it doesn't exist
+    if not os.path.isfile(log_path):
+        f = open(log_path, "x")
+        f.close()
+
+    # open log file in append mode to lines to existing file
+    f = open(log_path, "a")
     sys.stdout = f
 
     print(

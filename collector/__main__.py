@@ -60,7 +60,7 @@ def main():
     Initialize and starts the threads that will read the data from the sensors and send it to the database.
     The parameters of the sensors and assets are read from the configuration file as specified in the README.
     """
-    log_path = "/home/lab/influx_greenhouse/greenhouse-data-collector/log_collector.log"
+    log_path = "/home/lab/influx_greenhouse/greenhouse-data-collector/log_collector.txt"
     logging.basicConfig(filename=log_path, filemode="a")
 
     print("COLLECTOR PID: " + str(os.getpid()))
@@ -163,6 +163,7 @@ def init_threads() -> List[Tuple[Asset, Thread]]:
     for asset, thread in asset_list:
         thread.daemon = True
         thread.start()
+        print("Thread started")
 
     print("Threads started")
 

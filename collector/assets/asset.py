@@ -54,11 +54,10 @@ class Asset(ABC):
                         )
                         time.sleep(5)
                         bucket = self.influx_controller.get_bucket("greenhouse")
+                time.sleep(self.sensor_read_interval)
         except Exception as e:
             print("Error while reading sensor data: " + str(e))
             logging.error("Error while reading sensor data: " + str(e))
-
-            time.sleep(self.sensor_read_interval)
 
     def stop_thread(self):
         """

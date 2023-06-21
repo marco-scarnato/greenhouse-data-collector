@@ -87,11 +87,8 @@ def main():
 
     signal.signal(signal.SIGINT, signal_handler)
 
-    print("Signal handler set")
-
     asset_list = init_threads()
-
-    print("Threads initialized")
+    logging.info("Threads started")
 
     sync_config_file(asset_list)
     #
@@ -179,11 +176,8 @@ def init_threads() -> List[Tuple[Asset, Thread]]:
     asset_list.extend(plant_threads)
 
     for asset, thread in asset_list:
-        print("Thread started")
         thread.daemon = True
         thread.start()
-
-    print("Threads started")
 
     return asset_list
 

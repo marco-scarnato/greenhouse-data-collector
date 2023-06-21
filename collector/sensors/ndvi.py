@@ -4,9 +4,7 @@ from picamera2 import Picamera2
 
 
 class NDVI:
-    def __init__(
-        self, format: str = "RGB888"
-    ) -> None:
+    def __init__(self, format: str = "RGB888") -> None:
         """Initializes the camera, a config can be passed as a dictionary
 
         Args:
@@ -54,3 +52,6 @@ class NDVI:
         return np.mean(
             self.calculate_ndvi(self.contrast_stretch(self.camera.capture_array()))
         )
+
+    def stop(self):
+        self.camera.stop()

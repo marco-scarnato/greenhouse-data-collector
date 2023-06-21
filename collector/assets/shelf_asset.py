@@ -18,6 +18,7 @@ class ShelfAsset(Asset):
         humidity_sensor (Humidity)
         temperature_sensor (Temperature)
     """
+
     shelf_floor: str
     humidity_sensor: Humidity
     temperature_sensor: Temperature
@@ -33,3 +34,7 @@ class ShelfAsset(Asset):
             .field("temperature", self.temperature_sensor.read())
             .field("humidity", self.humidity_sensor.read())
         )
+
+    def stop_sensor(self):
+        self.temperature_sensor.stop()
+        self.humidity_sensor.stop()

@@ -10,7 +10,7 @@ class Temperature:
         Args:
             temperature_sensor: sensor used to read the temperature.
         """
-        self.temperature_sensor = temperature_sensor
+        self.temperature_sensor: DHT22 = temperature_sensor
 
     def read(self) -> Optional[float]:
         temperature_c: Optional[float] = None
@@ -21,8 +21,11 @@ class Temperature:
             RuntimeError
         ) as error:  # Errors happen fairly often, DHT's are hard to read, just keep going
             print(error.args[0])
-        except Exception as error:
+        except Exception:
             self.temperature_sensor.exit()
             return None
 
         return temperature_c
+
+    def stop(self):
+        self.temperature_sensor.exit()

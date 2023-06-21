@@ -34,6 +34,10 @@ class Asset(ABC):
         """
         pass
 
+    @abstractmethod
+    def stop_sensor(self):
+        pass
+
     def read_sensor_data(self) -> None:
         """
         Read the sensor data and write a point to influxdb. The point is created by the to_point() method.
@@ -57,9 +61,13 @@ class Asset(ABC):
                         bucket = self.influx_controller.get_bucket("greenhouse")
                 time.sleep(self.sensor_read_interval)
         except Exception as e:
+            # TODO add stacktrace
             print("Error while reading sensor data: " + str(e))
             logging.error("Error while reading sensor data: " + str(e))
+            self.stop_sensor()
+            sys.exit(1)
 
+        self.stop_sensor()
         sys.exit(0)
 
     def stop_thread(self):

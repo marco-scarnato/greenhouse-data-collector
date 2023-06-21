@@ -4,7 +4,7 @@ from adafruit_dht import DHT22
 
 
 class Humidity:
-    def __init__(self, humidity_sensor) -> None:
+    def __init__(self, humidity_sensor: DHT22) -> None:
         """Initializes the Humidity sensor. Uses the DHT22 sensor.
 
         Args:
@@ -18,11 +18,14 @@ class Humidity:
         try:
             humidity = self.humidity_sensor.humidity
         except (
-                RuntimeError
+            RuntimeError
         ) as error:  # Errors happen fairly often, DHT's are hard to read, just keep going
             print(error.args[0])
-        except Exception as error:
+        except Exception:
             self.humidity_sensor.exit()
             return None
 
         return humidity
+
+    def stop(self):
+        self.humidity_sensor.exit()

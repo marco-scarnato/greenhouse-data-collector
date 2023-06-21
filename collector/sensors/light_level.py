@@ -1,5 +1,6 @@
-import cv2
 from time import sleep
+
+import cv2
 
 from collector.sensors.interpreter import Interpreter
 
@@ -23,5 +24,9 @@ class LightLevel:
         return self.interpret(avg_light_level)
 
     def __del__(self):
+        self.cap.release()
+        cv2.destroyAllWindows()
+
+    def stop(self):
         self.cap.release()
         cv2.destroyAllWindows()

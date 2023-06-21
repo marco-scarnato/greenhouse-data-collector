@@ -15,10 +15,13 @@ class GreenhouseAsset(Asset):
     Attributes:
         light_sensor (LightLevel): sensor used to detect light in the greenhouse
     """
+
     light_sensor: LightLevel
 
     def to_point(self) -> Point:
-        return (
-            Point(MeasurementType.GREENHOUSE.get_measurement_name())
-            .field("light", self.light_sensor.read())
+        return Point(MeasurementType.GREENHOUSE.get_measurement_name()).field(
+            "light", self.light_sensor.read()
         )
+
+    def stop_sensor(self):
+        self.light_sensor.stop()

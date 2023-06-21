@@ -28,7 +28,7 @@ class PotAsset(Asset):
 
     def __post_init__(self):
         if self.shelf_floor != "1" and self.shelf_floor != "2":
-            raise ValueError("shelf_floor must be \"1\" or \"2\"")
+            raise ValueError('shelf_floor must be "1" or "2"')
 
         if self.group_position != "left" and self.group_position != "right":
             raise ValueError("group_position must be 'left' or 'right'")
@@ -45,3 +45,6 @@ class PotAsset(Asset):
             .tag("plant_id", self.plant_id)
             .field("moisture", self.moisture_sensor.read())
         )
+
+    def stop_sensor(self):
+        self.moisture_sensor.stop()

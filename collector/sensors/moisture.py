@@ -17,3 +17,6 @@ class Moisture:
 
     def read(self) -> float:
         return self.interpret(self.adc.read(self.channel))
+
+    def stop(self):
+        self.adc.close()

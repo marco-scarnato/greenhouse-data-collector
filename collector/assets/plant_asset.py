@@ -26,3 +26,6 @@ class PlantAsset(Asset):
             .tag("plant_id", self.plant_id)
             .field("ndvi", self.infrared_camera.read())
         )
+
+    def stop_sensor(self):
+        self.infrared_camera.stop()

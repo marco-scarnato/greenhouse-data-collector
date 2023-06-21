@@ -161,9 +161,9 @@ def init_threads() -> List[Tuple[Asset, Thread]]:
     asset_list.extend(plant_threads)
 
     for asset, thread in asset_list:
+        print("Thread started")
         thread.daemon = True
         thread.start()
-        print("Thread started")
 
     print("Threads started")
 

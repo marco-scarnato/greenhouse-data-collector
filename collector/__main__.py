@@ -61,7 +61,7 @@ def main():
     The parameters of the sensors and assets are read from the configuration file as specified in the README.
     """
     log_path = "/home/lab/influx_greenhouse/greenhouse-data-collector/log_collector.txt"
-    logging.basicConfig(filename=log_path, filemode="a")
+    logging.basicConfig(filename=log_path, filemode="a", level=logging.NOTSET)
 
     print("COLLECTOR PID: " + str(os.getpid()))
 

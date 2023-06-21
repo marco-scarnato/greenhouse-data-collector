@@ -55,3 +55,4 @@ class NDVI:
 
     def stop(self):
         self.camera.stop()
+        self.camera.close()

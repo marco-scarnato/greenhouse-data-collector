@@ -36,5 +36,9 @@ class ShelfAsset(Asset):
         )
 
     def stop_sensor(self):
-        self.temperature_sensor.stop()
-        self.humidity_sensor.stop()
+        try:
+            self.temperature_sensor.stop()
+            self.humidity_sensor.stop()
+        except Exception as e:
+            print(e)
+            pass

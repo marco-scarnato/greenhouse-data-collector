@@ -24,4 +24,8 @@ class GreenhouseAsset(Asset):
         )
 
     def stop_sensor(self):
-        self.light_sensor.stop()
+        try:
+            self.light_sensor.stop()
+        except Exception as e:
+            print(e)
+            pass

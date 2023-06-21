@@ -28,4 +28,8 @@ class PlantAsset(Asset):
         )
 
     def stop_sensor(self):
-        self.infrared_camera.stop()
+        try:
+            self.infrared_camera.stop()
+        except Exception as e:
+            print(e)
+            pass

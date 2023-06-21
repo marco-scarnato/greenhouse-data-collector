@@ -34,10 +34,6 @@ class Asset(ABC):
         """
         pass
 
-    @abstractmethod
-    def stop_sensor(self):
-        pass
-
     def read_sensor_data(self) -> None:
         """
         Read the sensor data and write a point to influxdb. The point is created by the to_point() method.

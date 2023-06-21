@@ -37,4 +37,3 @@ class ShelfAsset(Asset):
 
     def stop_sensor(self):
         self.temperature_sensor.stop()
-        self.humidity_sensor.stop()

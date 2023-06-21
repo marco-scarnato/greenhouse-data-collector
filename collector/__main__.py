@@ -7,6 +7,7 @@ Should be run from the root of the project as: python3 -m collector
 """
 import datetime
 import json
+import logging
 import os
 import signal
 import sys
@@ -59,38 +60,45 @@ def main():
     Initialize and starts the threads that will read the data from the sensors and send it to the database.
     The parameters of the sensors and assets are read from the configuration file as specified in the README.
     """
+    log_path = "/home/lab/influx_greenhouse/greenhouse-data-collector/log_collector.log"
+    logging.basicConfig(filename=log_path, filemode="a")
+
     print("COLLECTOR PID: " + str(os.getpid()))
 
-    orig_stdout = sys.stdout
-    log_path = "/home/lab/influx_greenhouse/greenhouse-data-collector/log.txt"
+    # orig_stdout = sys.stdout
+    #
+    # # create log file if it doesn't exist
+    # if not os.path.isfile(log_path):
+    #     f = open(log_path, "x")
+    #     f.close()
+    #
+    # # open log file in append mode to lines to existing file
+    # f = open(log_path, "a")
+    # # sys.stdout = f
 
-    # create log file if it doesn't exist
-    if not os.path.isfile(log_path):
-        f = open(log_path, "x")
-        f.close()
-
-    # open log file in append mode to lines to existing file
-    f = open(log_path, "a")
-    # sys.stdout = f
-
-    print(
+    logging.info(
         "\n\n************************************************************************************"
     )
-    print("RUN - DATE: ", datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
-    print("COLLECTOR PID: ", str(os.getpid()), "\n")
+    logging.info("RUN - DATE: ", datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
+    logging.info("COLLECTOR PID: ", str(os.getpid()), "\n")
 
     signal.signal(signal.SIGINT, signal_handler)
 
+    print("Signal handler set")
+
     asset_list = init_threads()
 
-    sync_config_file(asset_list)
+    print("Threads initialized")
 
-    sys.stdout = orig_stdout
-    f.close()
+    sync_config_file(asset_list)
+    #
+    # sys.stdout = orig_stdout
+    # f.close()
 
 
 def signal_handler(signal, frame):
-    print("Terminating...")
+    print("Terminating data-collector and threads...")
+    logging.info("Terminating data-collector and threads...")
     sys.exit(0)
 
 
@@ -105,12 +113,14 @@ def sync_config_file(thread_list: List[Tuple[Asset, Thread]]):
         newLastEdited = os.path.getmtime(CONFIG_PATH)
         if newLastEdited > last_edited:
             print("Config file changed, restarting threads...")
+            logging.info("Config file changed, restarting threads...")
             last_edited = newLastEdited
             for asset, thread in thread_list:
                 asset.stop_thread()
                 thread.join()
             thread_list = init_threads()
             print("Threads restarted")
+            logging.info("Threads restarted")
         sleep(20)
 
 
@@ -153,6 +163,8 @@ def init_threads() -> List[Tuple[Asset, Thread]]:
     for asset, thread in asset_list:
         thread.daemon = True
         thread.start()
+
+    print("Threads started")
 
     return asset_list
 

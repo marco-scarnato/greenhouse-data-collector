@@ -1,3 +1,4 @@
+import logging
 import threading
 import time
 from abc import ABC, abstractmethod
@@ -41,11 +42,13 @@ class Asset(ABC):
         while not self.stop_flag.is_set():
             point = self.to_point()
             print(point)
+            logging.info(point)
             if not self.influx_controller.write_point(point, bucket):
                 # if write fails, try again every 5 seconds
                 bucket = None
                 while bucket is None:
                     print("Bucket not found, trying again in 5 seconds...")
+                    logging.warning("Bucket not found, trying again in 5 seconds...")
                     time.sleep(5)
                     bucket = self.influx_controller.get_bucket("greenhouse")
 

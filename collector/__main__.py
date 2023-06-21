@@ -134,12 +134,7 @@ def init_threads() -> List[Tuple[Asset, Thread]]:
 
     # Initialize InfluxController singleton
     try:
-        print("Creating InfluxController...")
-        logging.info("Creating InfluxController...")
         influx_controller = InfluxController()
-        print("influx controller: ", influx_controller)
-        print("InfluxController created")
-        logging.info("InfluxController created")
     except Exception as e:
         print("Error creating InfluxController: " + str(e))
         print("Traceback:\n" + traceback.format_exc())
@@ -148,9 +143,7 @@ def init_threads() -> List[Tuple[Asset, Thread]]:
         raise e
 
     try:
-        print("Creating bucket...")
         influx_controller.create_bucket("greenhouse")
-        print("Bucket created")
     except Exception as e:
         print("Error creating bucket: " + str(e))
         print("Traceback:\n" + traceback.format_exc())

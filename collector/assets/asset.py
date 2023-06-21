@@ -43,16 +43,8 @@ class Asset(ABC):
         Read the sensor data and write a point to influxdb. The point is created by the to_point() method.
         Repeat every sensor_read_interval seconds.
         """
-        print("Reading sensor data...")
-        logging.info("Reading sensor data...")
-        print("stop flag: " + str(self.stop_flag.is_set()))
-        logging.info("stop flag: " + str(self.stop_flag.is_set()))
         try:
-            print("Getting bucket...")
-            logging.info("Getting bucket...")
             bucket = self.influx_controller.get_bucket("greenhouse")
-            print("Got bucket")
-            logging.info("Got bucket")
             while not self.stop_flag.is_set():
                 point = self.to_point()
                 print(point)

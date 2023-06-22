@@ -61,7 +61,8 @@ def main():
     Initialize and starts the threads that will read the data from the sensors and send it to the database.
     The parameters of the sensors and assets are read from the configuration file as specified in the README.
     """
-    utils.setupLogging()
+    utils.setup_logging()
+    utils.create_stop_script()
 
     signal.signal(signal.SIGINT, signal_handler)
 

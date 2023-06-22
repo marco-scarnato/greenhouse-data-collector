@@ -1,6 +1,4 @@
-import datetime
 import logging
-import os
 import time
 from typing import List
 
@@ -12,7 +10,8 @@ from collector.influx.influx_controller import InfluxController
 
 
 def demo():
-    utils.setupLogging(True)
+    utils.setup_logging(True)
+    utils.create_stop_script()
 
     influx_controller = InfluxController()
     demo_bucket = prepare_demo_bucket(influx_controller)
@@ -51,23 +50,6 @@ def demo():
         print(measurement.to_line_protocol())
         logging.info(measurement.to_line_protocol())
         time.sleep(1)
-
-
-def setupLogging():
-    log_path = (
-        "/home/lab/influx_greenhouse/greenhouse-data-collector/demo_log_collector.log"
-    )
-    print("COLLECTOR PID: " + str(os.getpid()))
-    f = open(log_path, "w")
-    f.close()
-    logging.basicConfig(filename=log_path, filemode="a", level=logging.NOTSET)
-    logging.info(
-        "\n\n************************************************************************************"
-    )
-    logging.info(
-        "DEMO RUN - DATE: " + str(datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
-    )
-    logging.info("COLLECTOR PID: " + str(os.getpid()) + "\n")
 
 
 def prepare_demo_bucket(influx_controller: InfluxController) -> Bucket:

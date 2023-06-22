@@ -10,9 +10,7 @@ The sensors retrieve data related to:
 - **Temperature** of the **shelves** in the greenhouse (in °C)
 - **Humidity** of the **shelves** in the greenhouse (in %)
 - **Moisture** level of the **pots** in the greenhouse (in %)
-- **Health** of the **plants** in the greenhouse (in %)
-- **Growth** of the **plants** in the greenhouse (in %)
-- Quantity of **water pumped** from the **water tanks** (in liters)
+- **NDVI** of the **plants** in the shelf (between -1 and 1)
 
 ## Dependencies
 

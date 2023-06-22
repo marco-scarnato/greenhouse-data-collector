@@ -1,13 +1,19 @@
+import datetime
+import logging
+import os
 import time
 from typing import List
 
 from influxdb_client import Bucket, Point
 
+from collector.assets import utils
 from collector.assets.measurement_type import MeasurementType
 from collector.influx.influx_controller import InfluxController
 
 
 def demo():
+    utils.setupLogging(True)
+
     influx_controller = InfluxController()
     demo_bucket = prepare_demo_bucket(influx_controller)
 
@@ -23,6 +29,7 @@ def demo():
 
     influx_controller.write_point(plant_measurement1, demo_bucket)
     print(plant_measurement1.to_line_protocol())
+    logging.info(plant_measurement1.to_line_protocol())
     time.sleep(2)
 
     for moisture_value in range(100, 0, -1):
@@ -37,11 +44,30 @@ def demo():
         pot_measurements.append(pot_measurement)
 
     print("Sending demo pot measurements to InfluxDB...")
+    logging.info("Sending demo pot measurements to InfluxDB...")
 
     for measurement in pot_measurements:
         influx_controller.write_point(measurement, demo_bucket)
         print(measurement.to_line_protocol())
+        logging.info(measurement.to_line_protocol())
         time.sleep(1)
+
+
+def setupLogging():
+    log_path = (
+        "/home/lab/influx_greenhouse/greenhouse-data-collector/demo_log_collector.log"
+    )
+    print("COLLECTOR PID: " + str(os.getpid()))
+    f = open(log_path, "w")
+    f.close()
+    logging.basicConfig(filename=log_path, filemode="a", level=logging.NOTSET)
+    logging.info(
+        "\n\n************************************************************************************"
+    )
+    logging.info(
+        "DEMO RUN - DATE: " + str(datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
+    )
+    logging.info("COLLECTOR PID: " + str(os.getpid()) + "\n")
 
 
 def prepare_demo_bucket(influx_controller: InfluxController) -> Bucket:

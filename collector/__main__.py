@@ -5,7 +5,6 @@ and send it to the InfluxDB database.
 
 Should be run from the root of the project as: python3 -m collector
 """
-import datetime
 import json
 import logging
 import os
@@ -20,6 +19,7 @@ from typing import Dict, List, Tuple
 import board
 from adafruit_dht import DHT22
 
+from collector.assets import utils
 from collector.assets.asset import Asset
 from collector.config import CONFIG_PATH
 from collector.demo.demo_influx import demo
@@ -61,22 +61,7 @@ def main():
     Initialize and starts the threads that will read the data from the sensors and send it to the database.
     The parameters of the sensors and assets are read from the configuration file as specified in the README.
     """
-    log_path = "/home/lab/influx_greenhouse/greenhouse-data-collector/log_collector.log"
-
-    print("COLLECTOR PID: " + str(os.getpid()))
-
-    f = open(log_path, "w")
-    f.close()
-
-    logging.basicConfig(filename=log_path, filemode="a", level=logging.NOTSET)
-
-    logging.info(
-        "\n\n************************************************************************************"
-    )
-    logging.info(
-        "RUN - DATE: " + str(datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
-    )
-    logging.info("COLLECTOR PID: " + str(os.getpid()) + "\n")
+    utils.setupLogging()
 
     signal.signal(signal.SIGINT, signal_handler)
 
@@ -84,9 +69,6 @@ def main():
     logging.info("Threads started")
 
     sync_config_file(asset_list)
-    #
-    # sys.stdout = orig_stdout
-    # f.close()
 
 
 def signal_handler(signal, frame):

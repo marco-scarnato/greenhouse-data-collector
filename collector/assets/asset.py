@@ -2,6 +2,7 @@ import logging
 import sys
 import threading
 import time
+import traceback
 from abc import ABC, abstractmethod
 
 from influxdb_client import Point
@@ -64,6 +65,8 @@ class Asset(ABC):
             # TODO add stacktrace
             print("Error while reading sensor data: " + str(e))
             logging.error("Error while reading sensor data: " + str(e))
+            print("Traceback:\n" + traceback.format_exc())
+            logging.error("Traceback:\n" + traceback.format_exc())
             self.stop_sensor()
             sys.exit(1)
 

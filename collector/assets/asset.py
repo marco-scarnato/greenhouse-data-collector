@@ -62,7 +62,6 @@ class Asset(ABC):
                         bucket = self.influx_controller.get_bucket("greenhouse")
                 time.sleep(self.sensor_read_interval)
         except Exception as e:
-            # TODO add stacktrace
             print("Error while reading sensor data: " + str(e))
             logging.error("Error while reading sensor data: " + str(e))
             print("Traceback:\n" + traceback.format_exc())

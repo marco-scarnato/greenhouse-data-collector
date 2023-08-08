@@ -51,4 +51,3 @@ class PotAsset(Asset):
             self.moisture_sensor.stop()
         except Exception as e:
             print(e)
-            pass

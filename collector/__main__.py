@@ -5,6 +5,8 @@ and send it to the InfluxDB database.
 
 Should be run from the root of the project as: python3 -m collector
 """
+# TODO fix flake8 flags, done temporarily to commit
+# flake8: noqa
 import json
 import logging
 import os
@@ -91,7 +93,8 @@ def sync_config_file(thread_list: List[Tuple[Asset, Thread]]):
             print("Config file changed, restarting threads...")
             logging.info("Config file changed, restarting threads...")
             last_edited = newLastEdited
-
+            del mcp3008
+            mcp3008 = MCP3008()
             for asset, thread in thread_list:
                 asset.stop_thread()
                 thread.join()

@@ -1,3 +1,5 @@
+# OUTDATED, NEED TO BE UPDATED
+
 # Data Collector python script
 
 The scripts in this project are used to collect data from the sensors of a Greenhouse and send them to an InfluxDB instance.

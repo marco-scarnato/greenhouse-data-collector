@@ -57,3 +57,5 @@ The measurements refer to a pot with
 - group_position = left
 - pot_position = right
 - plant_id = 1
+
+The incoming modifications to the configuration file are made using the message broker, for which the `.env` file must be configured with the correct credentials.

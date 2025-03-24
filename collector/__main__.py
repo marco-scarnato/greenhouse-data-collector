@@ -14,6 +14,7 @@ import traceback
 import stomp # for message broker
 import socket # for hostname retrieval
 import re # to split the hostname in letters and numbers
+import dbcamera_thread_test
 
 from sys import argv
 from threading import Thread
@@ -79,6 +80,9 @@ def main():
     logging.info("Threads started")
 
     sync_config_file(asset_list)
+    
+    thread_camera_db = Thread(target=dbcamera_thread_test.collect_photos)
+    thread_camera_db.start()
 
 
 def load_env_file(env_file_path=".env"):

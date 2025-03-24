@@ -31,6 +31,6 @@ XP=[80, 180]
 [postgres]
 url=localhost
 port=5432
-name=postgres
-user=postgres
+name=greenhouse_camera
+user=greenhouse_cameran
 pwd=postgres

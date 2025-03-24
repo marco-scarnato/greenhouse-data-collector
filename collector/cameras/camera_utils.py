@@ -12,7 +12,7 @@ def list_available_cameras(max_index=10):
             cap.release()
     return available_cameras
 
-def take_a_photo(photo_id, status="Healty", plant_name="basil", camera_index=0):
+def take_a_photo(photo_id, status="healty", plant_id="0", camera_index=0):
     """ Scatta una foto dalla webcam specificata e la salva nella cartella indicata. """
 
     # Inizializza la webcam con l'indice scelto
@@ -34,7 +34,7 @@ def take_a_photo(photo_id, status="Healty", plant_name="basil", camera_index=0):
         _, buffer = cv2.imencode('.jpg', frame)  # Converte il frame in un buffer di immagine
         photo_bytes = buffer.tobytes()  # Converte l'immagine in bytes
 
-        db_utils.post_photo(photo_id, photo_bytes, status, plant_name)
+        db_utils.post_photo(photo_id, photo_bytes, status, plant_id)
         print(f"Foto {photo_id} inviata al database con successo.")
 
 

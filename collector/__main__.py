@@ -14,7 +14,6 @@ import traceback
 import stomp # for message broker
 import socket # for hostname retrieval
 import re # to split the hostname in letters and numbers
-import dbcamera_thread_test
 
 from sys import argv
 from threading import Thread
@@ -31,6 +30,7 @@ from collector.demo.demo_influx import demo
 from collector.influx.influx_controller import InfluxController
 from collector.sensors.humidity import Humidity
 from collector.sensors.temperature import Temperature
+from collector.camera import dbcamera_thread
 
 try:
     # >3.2
@@ -81,7 +81,7 @@ def main():
 
     sync_config_file(asset_list)
     
-    thread_camera_db = Thread(target=dbcamera_thread_test.collect_photos)
+    thread_camera_db = Thread(target=dbcamera_thread.collect_photos)
     thread_camera_db.start()
 
 

@@ -1,13 +1,20 @@
 import psycopg2
 from psycopg2 import OperationalError
 from psycopg2 import Binary
+import os
+from configparser import ConfigParser
 
-# Parametri di connessione
-DB_HOST = "localhost"
-DB_PORT = "5432"
-DB_NAME = "postgres"
-DB_USER = "postgres"
-DB_PASSWORD = "postgres"
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.ini.example")
+
+# Used to read the .ini configuration file
+conf: ConfigParser = ConfigParser()
+conf.read(CONFIG_PATH)
+
+DB_HOST = conf["postgres"]["url"]
+DB_PORT = conf["postgres"]["port"]
+DB_NAME = conf["postgres"]["name"]
+DB_USER = conf["postgres"]["user"]
+DB_PASSWORD = conf["postgres"]["pwd"]
 
 def connect_to_postgres():
     """Crea una connessione al database PostgreSQL."""
@@ -38,7 +45,7 @@ def ensure_table_exists():
                 id VARCHAR PRIMARY KEY,
                 photo BYTEA,
                 status VARCHAR,
-                plant_name VARCHAR
+                plant_id VARCHAR
             )
             """
             cursor.execute(create_table_query)
@@ -55,7 +62,7 @@ def ensure_table_exists():
             connection.close()
             print("Connessione chiusa")
 
-def post_photo(photo_id, photo_bytes, status="Healty", plant_name="basil"):
+def post_photo(photo_id, photo_bytes, status="Healty", plant_id="basil"):
     """Inserisce una nuova foto nel database (POST)."""
     try:
         photo_data = Binary(photo_bytes)
@@ -70,13 +77,13 @@ def post_photo(photo_id, photo_bytes, status="Healty", plant_name="basil"):
             
             if cursor.fetchone():
                 # Se esiste, aggiorna la foto
-                query = "UPDATE photos SET photo = %s, status = %s, plant_name = %s WHERE id = %s"
-                cursor.execute(query, (photo_data, status, plant_name, photo_id))
+                query = "UPDATE photos SET photo = %s, status = %s, plant_id = %s WHERE id = %s"
+                cursor.execute(query, (photo_data, status, plant_id, photo_id))
                 print(f"Foto con ID '{photo_id}' aggiornata con successo!")
             else:
                 # Se non esiste, inserisci una nuova foto
-                query = "INSERT INTO photos (id, photo, status, plant_name) VALUES (%s, %s, %s, %s)"
-                cursor.execute(query, (photo_id, photo_data, status, plant_name))
+                query = "INSERT INTO photos (id, photo, status, plant_id) VALUES (%s, %s, %s, %s)"
+                cursor.execute(query, (photo_id, photo_data, status, plant_id))
                 print(f"Foto con ID '{photo_id}' inserita con successo!")
             
             connection.commit()
@@ -100,16 +107,16 @@ def get_photo(photo_id):
             
             # Presuppongo che la tabella si chiami 'photos'
             # Modifica il nome della tabella se necessario
-            query = "SELECT id, photo, status, plant_name FROM photos WHERE id = %s"
+            query = "SELECT id, photo, status, plant_id FROM photos WHERE id = %s"
             cursor.execute(query, (photo_id,))
             
             result = cursor.fetchone()
             
             if result:
-                id, photo_data, status, plant_name= result
+                id, photo_data, status, plant_id= result
                 print(f"Foto con ID '{id}' recuperata con successo!")
                 # Restituisce l'ID e i dati binari della foto
-                return id, photo_data, status, plant_name
+                return id, photo_data, status, plant_id
             else:
                 print(f"Nessuna foto trovata con ID '{photo_id}'")
                 return None

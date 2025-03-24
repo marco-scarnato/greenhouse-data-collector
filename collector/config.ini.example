@@ -28,4 +28,9 @@ XP=[1.1, 2.0]
 [light_level_values]
 XP=[80, 180]
 
-
+[postgres]
+url=localhost
+port=5432
+name=postgres
+user=postgres
+pwd=postgres

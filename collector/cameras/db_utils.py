@@ -1,10 +1,9 @@
 import psycopg2
+
 from psycopg2 import OperationalError
 from psycopg2 import Binary
-import os
 from configparser import ConfigParser
-
-CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.ini.example")
+from collector.config import CONFIG_PATH
 
 # Used to read the .ini configuration file
 conf: ConfigParser = ConfigParser()

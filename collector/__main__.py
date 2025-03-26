@@ -30,7 +30,7 @@ from collector.demo.demo_influx import demo
 from collector.influx.influx_controller import InfluxController
 from collector.sensors.humidity import Humidity
 from collector.sensors.temperature import Temperature
-from collector.camera import dbcamera_thread
+from collector.cameras import dbcamera_thread
 
 try:
     # >3.2
@@ -61,7 +61,6 @@ conf.read(CONFIG_PATH)
 # Initialize Analog to Digital Converter (ADC) used to convert analog signal from moisture sensors
 mcp3008 = MCP3008()
 
-
 def main():
     """
     Initialize and starts the threads that will read the data from the sensors and send it to the database.
@@ -80,10 +79,6 @@ def main():
     logging.info("Threads started")
 
     sync_config_file(asset_list)
-    
-    thread_camera_db = Thread(target=dbcamera_thread.collect_photos)
-    thread_camera_db.start()
-
 
 def load_env_file(env_file_path=".env"):
     try:
@@ -101,7 +96,6 @@ def load_env_file(env_file_path=".env"):
 
     except FileNotFoundError:
         print(f"{env_file_path} not found. Make sure to create a .env file with your environment variables.")
-
 
 def __wait_message():
     """
@@ -127,12 +121,10 @@ def __wait_message():
     while 1:
         sleep(10)
 
-
 def signal_handler(signal, frame):
     print("Terminating data-collector and threads...")
     logging.info("Terminating data-collector and threads...")
     sys.exit(0)
-
 
 def sync_config_file(thread_list: List[Tuple[Asset, Thread]]):
     """
@@ -155,7 +147,6 @@ def sync_config_file(thread_list: List[Tuple[Asset, Thread]]):
             print("Threads restarted")
             logging.info("Threads restarted")
         sleep(20)
-
 
 def init_threads() -> List[Tuple[Asset, Thread]]:
     """
@@ -194,6 +185,7 @@ def init_threads() -> List[Tuple[Asset, Thread]]:
     print("Initializing threads...")
     pot_threads = init_pots_threads()
     shelf_threads = init_shelf_thread()
+    cameras_threads = init_cameras_threads()
 
     greenhouse_threads = []
     if use_light_sensor:
@@ -214,8 +206,11 @@ def init_threads() -> List[Tuple[Asset, Thread]]:
         thread.daemon = True
         thread.start()
 
-    return asset_list
+    for thread in cameras_threads:
+        thread.daemon = True
+        thread.start()
 
+    return asset_list
 
 def init_plants_threads() -> List[Tuple[Asset, Thread]]:
     """
@@ -236,7 +231,6 @@ def init_plants_threads() -> List[Tuple[Asset, Thread]]:
         plant_list.append((plant, thread_plant))
 
     return plant_list
-
 
 def init_shelf_thread() -> List[Tuple[ShelfAsset, Thread]]:
     """
@@ -269,8 +263,7 @@ def init_shelf_thread() -> List[Tuple[ShelfAsset, Thread]]:
     shelf_list.append((shelf, thread_shelf))
     return shelf_list
 
-
-def init_pots_threads():
+def init_pots_threads() -> List[Tuple[PotAsset, Thread]]:
     """
     Initializes the threads that will read the data from the pots' sensors.
     The moisture sensors are read using the MCP3008 Analog to Digital Converter.
@@ -296,7 +289,6 @@ def init_pots_threads():
 
     return pot_list
 
-
 def init_greenhouse_thread() -> List[Tuple[GreenhouseAsset, Thread]]:
     """
     Initializes the thread that will read the data from the greenhouse's sensors.
@@ -312,7 +304,15 @@ def init_greenhouse_thread() -> List[Tuple[GreenhouseAsset, Thread]]:
     greenhouse_list.append((greenhouse, thread_greenhouse))
     return greenhouse_list
 
-
+def init_cameras_threads() -> List[Thread]:
+    """
+    Initialize the thread that will read the data from the cameras.
+    """
+    camera_list = []
+    for camera in range(len(conf["cameras"])):
+        camera_list.append(Thread(target=dbcamera_thread.define_camera_thread, args=(camera)))    
+    return camera_list 
+    
 if __name__ == "__main__":
     """
     Script to be run on the Raspberry Pi Data Collectors.

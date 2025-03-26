@@ -1,13 +1,12 @@
-import db_utils
-import camera_utils
 import threading
 import time
 import uuid
-from configparser import ConfigParser
-import os
 import json
 
-CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.ini.example")
+from collector.cameras import db_utils
+from collector.cameras import camera_utils
+from collector.config import CONFIG_PATH
+from configparser import ConfigParser
 
 # Used to read the .ini configuration file
 conf: ConfigParser = ConfigParser()
@@ -48,3 +47,12 @@ def collect_photos():
         
         print("Foto scattate con successo!")
         time.sleep(5)
+
+def define_camera_thread(camera_index=0):
+    db_utils.ensure_table_exists()
+    cameras = camera_utils.list_available_cameras(camera_index)
+    plant_info = get_plant_infos(camera_index)
+
+    camera_utils.take_a_photo(plant_info["photo_id"], plant_info["status"], plant_info["plant_id"], camera_index)
+    print("Foto scattata con successo! Camera:", camera_index)
+    time.sleep(5)

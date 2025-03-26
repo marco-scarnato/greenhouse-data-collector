@@ -1,6 +1,5 @@
 import cv2
-import os
-import db_utils
+from collector.cameras import db_utils
 
 def list_available_cameras(max_index=10):
     """ Trova e restituisce un elenco delle webcam disponibili. """

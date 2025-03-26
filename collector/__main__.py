@@ -309,8 +309,7 @@ def init_cameras_threads() -> List[Thread]:
     Initialize the thread that will read the data from the cameras.
     """
     camera_list = []
-    for camera in range(len(conf["cameras"])):
-        camera_list.append(Thread(target=dbcamera_thread.define_camera_thread, args=(camera,)))    
+    camera_list.append(Thread(target=dbcamera_thread.define_camera_thread, args=()))
     return camera_list 
     
 if __name__ == "__main__":

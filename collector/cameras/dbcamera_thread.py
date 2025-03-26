@@ -48,11 +48,11 @@ def collect_photos():
         print("Foto scattate con successo!")
         time.sleep(5)
 
-def define_camera_thread(camera_index=0):
-    db_utils.ensure_table_exists()
-    cameras = camera_utils.list_available_cameras(camera_index)
-    plant_info = get_plant_infos(camera_index)
-
-    camera_utils.take_a_photo(plant_info["photo_id"], plant_info["status"], plant_info["plant_id"], camera_index)
-    print("Foto scattata con successo! Camera:", camera_index)
-    time.sleep(5)
+def define_camera_thread():
+    cameras = camera_utils.list_available_cameras(len(conf["cameras"]))
+    while True:
+        for camera_id in range(len(cameras)):
+            plant_info = get_plant_infos(camera_id)
+            camera_utils.take_a_photo(plant_info["photo_id"], plant_info["status"], plant_info["plant_id"], camera_id)
+            print("Foto scattata con successo! Camera:", camera_id)
+        time.sleep(5)

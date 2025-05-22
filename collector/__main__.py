@@ -14,6 +14,8 @@ import traceback
 import stomp # for message broker
 import socket # for hostname retrieval
 import re # to split the hostname in letters and numbers
+import uuid
+
 
 from sys import argv
 from threading import Thread
@@ -30,7 +32,7 @@ from collector.demo.demo_influx import demo
 from collector.influx.influx_controller import InfluxController
 from collector.sensors.humidity import Humidity
 from collector.sensors.temperature import Temperature
-from collector.cameras import dbcamera_thread
+from collector.cameras import thread_camera
 
 try:
     # >3.2
@@ -49,6 +51,9 @@ from collector.sensors.mcp3008 import MCP3008
 from collector.sensors.moisture import Moisture
 from collector.sensors.ndvi import NDVI
 from collector.queue.subscriber import Subscriber
+
+CAMERA_LEFT = 4
+CAMERA_RIGTH = 6
 
 # We need to use board instead of initializing the pins manually like 'Pin(12)'
 # because in this way we have a wrapper that works on every Raspberry Pi model
@@ -309,7 +314,8 @@ def init_cameras_threads() -> List[Thread]:
     Initialize the thread that will read the data from the cameras.
     """
     camera_list = []
-    camera_list.append(Thread(target=dbcamera_thread.define_camera_thread, args=()))
+    # INIT THREAD CAMERA LEFT
+    camera_list.append(Thread(target=thread_camera.thread_take_photos, args=(CAMERA_LEFT, CAMERA_RIGTH)))
     return camera_list 
     
 if __name__ == "__main__":
